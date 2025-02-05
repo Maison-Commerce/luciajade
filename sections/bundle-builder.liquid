@@ -598,17 +598,29 @@
             body: JSON.stringify({ items })
           });
 
-          if (!response.ok) throw new Error('Failed to add bundle to cart');
+          if (!response.ok) {
+            throw new Error('Failed to add bundle to cart');
+          }
 
-          this.showNotification('Bundle added to cart!', 'success');
-          
-          // Open cart drawer using the theme's cart drawer implementation
-          Shopify.theme.cartDrawer.open();
+          // Wait for the cart addition to complete
+          await response.json();
 
-          // Clear the bundle after successful addition
+          // Clear the bundle first
           this.selectedItems = [];
           localStorage.removeItem('currentBundle');
           this.isViewOpen = false;
+
+          // Show success message
+          this.showNotification('Bundle added to cart!', 'success');
+
+          // Wait a brief moment before opening cart drawer
+          setTimeout(() => {
+            if (typeof Shopify !== 'undefined' && 
+                Shopify.theme && 
+                Shopify.theme.cartDrawer) {
+              Shopify.theme.cartDrawer.open();
+            }
+          }, 100);
 
         } catch (error) {
           console.error('Bundle addition error:', error);
@@ -619,6 +631,11 @@
       },
 
       showNotification(message, type = 'success') {
+        // Clear any existing toasts first
+        const existingToasts = document.querySelectorAll('.toastify');
+        existingToasts.forEach(toast => toast.remove());
+
+        // Show new toast
         Toastify({
           text: message,
           duration: 3000,
