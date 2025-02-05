@@ -537,24 +537,67 @@
     cursor: pointer;
   }
 
-  /* Variant dropdown styling */
+  /* Updated variant selection styling */
+  .variant-selectors {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin: 1rem 0;
+  }
+
   .variant-dropdown {
     width: 100%;
     padding: 0.75rem;
-    margin: 0.5rem 0;
     border: 1px solid var(--color-border);
     border-radius: 4px;
     background: #ffffff;
     font-size: 0.9rem;
+    appearance: none;
+    background-image: url('data:image/svg+xml;charset=US-ASCII,<svg width="14" height="8" viewBox="0 0 14 8" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1L7 7L13 1" stroke="%23151515" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    cursor: pointer;
   }
 
-  .variant-dropdown option {
-    padding: 0.5rem;
+  .variant-dropdown:focus {
+    outline: none;
+    border-color: #000;
   }
 
-  /* Size selector dropdown */
-  .size-dropdown {
-    margin-bottom: 1rem;
+  .add-to-bundle-button {
+    width: 100%;
+    padding: 0.75rem;
+    background: #000000;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .add-to-bundle-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .add-to-bundle-button:hover:not(:disabled) {
+    background: #333333;
+  }
+
+  /* Product card improvements */
+  .bundle-product-card {
+    padding: 1.5rem;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    background: #ffffff;
+  }
+
+  .bundle-product-title {
+    font-size: 1.1rem;
+    margin: 1rem 0;
+    font-weight: 500;
   }
 {%- endstyle -%}
 
@@ -679,9 +722,6 @@
           this.showNotification('Bundle added to cart!', 'success');
 
           // Wait a brief moment for the cart to update
-          await new Promise(resolve => setTimeout(resolve, 100));
-
-          // Update cart drawer with latest information
           await this.updateCartDrawer();
 
           // Try multiple methods to open cart drawer
@@ -858,13 +898,18 @@
       {% for product in collections[section.settings.bundle_collection].products %}
         <div class="bundle-product-card" 
              x-data="{ 
-               selectedVariant: null,
-               variants: {{ product.variants | json }}
+               selectedMaterial: '',
+               selectedLetter: '',
+               variants: {{ product.variants | json }},
+               getVariantId() {
+                 return this.variants.find(v => 
+                   v.title.includes(this.selectedMaterial) && 
+                   v.title.includes(this.selectedLetter)
+                 )?.id;
+               }
              }"
              :class="{ 'selected': isProductSelected('{{ product.id }}') }"
-             data-product-type="{{ product.type | handle }}"
-             data-product-size="{{ product.options_with_values[0].values | join: ',' }}"
-             data-product-material="{{ product.options_with_values[1].values | join: ',' }}">
+             data-product-type="{{ product.type | handle }}">
           
           <img src="{{ product.featured_image | img_url: '400x400', crop: 'center' }}" 
                alt="{{ product.title }}"
@@ -875,25 +920,45 @@
           <h3 class="bundle-product-title">{{ product.title }}</h3>
           <p class="price" x-text="formatMoney({{ product.price }})"></p>
           
-          <!-- Variant dropdown -->
-          <select class="variant-dropdown"
-                  x-model="selectedVariant"
-                  @change="addToBundle({
+          <div class="variant-selectors">
+            <!-- Material dropdown -->
+            <select class="variant-dropdown"
+                    x-model="selectedMaterial"
+                    :disabled="isProductSelected('{{ product.id }}')"
+                    aria-label="Select material">
+              <option value="">Select material</option>
+              {% for material in product.options_with_values[0].values %}
+                <option value="{{ material }}">{{ material }}</option>
+              {% endfor %}
+            </select>
+
+            <!-- Letter dropdown -->
+            <select class="variant-dropdown"
+                    x-model="selectedLetter"
+                    :disabled="isProductSelected('{{ product.id }}')"
+                    aria-label="Select letter">
+              <option value="">Select letter</option>
+              {% for letter in product.options_with_values[1].values %}
+                <option value="{{ letter }}">{{ letter }}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <!-- Add to Bundle button -->
+          <button class="add-to-bundle-button"
+                  @click="addToBundle({
                     id: '{{ product.id }}',
-                    variant_id: selectedVariant,
+                    variant_id: getVariantId(),
                     title: '{{ product.title | escape }}',
-                    price: variants.find(v => v.id == selectedVariant)?.price || {{ product.price }},
-                    variant_title: variants.find(v => v.id == selectedVariant)?.title || ''
+                    price: variants.find(v => v.id == getVariantId())?.price || {{ product.price }},
+                    variant_title: selectedMaterial + ' / ' + selectedLetter
                   })"
-                  :disabled="isProductSelected('{{ product.id }}')">
-            <option value="">Select Size & Material</option>
-            {% for variant in product.variants %}
-              <option value="{{ variant.id }}">
-                {{ variant.title }} - {{ variant.price | money }}
-              </option>
-            {% endfor %}
-          </select>
-          
+                  :disabled="!selectedMaterial || !selectedLetter || isProductSelected('{{ product.id }}')"
+                  x-show="!isProductSelected('{{ product.id }}')">
+            Add to Bundle
+          </button>
+
+          <!-- Remove button -->
           <button class="bundle-button"
                   x-show="isProductSelected('{{ product.id }}')"
                   @click="removeFromBundle('{{ product.id }}')">
