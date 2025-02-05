@@ -616,6 +616,9 @@
               const errorData = await response.json();
               throw new Error(errorData.description || 'Failed to add bundle to cart');
             }
+
+            // Force a cart refresh
+            await window.liquidAjaxCart.get();
           } else {
             // Fallback to regular fetch
             const response = await fetch('/cart/add.js', {
@@ -639,6 +642,9 @@
 
           // Show success message
           this.showNotification('Bundle added to cart!', 'success');
+
+          // Wait a brief moment for the cart to update
+          await new Promise(resolve => setTimeout(resolve, 100));
 
           // Try multiple methods to open cart drawer
           // 1. Theme event
