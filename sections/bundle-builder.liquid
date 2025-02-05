@@ -37,9 +37,16 @@
 
   .bundle-builder__products {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-template-columns: repeat(4, 1fr);
     gap: 1.5rem;
     position: relative;
+  }
+
+  @media screen and (max-width: 768px) {
+    .bundle-builder__products {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
   }
 
   .bundle-builder__summary {
@@ -96,14 +103,14 @@
 
   .bundle-button {
     width: 100%;
-    padding: 0.8rem;
-    margin-top: 1rem;
-    background: var(--color-button);
-    color: var(--color-button-text);
+    padding: 12px;
+    background: #000000;
+    color: #ffffff;
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    transition: opacity 0.3s ease;
+    font-weight: 500;
+    transition: all 0.3s ease;
   }
 
   .bundle-button:disabled {
@@ -357,20 +364,17 @@
     cursor: pointer;
     z-index: 999;
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    width: auto;
+    min-width: 200px;
   }
 
-  @media screen and (max-width: 768px) {
-    .bundle-view-button {
-      right: 10px;
-      bottom: 10px;
-      padding: 10px 20px;
-    }
+  .bundle-view-button.all-items-added {
+    background: #4CAF50;
   }
 
   .bundle-progress-container {
-    margin: 30px auto;
-    max-width: 400px;
-    text-align: center;
+    display: none;
   }
 
   .bundle-progress-text {
@@ -739,6 +743,17 @@
           style: 'currency',
           currency: '{{ cart.currency.iso_code }}'
         }).format(cents / 100);
+      },
+
+      filterProducts(type) {
+        const products = document.querySelectorAll('.bundle-product-card');
+        products.forEach(product => {
+          if (!type || product.dataset.productType === type) {
+            product.style.display = 'block';
+          } else {
+            product.style.display = 'none';
+          }
+        });
       }
     }));
   });
@@ -762,44 +777,16 @@
   
   <div class="bundle-builder__header">
     <h2 class="h1">{{ section.settings.title }}</h2>
-    
-    <div class="bundle-progress-container">
-      <div class="bundle-progress-text">
-        <span x-text="selectedItems.length"></span> / <span x-text="bundleSize"></span> items selected
-      </div>
-      
-      <div class="bundle-progress-bar">
-        <div class="bundle-progress-fill"
-             :style="'width: ' + (selectedItems.length / bundleSize * 100) + '%'">
-        </div>
-      </div>
-      
-      <div class="bundle-progress-steps">
-        <template x-for="index in bundleSize" :key="index">
-          <div class="bundle-progress-step"
-               :class="{
-                 'active': selectedItems.length === index,
-                 'completed': selectedItems.length > index
-               }">
-          </div>
-        </template>
-      </div>
-      
-      <div class="bundle-progress-labels">
-        <div class="bundle-progress-label"
-             :class="{ 'active': selectedItems.length === 0 }">
-          Start
-        </div>
-        <div class="bundle-progress-label"
-             :class="{ 'active': selectedItems.length > 0 && selectedItems.length < bundleSize }">
-          Building
-        </div>
-        <div class="bundle-progress-label"
-             :class="{ 'active': selectedItems.length === bundleSize }">
-          Complete
-        </div>
-      </div>
-    </div>
+  </div>
+
+  <!-- Filter System -->
+  <div class="bundle-filter">
+    <select @change="filterProducts($event.target.value)">
+      <option value="">All Products</option>
+      {% for product_type in collection.all_types %}
+        <option value="{{ product_type | handle }}">{{ product_type }}</option>
+      {% endfor %}
+    </select>
   </div>
 
   <div class="bundle-builder__content">
@@ -807,8 +794,9 @@
     <div class="bundle-builder__products">
       {% for product in collections[section.settings.bundle_collection].products %}
         <div class="bundle-product-card" 
-             x-data="{ showVariants: false }"
-             :class="{ 'selected': isProductSelected('{{ product.id }}') }">
+             x-data="{ selectedVariant: null }"
+             :class="{ 'selected': isProductSelected('{{ product.id }}') }"
+             data-product-type="{{ product.type | handle }}">
           
           <img src="{{ product.featured_image | img_url: '300x300', crop: 'center' }}" 
                alt="{{ product.title }}"
@@ -819,23 +807,8 @@
           <h3 class="h4">{{ product.title }}</h3>
           <p class="price" x-text="formatMoney({{ product.price }})"></p>
           
-          <button class="bundle-button"
-                  x-show="!isProductSelected('{{ product.id }}')"
-                  @click="showVariants = true"
-                  :disabled="selectedItems.length >= bundleSize">
-            Add to Bundle
-          </button>
-          
-          <button class="bundle-button"
-                  x-show="isProductSelected('{{ product.id }}')"
-                  @click="removeFromBundle('{{ product.id }}')">
-            Remove
-          </button>
-          
-          <!-- Variant Selector -->
-          <div x-show="showVariants" 
-               x-transition
-               class="variant-selector">
+          <!-- Always visible variant selector -->
+          <div class="variant-selector">
             {% for variant in product.variants %}
               <button class="variant-button"
                       @click="addToBundle({
@@ -844,21 +817,29 @@
                         title: '{{ product.title | escape }}',
                         price: {{ variant.price }},
                         variant_title: '{{ variant.title | escape }}'
-                      }); showVariants = false">
+                      })"
+                      :disabled="selectedItems.length >= bundleSize && !isProductSelected('{{ product.id }}')">
                 {{ variant.title }}
               </button>
             {% endfor %}
           </div>
+          
+          <button class="bundle-button"
+                  x-show="isProductSelected('{{ product.id }}')"
+                  @click="removeFromBundle('{{ product.id }}')">
+            Remove
+          </button>
         </div>
       {% endfor %}
     </div>
   </div>
 
-  <!-- View Box Button -->
+  <!-- Updated Sticky Banner -->
   <button class="bundle-view-button"
           @click="toggleView()"
-          x-show="!isViewOpen">
-    View Box (<span x-text="selectedItems.length"></span>)
+          x-show="!isViewOpen"
+          :class="{ 'all-items-added': selectedItems.length === bundleSize }">
+    <span x-text="selectedItems.length === bundleSize ? 'All Items Added' : `${selectedItems.length} / ${bundleSize} Items Added`"></span>
   </button>
 
   <!-- Bundle View Sidebar -->
