@@ -850,13 +850,13 @@
                     };
                     variantImage = variant.image;
                   ">
-            <option value="">Select Option</option>
+            <option value="" x-text="selectedVariant ? selectedVariant.title : 'Select Option'"></option>
             {% for variant in product.variants %}
               {% assign option_text = variant.title | split: ' / ' | first %}
               <option value="{{ variant.id }}"
                       data-id="{{ variant.id }}"
                       data-price="{{ variant.price }}"
-                      data-title="{{ variant.title | escape }}"
+                      data-title="{{ option_text }}"
                       data-image="{{ variant.featured_image | default: product.featured_image | img_url: '300x300', crop: 'center' }}">
                 {{ option_text }}
               </option>
