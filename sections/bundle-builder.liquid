@@ -13,69 +13,9 @@
 
 {%- style -%}
   .bundle-builder {
-    @apply max-w-7xl mx-auto px-4 py-8;
-  }
-
-  .bundle-progress {
-    @apply fixed top-0 left-0 right-0 bg-white/90 backdrop-blur-sm shadow-md z-50 p-4;
-  }
-
-  .bundle-progress__inner {
-    @apply max-w-7xl mx-auto flex items-center justify-between gap-4;
-  }
-
-  .bundle-progress__bar {
-    @apply h-2 bg-gray-100 rounded-full overflow-hidden;
-  }
-
-  .bundle-progress__fill {
-    @apply h-full transition-all duration-300 bg-black;
-  }
-
-  .bundle-grid {
-    @apply grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6;
-  }
-
-  .bundle-product {
-    @apply relative flex flex-col bg-white rounded-lg shadow-sm overflow-hidden transition-all duration-300;
-  }
-
-  .bundle-product.selected {
-    @apply ring-2 ring-black shadow-lg scale-[1.02];
-  }
-
-  .bundle-product__image {
-    @apply aspect-square w-full object-cover;
-  }
-
-  .bundle-product__content {
-    @apply p-4 flex flex-col flex-1;
-  }
-
-  .bundle-variant-selector {
-    @apply mt-2 space-y-2;
-  }
-
-  .bundle-select {
-    @apply w-full text-sm border-gray-300 rounded-md shadow-sm focus:border-black focus:ring-black;
-  }
-
-  .bundle-button {
-    @apply mt-auto w-full px-4 py-2 text-sm font-medium text-white bg-black rounded-md 
-           hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black
-           disabled:opacity-50 disabled:cursor-not-allowed;
-  }
-
-  .bundle-view {
-    @apply fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50;
-  }
-
-  .bundle-view__content {
-    @apply bg-white rounded-lg w-full max-w-lg max-h-[90vh] overflow-y-auto p-6;
-  }
-
-  .bundle-item {
-    @apply flex items-center gap-4 p-4 bg-gray-50 rounded-lg mb-4;
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
   }
 
   .bundle-builder__header {
@@ -154,6 +94,46 @@
     margin: 0.5rem 0;
   }
 
+  .bundle-button {
+    width: 100%;
+    padding: 0.8rem;
+    margin-top: 1rem;
+    background: var(--color-button);
+    color: var(--color-button-text);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+  }
+
+  .bundle-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .variant-selector {
+    margin-top: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+  }
+
+  .variant-button {
+    flex: 1;
+    min-width: 80px;
+    padding: 0.5rem;
+    background: var(--color-background);
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .variant-button:hover {
+    background: var(--color-background-secondary);
+  }
+
   .bundle-notifications {
     position: fixed;
     bottom: 20px;
@@ -222,6 +202,144 @@
 
   .add-bundle-to-cart:disabled {
     opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .bundle-view {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100%;
+    max-width: 450px;
+    height: 100vh;
+    background: #ffffff;
+    box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+    padding: 30px;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+    z-index: 1000;
+    overflow-y: auto;
+  }
+
+  @media screen and (max-width: 768px) {
+    .bundle-view {
+      width: 100%;
+      max-width: 100%;
+    }
+  }
+
+  .bundle-view.active {
+    transform: translateX(0);
+  }
+
+  .bundle-view-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #e5e5e5;
+  }
+
+  .bundle-view-header h3 {
+    font-size: 24px;
+    font-weight: 500;
+    margin: 0;
+  }
+
+  .close-button {
+    background: transparent;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 5px;
+    color: #333;
+  }
+
+  .bundle-item {
+    padding: 20px 0;
+    border-bottom: 1px solid #e5e5e5;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .bundle-item-title {
+    font-size: 16px;
+    color: #333;
+    margin: 0;
+  }
+
+  .bundle-item-price {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 4px;
+  }
+
+  .bundle-item-remove {
+    background: transparent;
+    border: none;
+    color: #000000;
+    padding: 0;
+    cursor: pointer;
+    font-size: 14px;
+    transition: opacity 0.3s ease;
+    width: fit-content;
+    text-decoration: underline;
+  }
+
+  .bundle-item-remove:hover {
+    opacity: 0.7;
+  }
+
+  .bundle-total {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 2px solid #e5e5e5;
+  }
+
+  .bundle-total p {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 0;
+    font-size: 14px;
+    color: #666;
+  }
+
+  .bundle-total .final-price {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    margin-top: 15px;
+  }
+
+  .bundle-actions {
+    position: sticky;
+    bottom: 0;
+    background: #ffffff;
+    padding: 20px 0;
+    margin-top: 30px;
+  }
+
+  .add-bundle-to-cart {
+    width: 100%;
+    padding: 15px;
+    background: #000000;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  .add-bundle-to-cart:hover {
+    background: #333;
+  }
+
+  .add-bundle-to-cart:disabled {
+    background: #cccccc;
     cursor: not-allowed;
   }
 
@@ -419,20 +537,13 @@
       },
       loading: false,
       isViewOpen: false,
-      activeCategory: 'All',
-      selectedVariants: {},
 
       init() {
-        this.initializeSelectedVariants();
         // Initialize from localStorage if exists
         const savedBundle = localStorage.getItem('currentBundle');
         if (savedBundle) {
           this.selectedItems = JSON.parse(savedBundle);
         }
-      },
-
-      initializeSelectedVariants() {
-        // ... variant initialization logic ...
       },
 
       toggleView() {
@@ -628,12 +739,6 @@
           style: 'currency',
           currency: '{{ cart.currency.iso_code }}'
         }).format(cents / 100);
-      },
-
-      get filteredProducts() {
-        return this.activeCategory === 'All'
-          ? this.products
-          : this.products.filter(p => p.product_type === this.activeCategory);
       }
     }));
   });
@@ -658,12 +763,14 @@
   <div class="bundle-builder__header">
     <h2 class="h1">{{ section.settings.title }}</h2>
     
-    <div class="bundle-progress">
-      <div class="bundle-progress__inner">
-        <div class="bundle-progress__bar">
-          <div class="bundle-progress__fill"
-               :style="'width: ' + (selectedItems.length / bundleSize * 100) + '%'">
-          </div>
+    <div class="bundle-progress-container">
+      <div class="bundle-progress-text">
+        <span x-text="selectedItems.length"></span> / <span x-text="bundleSize"></span> items selected
+      </div>
+      
+      <div class="bundle-progress-bar">
+        <div class="bundle-progress-fill"
+             :style="'width: ' + (selectedItems.length / bundleSize * 100) + '%'">
         </div>
       </div>
       
@@ -696,15 +803,10 @@
   </div>
 
   <div class="bundle-builder__content">
-    <!-- Category Tabs -->
-    <div class="bundle-categories">
-      <!-- ... category tabs markup ... -->
-    </div>
-
     <!-- Product Grid -->
-    <div class="bundle-grid">
+    <div class="bundle-builder__products">
       {% for product in collections[section.settings.bundle_collection].products %}
-        <div class="bundle-product" 
+        <div class="bundle-product-card" 
              x-data="{ showVariants: false }"
              :class="{ 'selected': isProductSelected('{{ product.id }}') }">
           
@@ -712,104 +814,110 @@
                alt="{{ product.title }}"
                loading="lazy"
                width="300"
-               height="300"
-               class="bundle-product__image">
+               height="300">
           
-          <div class="bundle-product__content">
-            <h3 class="h4">{{ product.title }}</h3>
-            <p class="price" x-text="formatMoney({{ product.price }})"></p>
-            
-            <button class="bundle-button"
-                    x-show="!isProductSelected('{{ product.id }}')"
-                    @click="showVariants = true"
-                    :disabled="selectedItems.length >= bundleSize">
-              Add to Bundle
-            </button>
-            
-            <button class="bundle-button"
-                    x-show="isProductSelected('{{ product.id }}')"
-                    @click="removeFromBundle('{{ product.id }}')">
-              Remove
-            </button>
-            
-            <!-- Variant Selector -->
-            <div x-show="showVariants" 
-                 x-transition
-                 class="bundle-variant-selector">
-              {% for variant in product.variants %}
-                <button class="bundle-select"
-                        @click="addToBundle({
-                          id: '{{ product.id }}',
-                          variant_id: '{{ variant.id }}',
-                          title: '{{ product.title | escape }}',
-                          price: {{ variant.price }},
-                          variant_title: '{{ variant.title | escape }}'
-                        }); showVariants = false">
-                  {{ variant.title }}
-                </button>
-              {% endfor %}
-            </div>
+          <h3 class="h4">{{ product.title }}</h3>
+          <p class="price" x-text="formatMoney({{ product.price }})"></p>
+          
+          <button class="bundle-button"
+                  x-show="!isProductSelected('{{ product.id }}')"
+                  @click="showVariants = true"
+                  :disabled="selectedItems.length >= bundleSize">
+            Add to Bundle
+          </button>
+          
+          <button class="bundle-button"
+                  x-show="isProductSelected('{{ product.id }}')"
+                  @click="removeFromBundle('{{ product.id }}')">
+            Remove
+          </button>
+          
+          <!-- Variant Selector -->
+          <div x-show="showVariants" 
+               x-transition
+               class="variant-selector">
+            {% for variant in product.variants %}
+              <button class="variant-button"
+                      @click="addToBundle({
+                        id: '{{ product.id }}',
+                        variant_id: '{{ variant.id }}',
+                        title: '{{ product.title | escape }}',
+                        price: {{ variant.price }},
+                        variant_title: '{{ variant.title | escape }}'
+                      }); showVariants = false">
+                {{ variant.title }}
+              </button>
+            {% endfor %}
           </div>
         </div>
       {% endfor %}
     </div>
   </div>
 
-  <!-- Bundle View -->
-  <div class="bundle-view" x-show="isViewOpen" x-transition>
-    <div class="bundle-view__content">
-      <div class="bundle-view-header">
-        <h3>Your Box</h3>
-        <button class="close-button" @click="toggleView()">Close</button>
-      </div>
-      
-      <!-- Empty state message -->
-      <div class="bundle-view-empty" x-show="selectedItems.length === 0">
-        <h4>Your bundle is empty</h4>
-        <p>{{ section.settings.empty_state_message }}</p>
-      </div>
-      
-      <!-- Selected items -->
-      <template x-for="item in selectedItems" :key="item.variant_id">
-        <div class="bundle-item">
-          <h4 class="bundle-item-title" x-text="item.title"></h4>
-          <span class="bundle-item-price" x-text="formatMoney(item.price)"></span>
-          <button class="bundle-item-remove"
-                  @click="removeFromBundle(item.id)">
-            Remove
-          </button>
-        </div>
-      </template>
-      
-      <!-- Bundle totals -->
-      <div class="bundle-total" x-show="selectedItems.length > 0">
-        <p>
-          <span>Original Total:</span>
-          <span x-text="formatMoney(originalTotal)"></span>
-        </p>
-        <p>
-          <span>Bundle Discount:</span>
-          <span x-text="discountPercentage + '%'"></span>
-        </p>
-        <p>
-          <span>You Save:</span>
-          <span class="savings" x-text="formatMoney(savings)"></span>
-        </p>
-        <p class="final-price">
-          <span>Final Price:</span>
-          <span x-text="formatMoney(finalPrice)"></span>
-        </p>
-      </div>
+  <!-- View Box Button -->
+  <button class="bundle-view-button"
+          @click="toggleView()"
+          x-show="!isViewOpen">
+    View Box (<span x-text="selectedItems.length"></span>)
+  </button>
 
-      <!-- Bundle actions -->
-      <div class="bundle-actions" x-show="selectedItems.length > 0">
-        <button class="add-bundle-to-cart"
-                @click="addBundleToCart()"
-                :disabled="selectedItems.length < bundleSize || loading">
-          <span x-show="!loading">Add Bundle to Cart</span>
-          <span x-show="loading">Adding to Cart...</span>
+  <!-- Bundle View Sidebar -->
+  <div class="bundle-view"
+       :class="{ 'active': isViewOpen }"
+       x-show="isViewOpen"
+       x-transition>
+    
+    <div class="bundle-view-header">
+      <h3>Your Box</h3>
+      <button class="close-button" @click="toggleView()">Close</button>
+    </div>
+    
+    <!-- Empty state message -->
+    <div class="bundle-view-empty" x-show="selectedItems.length === 0">
+      <h4>Your bundle is empty</h4>
+      <p>Select items to create your custom bundle and save {{ section.settings.discount_percentage }}% on your purchase.</p>
+    </div>
+    
+    <!-- Selected items -->
+    <template x-for="item in selectedItems" :key="item.variant_id">
+      <div class="bundle-item">
+        <h4 class="bundle-item-title" x-text="item.title"></h4>
+        <span class="bundle-item-price" x-text="formatMoney(item.price)"></span>
+        <button class="bundle-item-remove"
+                @click="removeFromBundle(item.id)">
+          Remove
         </button>
       </div>
+    </template>
+    
+    <!-- Bundle totals -->
+    <div class="bundle-total" x-show="selectedItems.length > 0">
+      <p>
+        <span>Original Total:</span>
+        <span x-text="formatMoney(originalTotal)"></span>
+      </p>
+      <p>
+        <span>Bundle Discount:</span>
+        <span x-text="discountPercentage + '%'"></span>
+      </p>
+      <p>
+        <span>You Save:</span>
+        <span class="savings" x-text="formatMoney(savings)"></span>
+      </p>
+      <p class="final-price">
+        <span>Final Price:</span>
+        <span x-text="formatMoney(finalPrice)"></span>
+      </p>
+    </div>
+
+    <!-- Bundle actions -->
+    <div class="bundle-actions" x-show="selectedItems.length > 0">
+      <button class="add-bundle-to-cart"
+              @click="addBundleToCart()"
+              :disabled="selectedItems.length < bundleSize || loading">
+        <span x-show="!loading">Add Bundle to Cart</span>
+        <span x-show="loading">Adding to Cart...</span>
+      </button>
     </div>
   </div>
 </div>
@@ -864,18 +972,6 @@
       "id": "button_text_color",
       "label": "Button Text Color",
       "default": "#ffffff"
-    },
-    {
-      "type": "text",
-      "id": "empty_state_message",
-      "label": "Empty State Message",
-      "default": "Start building your custom bundle to save!"
-    },
-    {
-      "type": "text",
-      "id": "progress_message",
-      "label": "Progress Message",
-      "default": "Select {remaining} more items to complete your bundle"
     }
   ],
   "presets": [
