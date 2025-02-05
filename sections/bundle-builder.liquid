@@ -138,31 +138,14 @@
     cursor: not-allowed;
   }
 
-  /* Bundle counter */
-  .bundle-counter {
-    position: fixed;
-    bottom: 2rem;
-    right: 2rem;
-    background: #000;
-    color: #fff;
-    padding: 1rem 2rem;
-    border-radius: 4px;
-    font-weight: 500;
-    z-index: 1000;
-  }
-
-  .bundle-counter.complete {
-    background: #4CAF50;
-  }
-
-  /* Bundle box styles */
+  /* Bundle Box */
   .bundle-box {
     position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
     background: #ffffff;
-    padding: 1rem;
+    padding: 1.5rem;
     box-shadow: 0 -4px 12px rgba(0,0,0,0.1);
     z-index: 1000;
     transform: translateY(100%);
@@ -179,21 +162,62 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 2rem;
   }
 
   .bundle-box__items {
     display: flex;
     gap: 1rem;
     overflow-x: auto;
-    padding: 1rem;
+    padding: 0.5rem;
+    flex-grow: 1;
   }
 
   .bundle-box__item {
-    min-width: 100px;
+    position: relative;
+    min-width: 80px;
     text-align: center;
+    background: #f5f5f5;
+    padding: 0.5rem;
+    border-radius: 4px;
   }
 
-  .bundle-counter {
+  .bundle-box__item img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 4px;
+    margin-bottom: 0.5rem;
+  }
+
+  .bundle-box__item-title {
+    font-size: 0.8rem;
+    margin: 0;
+  }
+
+  .bundle-box__item-remove {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #000;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 1;
+    padding: 0;
+  }
+
+  .bundle-box__actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .bundle-box__counter {
     background: #000;
     color: #fff;
     padding: 0.75rem 1.5rem;
@@ -201,20 +225,17 @@
     font-weight: 500;
   }
 
-  .add-to-bundle-button {
-    width: 100%;
-    padding: 0.75rem;
+  .bundle-box__checkout {
     background: #000;
     color: #fff;
-    border: none;
+    padding: 0.75rem 1.5rem;
     border-radius: 4px;
-    font-size: 0.9rem;
-    font-weight: 500;
+    border: none;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    font-weight: 500;
   }
 
-  .add-to-bundle-button:disabled {
+  .bundle-box__checkout:disabled {
     opacity: 0.5;
     cursor: not-allowed;
   }
@@ -563,13 +584,26 @@
       <div class="bundle-box__items">
         <template x-for="item in selectedItems" :key="item.variant_id">
           <div class="bundle-box__item">
-            <span x-text="item.title"></span>
-            <button @click="removeFromBundle(item.id)" class="remove-item">×</button>
+            <button class="bundle-box__item-remove" 
+                    @click="removeFromBundle(item.id)">&times;</button>
+            <img :src="item.image" :alt="item.title">
+            <p class="bundle-box__item-title" x-text="item.title"></p>
+            <small x-text="item.variant_title"></small>
           </div>
         </template>
       </div>
-      <div class="bundle-counter">
-        <span x-text="`${selectedItems.length} / ${bundleSize} Items Added`"></span>
+      
+      <div class="bundle-box__actions">
+        <div class="bundle-box__counter">
+          <span x-text="`${selectedItems.length} / ${bundleSize} Items`"></span>
+        </div>
+        
+        <button class="bundle-box__checkout"
+                @click="addBundleToCart()"
+                :disabled="selectedItems.length < bundleSize || loading">
+          <span x-show="!loading">Complete Bundle</span>
+          <span x-show="loading">Adding...</span>
+        </button>
       </div>
     </div>
   </div>
