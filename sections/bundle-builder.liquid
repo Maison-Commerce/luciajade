@@ -532,6 +532,33 @@
     outline: none;
     border-color: var(--color-button);
   }
+
+  .bundle-type-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin: 2rem 0;
+    justify-content: center;
+  }
+
+  .type-filter-button {
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    background: var(--color-background);
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .type-filter-button:hover {
+    background: var(--color-background-secondary);
+  }
+
+  .type-filter-button.active {
+    background: var(--color-button);
+    color: var(--color-button-text);
+    border-color: var(--color-button);
+  }
 {%- endstyle -%}
 
 <!-- Add Toastify CDN in the head of your document -->
@@ -544,6 +571,7 @@
       bundleSize: bundleSize,
       discountPercentage: discountPercentage,
       selectedItems: [],
+      selectedType: 'all',
       notification: {
         show: false,
         message: '',
@@ -816,6 +844,25 @@
     </div>
   </div>
 
+  <!-- Add type filter buttons after the header -->
+  <div class="bundle-type-filter">
+    <button class="type-filter-button" 
+            @click="selectedType = 'all'"
+            :class="{ 'active': selectedType === 'all' }">
+      All Products
+    </button>
+    {% assign product_types = collections[section.settings.bundle_collection].products | map: 'type' | uniq %}
+    {% for type in product_types %}
+      {% unless type == blank %}
+        <button class="type-filter-button"
+                @click="selectedType = '{{ type | escape }}'"
+                :class="{ 'active': selectedType === '{{ type | escape }}' }">
+          {{ type }}
+        </button>
+      {% endunless %}
+    {% endfor %}
+  </div>
+
   <div class="bundle-builder__content">
     <!-- Product Grid -->
     <div class="bundle-builder__products">
@@ -826,6 +873,7 @@
                selectedVariant: null,
                variantImage: '{{ product.featured_image | img_url: '300x300', crop: 'center' }}'
              }"
+             x-show="selectedType === 'all' || selectedType === '{{ product.type | escape }}'"
              :class="{ 'selected': isProductSelected('{{ product.id }}') }">
           
           <img :src="variantImage" 
