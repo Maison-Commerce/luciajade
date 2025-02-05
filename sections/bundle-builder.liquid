@@ -616,7 +616,7 @@
             }
 
             // Force a cart refresh
-            await window.liquidAjaxCart.get();
+            await liquidAjaxcart.update();
           } else {
             const response = await fetch('/cart/add.js', {
               method: 'POST',
