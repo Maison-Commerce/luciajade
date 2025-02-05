@@ -590,11 +590,22 @@
             }
           }));
 
-          // Use Liquid Ajax Cart's API to add items
-          const response = await window.liquidAjaxCart.add({items});
+          // Log the items being added for debugging
+          console.log('Adding items to cart:', items);
 
-          if (!response.ok) {
-            throw new Error('Failed to add bundle to cart');
+          // Use Liquid Ajax Cart's API to add items
+          const response = await window.liquidAjaxCart.add({
+            items: items,
+            sections: ['cart-drawer'] // Request cart drawer section update
+          });
+
+          // Log the response for debugging
+          console.log('Cart response:', response);
+
+          // Check both response.ok and response status
+          if (!response.ok || response.status >= 400) {
+            const errorData = await response.json();
+            throw new Error(errorData.description || 'Failed to add bundle to cart');
           }
 
           // Clear the bundle first
@@ -605,12 +616,20 @@
           // Show success message
           this.showNotification('Bundle added to cart!', 'success');
 
-          // Trigger cart drawer open using Liquid Ajax Cart
-          document.body.classList.add('js-show-ajax-cart');
+          // Open cart drawer
+          document.documentElement.dispatchEvent(
+            new CustomEvent('cart:open', {
+              bubbles: true
+            })
+          );
 
         } catch (error) {
           console.error('Bundle addition error:', error);
-          this.showNotification('Error adding bundle to cart', 'error');
+          // Show more specific error message
+          this.showNotification(
+            error.message || 'Error adding bundle to cart. Please try again.',
+            'error'
+          );
         } finally {
           this.loading = false;
         }
