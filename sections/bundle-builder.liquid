@@ -839,28 +839,32 @@
           <p class="price" x-text="selectedVariant ? formatMoney(selectedVariant.price) : formatMoney({{ product.price }})"></p>
           
           <!-- Variant Dropdown -->
-          <select class="variant-dropdown"
-                  x-model="selectedVariant"
-                  @change="
-                    const variant = $event.target.selectedOptions[0].dataset;
+          <div class="variant-selector" x-data="{ open: false }">
+            <button 
+              class="variant-dropdown"
+              @click="open = !open"
+              type="button">
+              <span x-text="selectedVariant ? selectedVariant.title : 'Select Option'"></span>
+            </button>
+            
+            <div class="variant-options" x-show="open" @click.away="open = false">
+              {% for variant in product.variants %}
+                <button 
+                  class="variant-option"
+                  @click="
                     selectedVariant = {
-                      id: variant.id,
-                      price: parseFloat(variant.price),
-                      title: variant.title
+                      id: '{{ variant.id }}',
+                      price: {{ variant.price }},
+                      title: '{{ variant.title | escape }}'
                     };
-                    variantImage = variant.image;
+                    variantImage = '{{ variant.featured_image | default: product.featured_image | img_url: '300x300', crop: 'center' }}';
+                    open = false;
                   ">
-            <option value="">Select Option</option>
-            {% for variant in product.variants %}
-              <option value="{{ variant.id }}"
-                      data-id="{{ variant.id }}"
-                      data-price="{{ variant.price }}"
-                      data-title="{{ variant.title | escape }}"
-                      data-image="{{ variant.featured_image | default: product.featured_image | img_url: '300x300', crop: 'center' }}">
-                {{ variant.title }}
-              </option>
-            {% endfor %}
-          </select>
+                  {{ variant.title }}
+                </button>
+              {% endfor %}
+            </div>
+          </div>
           
           <button class="bundle-button"
                   x-show="!isProductSelected('{{ product.id }}')"
