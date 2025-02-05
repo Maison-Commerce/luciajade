@@ -605,10 +605,9 @@
           }));
 
           if (typeof window.liquidAjaxCart !== 'undefined') {
-            // Use Liquid Ajax Cart for adding items
             const response = await window.liquidAjaxCart.add({
               items: items,
-              sections: ['cart-drawer', 'cart-items', 'cart-icon-bubble']
+              sections: ['cart-drawer']
             });
 
             if (!response.ok) {
@@ -616,19 +615,9 @@
               throw new Error(errorData.description || 'Failed to add bundle to cart');
             }
 
-            // Clear the bundle
-            this.selectedItems = [];
-            localStorage.removeItem('currentBundle');
-            this.isViewOpen = false;
-
-            // Show success message
-            this.showNotification('Bundle added to cart!', 'success');
-
-            // Request a cart state update
-            await window.liquidAjaxCart.update();
-
+            // Force a cart refresh
+            await liquidAjaxcart.update();
           } else {
-            // Fallback to standard Ajax API
             const response = await fetch('/cart/add.js', {
               method: 'POST',
               headers: {
@@ -641,34 +630,37 @@
               const errorData = await response.json();
               throw new Error(errorData.description || 'Failed to add bundle to cart');
             }
-
-            // Clear the bundle
-            this.selectedItems = [];
-            localStorage.removeItem('currentBundle');
-            this.isViewOpen = false;
-
-            // Show success message
-            this.showNotification('Bundle added to cart!', 'success');
-
-            // Fetch updated cart data
-            const cartResponse = await fetch('/?section_id=cart-drawer');
-            const cartHtml = await cartResponse.text();
-            
-            // Update cart drawer content
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(cartHtml, 'text/html');
-            const cartDrawerItems = document.querySelector('[data-cart-drawer-items]');
-            const newItems = doc.querySelector('[data-cart-drawer-items]');
-            
-            if (cartDrawerItems && newItems) {
-              cartDrawerItems.innerHTML = newItems.innerHTML;
-            }
           }
 
-          // Dispatch cart drawer open event
+          // Clear the bundle
+          this.selectedItems = [];
+          localStorage.removeItem('currentBundle');
+          this.isViewOpen = false;
+
+          // Show success message
+          this.showNotification('Bundle added to cart!', 'success');
+
+          // Wait a brief moment for the cart to update
+          await new Promise(resolve => setTimeout(resolve, 100));
+
+          // Update cart drawer with latest information
+          await this.updateCartDrawer();
+
+          // Try multiple methods to open cart drawer
           document.dispatchEvent(new CustomEvent('theme:cart-drawer:show', {
             bubbles: true
           }));
+
+          const cartDrawer = document.querySelector('.drawer--cart');
+          if (cartDrawer) {
+            cartDrawer.setAttribute('open', '');
+            cartDrawer.classList.add('is-open');
+          }
+
+          const cartButton = document.querySelector('[data-cart-toggle]');
+          if (cartButton) {
+            cartButton.click();
+          }
 
         } catch (error) {
           console.error('Bundle addition error:', error);
