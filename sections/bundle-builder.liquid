@@ -1,0 +1,431 @@
+{%- style -%}
+  .bundle-builder {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .bundle-builder__header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .bundle-builder__content {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 2rem;
+  }
+
+  @media screen and (max-width: 768px) {
+    .bundle-builder__content {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .bundle-builder__products {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .bundle-builder__summary {
+    background: var(--color-background);
+    padding: 1.5rem;
+    border-radius: 8px;
+    position: sticky;
+    top: 20px;
+    border: 1px solid var(--color-border);
+  }
+
+  .bundle-product-card {
+    border: 1px solid var(--color-border);
+    padding: 1rem;
+    border-radius: 8px;
+    text-align: center;
+    transition: all 0.3s ease;
+  }
+
+  .bundle-product-card.selected {
+    border-color: var(--color-success);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  }
+
+  .bundle-product-card img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 4px;
+  }
+
+  .bundle-button {
+    width: 100%;
+    padding: 0.8rem;
+    margin-top: 1rem;
+    background: var(--color-button);
+    color: var(--color-button-text);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+  }
+
+  .bundle-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .variant-selector {
+    margin-top: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .variant-button {
+    flex: 1;
+    min-width: 80px;
+    padding: 0.5rem;
+    background: var(--color-background);
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .variant-button:hover {
+    background: var(--color-background-secondary);
+  }
+
+  .bundle-notifications {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 1rem;
+    border-radius: 4px;
+    z-index: 1000;
+    animation: slideIn 0.3s ease;
+  }
+
+  @keyframes slideIn {
+    from { transform: translateY(100%); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  .bundle-notifications.success {
+    background: var(--color-success);
+    color: #ffffff;
+  }
+
+  .bundle-notifications.error {
+    background: var(--color-error);
+    color: #ffffff;
+  }
+
+  .bundle-total {
+    margin: 1.5rem 0;
+    padding-top: 1rem;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .bundle-savings {
+    color: var(--color-success);
+    font-weight: bold;
+  }
+
+  .add-bundle-to-cart {
+    width: 100%;
+    padding: 1rem;
+    background: var(--color-button);
+    color: var(--color-button-text);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: bold;
+    transition: all 0.3s ease;
+  }
+
+  .add-bundle-to-cart:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+{%- endstyle -%}
+
+<script>
+  document.addEventListener('alpine:init', () => {
+    Alpine.data('bundleBuilder', (bundleSize, discountPercentage) => ({
+      bundleSize: bundleSize,
+      discountPercentage: discountPercentage,
+      selectedItems: [],
+      notification: {
+        show: false,
+        message: '',
+        type: 'success'
+      },
+      loading: false,
+
+      get originalTotal() {
+        return this.selectedItems.reduce((sum, item) => sum + item.price, 0);
+      },
+
+      get finalPrice() {
+        return this.originalTotal * (1 - this.discountPercentage / 100);
+      },
+
+      get savings() {
+        return this.originalTotal - this.finalPrice;
+      },
+
+      isProductSelected(productId) {
+        return this.selectedItems.some(item => item.id === productId);
+      },
+
+      addToBundle(product) {
+        if (this.selectedItems.length >= this.bundleSize) {
+          this.showNotification('Bundle is full!', 'error');
+          return;
+        }
+
+        this.selectedItems.push(product);
+        this.showNotification('Item added to bundle', 'success');
+      },
+
+      removeFromBundle(productId) {
+        this.selectedItems = this.selectedItems.filter(item => item.id !== productId);
+        this.showNotification('Item removed from bundle', 'success');
+      },
+
+      async addBundleToCart() {
+        if (this.selectedItems.length < this.bundleSize) {
+          this.showNotification(`Please select ${this.bundleSize} items`, 'error');
+          return;
+        }
+
+        this.loading = true;
+
+        try {
+          const bundleId = new Date().getTime();
+          const items = this.selectedItems.map(item => ({
+            id: item.variant_id,
+            quantity: 1,
+            properties: {
+              '_bundle_id': bundleId,
+              '_bundle_discount': this.discountPercentage + '%',
+              'Bundle': 'Jewelry Bundle Set'
+            }
+          }));
+
+          const response = await fetch(window.Shopify.routes.root + 'cart/add.js', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ items })
+          });
+
+          if (!response.ok) throw new Error('Failed to add bundle to cart');
+
+          this.showNotification('Bundle added to cart!', 'success');
+          
+          // Update cart drawer/counter if they exist
+          if (typeof window.updateCartDrawer === 'function') {
+            await window.updateCartDrawer();
+          }
+
+          setTimeout(() => window.location.href = '/cart', 1500);
+        } catch (error) {
+          console.error('Bundle addition error:', error);
+          this.showNotification('Error adding bundle to cart', 'error');
+        } finally {
+          this.loading = false;
+        }
+      },
+
+      showNotification(message, type = 'success') {
+        this.notification = {
+          show: true,
+          message,
+          type
+        };
+
+        setTimeout(() => {
+          this.notification.show = false;
+        }, 3000);
+      },
+
+      formatMoney(cents) {
+        return new Intl.NumberFormat('en-US', {
+          style: 'currency',
+          currency: '{{ cart.currency.iso_code }}'
+        }).format(cents / 100);
+      }
+    }));
+  });
+</script>
+
+<div class="bundle-builder" 
+     x-data="bundleBuilder({{ section.settings.bundle_size }}, {{ section.settings.discount_percentage }})"
+     x-init="initializeBundleBuilder()">
+  
+  <div class="bundle-builder__header">
+    <h2 class="h1">{{ section.settings.title }}</h2>
+    <div class="bundle-progress">
+      <span x-text="selectedItems.length"></span>/
+      <span x-text="bundleSize"></span> items selected
+    </div>
+  </div>
+
+  <div class="bundle-builder__content">
+    <!-- Product Grid -->
+    <div class="bundle-builder__products">
+      {% for product in collections[section.settings.bundle_collection].products %}
+        <div class="bundle-product-card" 
+             x-data="{ showVariants: false }"
+             :class="{ 'selected': isProductSelected('{{ product.id }}') }">
+          
+          <img src="{{ product.featured_image | img_url: '300x300', crop: 'center' }}" 
+               alt="{{ product.title }}"
+               loading="lazy"
+               width="300"
+               height="300">
+          
+          <h3 class="h4">{{ product.title }}</h3>
+          <p class="price" x-text="formatMoney({{ product.price }})"></p>
+          
+          <button class="bundle-button"
+                  x-show="!isProductSelected('{{ product.id }}')"
+                  @click="showVariants = true"
+                  :disabled="selectedItems.length >= bundleSize">
+            Add to Bundle
+          </button>
+          
+          <button class="bundle-button"
+                  x-show="isProductSelected('{{ product.id }}')"
+                  @click="removeFromBundle('{{ product.id }}')">
+            Remove
+          </button>
+          
+          <!-- Variant Selector -->
+          <div x-show="showVariants" 
+               x-transition
+               class="variant-selector">
+            {% for variant in product.variants %}
+              <button class="variant-button"
+                      @click="addToBundle({
+                        id: '{{ product.id }}',
+                        variant_id: '{{ variant.id }}',
+                        title: '{{ product.title | escape }}',
+                        price: {{ variant.price }},
+                        variant_title: '{{ variant.title | escape }}'
+                      }); showVariants = false">
+                {{ variant.title }}
+              </button>
+            {% endfor %}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+
+    <!-- Selected Items Summary -->
+    <div class="bundle-builder__summary" 
+         x-show="selectedItems.length > 0"
+         x-transition>
+      <h3 class="h3">Your Bundle</h3>
+      
+      <template x-for="item in selectedItems" :key="item.variant_id">
+        <div class="bundle-item">
+          <span x-text="item.title"></span>
+          <span x-text="item.variant_title"></span>
+          <span x-text="formatMoney(item.price)"></span>
+          <button class="bundle-button"
+                  @click="removeFromBundle(item.id)">
+            Remove
+          </button>
+        </div>
+      </template>
+      
+      <div class="bundle-total">
+        <p>Original Total: <span x-text="formatMoney(originalTotal)"></span></p>
+        <p>Bundle Discount: <span x-text="discountPercentage + '%'"></span></p>
+        <p class="bundle-savings">You Save: <span x-text="formatMoney(savings)"></span></p>
+        <p class="h3">Final Price: <span x-text="formatMoney(finalPrice)"></span></p>
+      </div>
+
+      <button class="add-bundle-to-cart"
+              @click="addBundleToCart()"
+              :disabled="selectedItems.length < bundleSize || loading">
+        <span x-show="!loading">Add Bundle to Cart</span>
+        <span x-show="loading">Adding to Cart...</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Notifications -->
+  <div class="bundle-notifications" 
+       x-show="notification.show" 
+       x-transition
+       :class="notification.type">
+    <p x-text="notification.message"></p>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Bundle Builder",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section Title",
+      "default": "Build Your Bundle"
+    },
+    {
+      "type": "number",
+      "id": "bundle_size",
+      "label": "Number of Items in Bundle",
+      "default": 7
+    },
+    {
+      "type": "number",
+      "id": "discount_percentage",
+      "label": "Bundle Discount Percentage",
+      "default": 20
+    },
+    {
+      "type": "collection",
+      "id": "bundle_collection",
+      "label": "Bundle Products Collection"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "button_color",
+      "label": "Button Color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button Text Color",
+      "default": "#ffffff"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Bundle Builder",
+      "category": "Custom"
+    }
+  ]
+}
+{% endschema %} 

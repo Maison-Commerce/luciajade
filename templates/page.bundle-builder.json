@@ -25,6 +25,19 @@
         "heading_tag": "automatic"
       }
     },
+    "bundle_builder": {
+      "type": "bundle-builder",
+      "settings": {
+        "title": "Create Your Custom Bundle",
+        "bundle_size": 7,
+        "discount_percentage": 20,
+        "bundle_collection": "all",
+        "background_color": "#ffffff",
+        "text_color": "#000000",
+        "button_color": "#000000",
+        "button_text_color": "#ffffff"
+      }
+    },
     "section_multicolumn_eqFPgc": {
       "type": "section-multicolumn",
       "blocks": {
@@ -178,7 +191,7 @@
           "type": "accordion",
           "settings": {
             "title": "Do you offer free shipping?",
-            "content": "<p>Yes, I’m happy to offer FREE shipping across the country! Once your jewelry is on its way, I’ll send you a tracking number so you can follow its journey from my hands to yours.</p>"
+            "content": "<p>Yes, I'm happy to offer FREE shipping across the country! Once your jewelry is on its way, I'll send you a tracking number so you can follow its journey from my hands to yours.</p>"
           }
         }
       },
@@ -205,6 +218,7 @@
   },
   "order": [
     "main",
+    "bundle_builder",
     "section_multicolumn_eqFPgc",
     "section_sidebar_FFdyeB"
   ]
