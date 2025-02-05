@@ -309,6 +309,102 @@
       padding: 10px 20px;
     }
   }
+
+  .bundle-progress-container {
+    margin: 30px auto;
+    max-width: 400px;
+    text-align: center;
+  }
+
+  .bundle-progress-text {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 15px;
+  }
+
+  .bundle-progress-bar {
+    height: 8px;
+    background: #e5e5e5;
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .bundle-progress-fill {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    background: linear-gradient(90deg, #000000, #333333);
+    transition: width 0.3s ease;
+    border-radius: 4px;
+  }
+
+  .bundle-progress-steps {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    position: relative;
+  }
+
+  .bundle-progress-step {
+    width: 24px;
+    height: 24px;
+    background: #e5e5e5;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    color: #666;
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 2;
+  }
+
+  .bundle-progress-step.active {
+    background: #000000;
+    color: #ffffff;
+    transform: scale(1.2);
+  }
+
+  .bundle-progress-step.completed {
+    background: #000000;
+    color: #ffffff;
+  }
+
+  .bundle-progress-step.completed::after {
+    content: '✓';
+    font-size: 14px;
+  }
+
+  @keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+  }
+
+  .bundle-progress-step.active {
+    animation: pulse 2s infinite;
+  }
+
+  .bundle-progress-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 25px;
+    font-size: 14px;
+    color: #666;
+  }
+
+  .bundle-progress-label {
+    text-align: center;
+    transition: color 0.3s ease;
+  }
+
+  .bundle-progress-label.active {
+    color: #000000;
+    font-weight: 500;
+  }
 {%- endstyle -%}
 
 <script>
@@ -444,9 +540,44 @@
   
   <div class="bundle-builder__header">
     <h2 class="h1">{{ section.settings.title }}</h2>
-    <div class="bundle-progress">
-      <span x-text="selectedItems.length"></span>/
-      <span x-text="bundleSize"></span> items selected
+    
+    <div class="bundle-progress-container">
+      <div class="bundle-progress-text">
+        <span x-text="selectedItems.length"></span> / <span x-text="bundleSize"></span> items selected
+      </div>
+      
+      <div class="bundle-progress-bar">
+        <div class="bundle-progress-fill"
+             :style="'width: ' + (selectedItems.length / bundleSize * 100) + '%'">
+        </div>
+      </div>
+      
+      <div class="bundle-progress-steps">
+        <template x-for="index in bundleSize" :key="index">
+          <div class="bundle-progress-step"
+               :class="{
+                 'active': selectedItems.length === index - 1,
+                 'completed': selectedItems.length >= index
+               }"
+               x-text="selectedItems.length >= index ? '✓' : index">
+          </div>
+        </template>
+      </div>
+      
+      <div class="bundle-progress-labels">
+        <div class="bundle-progress-label"
+             :class="{ 'active': selectedItems.length === 0 }">
+          Start
+        </div>
+        <div class="bundle-progress-label"
+             :class="{ 'active': selectedItems.length > 0 && selectedItems.length < bundleSize }">
+          Building
+        </div>
+        <div class="bundle-progress-label"
+             :class="{ 'active': selectedItems.length === bundleSize }">
+          Complete
+        </div>
+      </div>
     </div>
   </div>
 
