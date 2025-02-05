@@ -23,23 +23,46 @@
     margin-bottom: 2rem;
   }
 
-  .bundle-builder__content {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 2rem;
+  .bundle-builder__title {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
   }
 
-  @media screen and (max-width: 768px) {
-    .bundle-builder__content {
-      grid-template-columns: 1fr;
-    }
+  /* Filter controls */
+  .bundle-filter-controls {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    justify-content: center;
   }
 
+  .bundle-filter-button {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    background: transparent;
+    font-size: 1rem;
+    cursor: pointer;
+    color: #666;
+    transition: color 0.3s ease;
+  }
+
+  .bundle-filter-button.active {
+    color: #000;
+    font-weight: 500;
+  }
+
+  /* Product grid */
   .bundle-builder__products {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 2rem;
-    padding: 2rem 0;
+    margin: 2rem 0;
+  }
+
+  @media screen and (max-width: 1024px) {
+    .bundle-builder__products {
+      grid-template-columns: repeat(3, 1fr);
+    }
   }
 
   @media screen and (max-width: 768px) {
@@ -49,532 +72,65 @@
     }
   }
 
-  .bundle-builder__summary {
-    background: var(--color-background);
-    padding: 1.5rem;
-    border-radius: 8px;
-    position: sticky;
-    top: 20px;
-    border: 1px solid var(--color-border);
-  }
-
+  /* Product card */
   .bundle-product-card {
     display: flex;
     flex-direction: column;
-    padding: 1.5rem;
-    border: 1px solid var(--color-border);
+    padding: 1rem;
     border-radius: 8px;
-    transition: all 0.3s ease;
     background: #ffffff;
   }
 
-  .bundle-product-card:hover {
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  }
-
-  .bundle-product-card img {
+  .bundle-product-image {
     width: 100%;
-    height: auto;
     aspect-ratio: 1;
     object-fit: cover;
     border-radius: 4px;
     margin-bottom: 1rem;
   }
 
-  .bundle-product-card-content {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-  }
-
   .bundle-product-title {
-    font-size: 1.1rem;
-    margin: 1rem 0;
+    font-size: 1rem;
+    margin: 0.5rem 0;
     font-weight: 500;
   }
 
   .bundle-product-price {
-    margin: 0.5rem 0;
-  }
-
-  .bundle-button {
-    width: 100%;
-    padding: 12px;
-    background: #000000;
-    color: #ffffff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: 500;
-    transition: all 0.3s ease;
-  }
-
-  .bundle-button:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-
-  .variant-selector {
-    margin-top: 1rem;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    justify-content: center;
-  }
-
-  .variant-button {
-    flex: 1;
-    min-width: 80px;
-    padding: 0.5rem;
-    background: var(--color-background);
-    border: 1px solid var(--color-border);
-    border-radius: 4px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-  }
-
-  .variant-button:hover {
-    background: var(--color-background-secondary);
-  }
-
-  .bundle-notifications {
-    position: fixed;
-    bottom: 20px;
-    left: 20px;
-    z-index: 1000;
-  }
-
-  /* Toastify custom styles */
-  .toastify {
-    padding: 12px 20px;
-    color: #ffffff;
-    display: inline-block;
-    box-shadow: 0 3px 6px -1px rgba(0, 0, 0, 0.12);
-    background: #000000;
-    position: fixed;
-    opacity: 0;
-    transition: all 0.4s cubic-bezier(0.215, 0.61, 0.355, 1);
-    border-radius: 4px;
-    cursor: pointer;
-    text-decoration: none;
-    max-width: calc(50% - 20px);
-    z-index: 2147483647;
-  }
-
-  .toastify.on {
-    opacity: 1;
-  }
-
-  .toast-close {
-    opacity: 0.4;
-    padding: 0 5px;
-    margin-left: 10px;
-  }
-
-  .toastify.success {
-    background: #000000;
-  }
-
-  .toastify.error {
-    background: #ef4444;
-  }
-
-  .bundle-total {
-    margin: 1.5rem 0;
-    padding-top: 1rem;
-    border-top: 1px solid var(--color-border);
-  }
-
-  .bundle-savings {
-    color: var(--color-success);
-    font-weight: bold;
-  }
-
-  .add-bundle-to-cart {
-    width: 100%;
-    padding: 1rem;
-    background: var(--color-button);
-    color: var(--color-button-text);
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 1.1em;
-    font-weight: bold;
-    transition: all 0.3s ease;
-  }
-
-  .add-bundle-to-cart:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-
-  .bundle-view {
-    position: fixed;
-    top: 0;
-    right: 0;
-    width: 100%;
-    max-width: 450px;
-    height: 100vh;
-    background: #ffffff;
-    box-shadow: -5px 0 15px rgba(0,0,0,0.1);
-    padding: 30px;
-    transform: translateX(100%);
-    transition: transform 0.3s ease;
-    z-index: 1000;
-    overflow-y: auto;
-  }
-
-  @media screen and (max-width: 768px) {
-    .bundle-view {
-      width: 100%;
-      max-width: 100%;
-    }
-  }
-
-  .bundle-view.active {
-    transform: translateX(0);
-  }
-
-  .bundle-view-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 30px;
-    padding-bottom: 15px;
-    border-bottom: 1px solid #e5e5e5;
-  }
-
-  .bundle-view-header h3 {
-    font-size: 24px;
-    font-weight: 500;
-    margin: 0;
-  }
-
-  .close-button {
-    background: transparent;
-    border: none;
-    font-size: 16px;
-    cursor: pointer;
-    padding: 5px;
-    color: #333;
-  }
-
-  .bundle-item {
-    padding: 20px 0;
-    border-bottom: 1px solid #e5e5e5;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .bundle-item-title {
-    font-size: 16px;
-    color: #333;
-    margin: 0;
-  }
-
-  .bundle-item-price {
-    font-size: 14px;
-    color: #666;
-    margin-bottom: 4px;
-  }
-
-  .bundle-item-remove {
-    background: transparent;
-    border: none;
-    color: #000000;
-    padding: 0;
-    cursor: pointer;
-    font-size: 14px;
-    transition: opacity 0.3s ease;
-    width: fit-content;
-    text-decoration: underline;
-  }
-
-  .bundle-item-remove:hover {
-    opacity: 0.7;
-  }
-
-  .bundle-total {
-    margin-top: 30px;
-    padding-top: 20px;
-    border-top: 2px solid #e5e5e5;
-  }
-
-  .bundle-total p {
-    display: flex;
-    justify-content: space-between;
-    margin: 10px 0;
-    font-size: 14px;
-    color: #666;
-  }
-
-  .bundle-total .final-price {
-    font-size: 18px;
-    font-weight: bold;
-    color: #333;
-    margin-top: 15px;
-  }
-
-  .bundle-actions {
-    position: sticky;
-    bottom: 0;
-    background: #ffffff;
-    padding: 20px 0;
-    margin-top: 30px;
-  }
-
-  .add-bundle-to-cart {
-    width: 100%;
-    padding: 15px;
-    background: #000000;
-    color: #ffffff;
-    border: none;
-    border-radius: 4px;
-    font-size: 16px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-
-  .add-bundle-to-cart:hover {
-    background: #333;
-  }
-
-  .add-bundle-to-cart:disabled {
-    background: #cccccc;
-    cursor: not-allowed;
-  }
-
-  .bundle-view-button {
-    position: fixed;
-    right: 20px;
-    bottom: 20px;
-    padding: 12px 24px;
-    background: #000000;
-    color: #ffffff;
-    border: none;
-    border-radius: 4px;
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    z-index: 999;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    transition: all 0.3s ease;
-    width: auto;
-    min-width: 200px;
-  }
-
-  .bundle-view-button.all-items-added {
-    background: #4CAF50;
-  }
-
-  .bundle-progress-container {
-    display: none;
-  }
-
-  .bundle-progress-text {
-    font-size: 16px;
-    color: #666;
-    margin-bottom: 15px;
-  }
-
-  .bundle-progress-bar {
-    height: 8px;
-    background: #e5e5e5;
-    border-radius: 4px;
-    overflow: hidden;
-    position: relative;
-  }
-
-  .bundle-progress-fill {
-    position: absolute;
-    left: 0;
-    top: 0;
-    height: 100%;
-    background: linear-gradient(90deg, #000000, #333333);
-    transition: width 0.3s ease;
-    border-radius: 4px;
-  }
-
-  .bundle-progress-steps {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 10px;
-    position: relative;
-    padding: 0 10px;
-  }
-
-  /* Add line connecting steps */
-  .bundle-progress-steps::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background: #e5e5e5;
-    transform: translateY(-50%);
-    z-index: 1;
-  }
-
-  .bundle-progress-step {
-    width: 24px;
-    height: 24px;
-    background: #e5e5e5;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 12px;
-    color: #ffffff;
-    transition: all 0.3s ease;
-    position: relative;
-    z-index: 2;
-  }
-
-  .bundle-progress-step.active {
-    background: #000000;
-  }
-
-  .bundle-progress-step.active::after {
-    content: '✓';
-    font-size: 14px;
-  }
-
-  /* Add style for completed steps */
-  .bundle-progress-step.completed {
-    background: #000000;
-  }
-
-  .bundle-progress-step.completed::after {
-    content: '✓';
-    font-size: 14px;
-  }
-
-  @keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.1); }
-    100% { transform: scale(1); }
-  }
-
-  .bundle-progress-step.active {
-    animation: pulse 2s infinite;
-  }
-
-  .bundle-progress-labels {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 25px;
-    font-size: 14px;
-    color: #666;
-  }
-
-  .bundle-progress-label {
-    text-align: center;
-    transition: color 0.3s ease;
-  }
-
-  .bundle-progress-label.active {
-    color: #000000;
-    font-weight: 500;
-  }
-
-  /* Empty state message */
-  .bundle-view-empty {
-    text-align: center;
-    padding: 40px 20px;
-    color: #666;
-  }
-
-  .bundle-view-empty h4 {
-    font-size: 18px;
-    margin-bottom: 10px;
-    color: #333;
-  }
-
-  .bundle-view-empty p {
-    font-size: 14px;
-    line-height: 1.5;
-  }
-
-  /* Selected product card styling */
-  .bundle-product-card.selected {
-    border: 2px solid #000000;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    transform: translateY(-2px);
-  }
-
-  .bundle-product-card.selected .bundle-button {
-    background: #000000;
-    color: #ffffff;
-    border-radius: 4px;
-    padding: 10px 20px;
-    border: 1px solid #000000;
-    transition: all 0.3s ease;
-  }
-
-  .bundle-product-card.selected .bundle-button:hover {
-    background: #ffffff;
-    color: #000000;
-  }
-
-  /* Sorting and filtering controls */
-  .bundle-controls {
-    display: flex;
-    gap: 1rem;
-    margin-bottom: 2rem;
-    flex-wrap: wrap;
-  }
-
-  .bundle-dropdown {
-    padding: 0.75rem 1rem;
-    border: 1px solid var(--color-border);
-    border-radius: 4px;
-    min-width: 200px;
-    background: #ffffff;
     font-size: 1rem;
-    cursor: pointer;
+    color: #000;
+    margin-bottom: 1rem;
   }
 
-  /* Updated variant selection styling */
-  .variant-selectors {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    margin: 1rem 0;
+  /* Variant selector */
+  .variant-selector {
+    margin-top: auto;
   }
 
   .variant-dropdown {
     width: 100%;
     padding: 0.75rem;
-    border: 1px solid var(--color-border);
+    border: 1px solid #e5e5e5;
     border-radius: 4px;
-    background: #ffffff;
-    font-size: 0.9rem;
+    margin-bottom: 0.75rem;
     appearance: none;
     background-image: url('data:image/svg+xml;charset=US-ASCII,<svg width="14" height="8" viewBox="0 0 14 8" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1L7 7L13 1" stroke="%23151515" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>');
     background-repeat: no-repeat;
     background-position: right 1rem center;
-    cursor: pointer;
-  }
-
-  .variant-dropdown:focus {
-    outline: none;
-    border-color: #000;
+    background-color: #fff;
+    font-size: 0.9rem;
   }
 
   .add-to-bundle-button {
     width: 100%;
     padding: 0.75rem;
-    background: #000000;
-    color: #ffffff;
+    background: #000;
+    color: #fff;
     border: none;
     border-radius: 4px;
     font-size: 0.9rem;
     font-weight: 500;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: background-color 0.3s ease;
   }
 
   .add-to-bundle-button:disabled {
@@ -582,22 +138,21 @@
     cursor: not-allowed;
   }
 
-  .add-to-bundle-button:hover:not(:disabled) {
-    background: #333333;
-  }
-
-  /* Product card improvements */
-  .bundle-product-card {
-    padding: 1.5rem;
-    border: 1px solid var(--color-border);
-    border-radius: 8px;
-    background: #ffffff;
-  }
-
-  .bundle-product-title {
-    font-size: 1.1rem;
-    margin: 1rem 0;
+  /* Bundle counter */
+  .bundle-counter {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    background: #000;
+    color: #fff;
+    padding: 1rem 2rem;
+    border-radius: 4px;
     font-weight: 500;
+    z-index: 1000;
+  }
+
+  .bundle-counter.complete {
+    background: #4CAF50;
   }
 {%- endstyle -%}
 
@@ -608,9 +163,10 @@
 <script>
   document.addEventListener('alpine:init', () => {
     Alpine.data('bundleBuilder', (bundleSize, discountPercentage) => ({
-      bundleSize: bundleSize,
-      discountPercentage: discountPercentage,
+      bundleSize,
+      discountPercentage,
       selectedItems: [],
+      currentFilter: '',
       notification: {
         show: false,
         message: '',
@@ -620,7 +176,6 @@
       isViewOpen: false,
 
       init() {
-        // Initialize from localStorage if exists
         const savedBundle = localStorage.getItem('currentBundle');
         if (savedBundle) {
           this.selectedItems = JSON.parse(savedBundle);
@@ -641,6 +196,14 @@
 
       get savings() {
         return this.originalTotal - this.finalPrice;
+      },
+
+      filterProducts(type) {
+        this.currentFilter = type;
+      },
+
+      shouldShowProduct(type) {
+        return !this.currentFilter || this.currentFilter === type;
       },
 
       isProductSelected(productId) {
@@ -819,30 +382,8 @@
         }).format(cents / 100);
       },
 
-      filterProducts(category) {
-        const products = document.querySelectorAll('.bundle-product-card');
-        products.forEach(product => {
-          const shouldShow = !category || product.dataset.productType.includes(category);
-          product.style.display = shouldShow ? 'flex' : 'none';
-        });
-      },
-
-      filterBySize(size) {
-        const products = document.querySelectorAll('.bundle-product-card');
-        products.forEach(product => {
-          const sizes = product.dataset.productSize.split(',');
-          const shouldShow = !size || sizes.includes(size);
-          product.style.display = shouldShow ? 'flex' : 'none';
-        });
-      },
-
-      filterByMaterial(material) {
-        const products = document.querySelectorAll('.bundle-product-card');
-        products.forEach(product => {
-          const materials = product.dataset.productMaterial.split(',');
-          const shouldShow = !material || materials.includes(material);
-          product.style.display = shouldShow ? 'flex' : 'none';
-        });
+      updateSelectedVariant(event, productId) {
+        // Additional variant handling if needed
       }
     }));
   });
@@ -860,122 +401,71 @@
   });
 </script>
 
-<div class="bundle-builder" 
-     x-data="bundleBuilder({{ section.settings.bundle_size }}, {{ section.settings.discount_percentage }})"
-     x-init="init()">
-  
+<div class="bundle-builder" x-data="bundleBuilder({{ section.settings.bundle_size }}, {{ section.settings.discount_percentage }})">
   <div class="bundle-builder__header">
-    <h2 class="h1">{{ section.settings.title }}</h2>
-  </div>
-
-  <!-- Enhanced filtering and sorting controls -->
-  <div class="bundle-controls">
-    <!-- Category filter -->
-    <select class="bundle-dropdown" @change="filterProducts($event.target.value)">
-      <option value="">All Categories</option>
-      <option value="pink-stone">Pink Stone</option>
-      <option value="tiger-eye">Tiger Eye Stone</option>
-    </select>
-
-    <!-- Size filter -->
-    <select class="bundle-dropdown" @change="filterBySize($event.target.value)">
-      <option value="">All Sizes</option>
-      <option value="6">US 6</option>
-      <option value="7">US 7</option>
-      <option value="8">US 8</option>
-    </select>
-
-    <!-- Material filter -->
-    <select class="bundle-dropdown" @change="filterByMaterial($event.target.value)">
-      <option value="">All Materials</option>
-      <option value="gold">Gold</option>
-      <option value="silver">Silver</option>
-    </select>
-  </div>
-
-  <div class="bundle-builder__content">
-    <div class="bundle-builder__products">
-      {% for product in collections[section.settings.bundle_collection].products %}
-        <div class="bundle-product-card" 
-             x-data="{ 
-               selectedMaterial: '',
-               selectedLetter: '',
-               variants: {{ product.variants | json }},
-               getVariantId() {
-                 return this.variants.find(v => 
-                   v.title.includes(this.selectedMaterial) && 
-                   v.title.includes(this.selectedLetter)
-                 )?.id;
-               }
-             }"
-             :class="{ 'selected': isProductSelected('{{ product.id }}') }"
-             data-product-type="{{ product.type | handle }}">
-          
-          <img src="{{ product.featured_image | img_url: '400x400', crop: 'center' }}" 
-               alt="{{ product.title }}"
-               loading="lazy"
-               width="400"
-               height="400">
-          
-          <h3 class="bundle-product-title">{{ product.title }}</h3>
-          <p class="price" x-text="formatMoney({{ product.price }})"></p>
-          
-          <div class="variant-selectors">
-            <!-- Material dropdown -->
-            <select class="variant-dropdown"
-                    x-model="selectedMaterial"
-                    :disabled="isProductSelected('{{ product.id }}')"
-                    aria-label="Select material">
-              <option value="">Select material</option>
-              {% for material in product.options_with_values[0].values %}
-                <option value="{{ material }}">{{ material }}</option>
-              {% endfor %}
-            </select>
-
-            <!-- Letter dropdown -->
-            <select class="variant-dropdown"
-                    x-model="selectedLetter"
-                    :disabled="isProductSelected('{{ product.id }}')"
-                    aria-label="Select letter">
-              <option value="">Select letter</option>
-              {% for letter in product.options_with_values[1].values %}
-                <option value="{{ letter }}">{{ letter }}</option>
-              {% endfor %}
-            </select>
-          </div>
-
-          <!-- Add to Bundle button -->
-          <button class="add-to-bundle-button"
-                  @click="addToBundle({
-                    id: '{{ product.id }}',
-                    variant_id: getVariantId(),
-                    title: '{{ product.title | escape }}',
-                    price: variants.find(v => v.id == getVariantId())?.price || {{ product.price }},
-                    variant_title: selectedMaterial + ' / ' + selectedLetter
-                  })"
-                  :disabled="!selectedMaterial || !selectedLetter || isProductSelected('{{ product.id }}')"
-                  x-show="!isProductSelected('{{ product.id }}')">
-            Add to Bundle
-          </button>
-
-          <!-- Remove button -->
-          <button class="bundle-button"
-                  x-show="isProductSelected('{{ product.id }}')"
-                  @click="removeFromBundle('{{ product.id }}')">
-            Remove
-          </button>
-        </div>
+    <h1 class="bundle-builder__title">Create Your Custom Bundle</h1>
+    
+    <!-- Filter buttons -->
+    <div class="bundle-filter-controls">
+      {% for product_type in collection.all_types %}
+        <button class="bundle-filter-button"
+                :class="{ 'active': currentFilter === '{{ product_type | handle }}' }"
+                @click="filterProducts('{{ product_type | handle }}')">
+          {{ product_type }}
+        </button>
       {% endfor %}
     </div>
   </div>
 
-  <!-- Updated Sticky Banner -->
-  <button class="bundle-view-button"
-          @click="toggleView()"
-          x-show="!isViewOpen"
-          :class="{ 'all-items-added': selectedItems.length === bundleSize }">
+  <div class="bundle-builder__products">
+    {% for product in collections[section.settings.bundle_collection].products %}
+      <div class="bundle-product-card"
+           x-data="{ selectedVariant: '' }"
+           :class="{ 'selected': isProductSelected('{{ product.id }}') }"
+           data-product-type="{{ product.type | handle }}"
+           x-show="shouldShowProduct('{{ product.type | handle }}')">
+        
+        <img src="{{ product.featured_image | img_url: '400x400', crop: 'center' }}"
+             alt="{{ product.title }}"
+             class="bundle-product-image"
+             loading="lazy">
+        
+        <h3 class="bundle-product-title">{{ product.title }}</h3>
+        <p class="bundle-product-price">{{ product.price | money }}</p>
+        
+        <div class="variant-selector">
+          <select class="variant-dropdown"
+                  x-model="selectedVariant"
+                  :disabled="isProductSelected('{{ product.id }}')"
+                  @change="updateSelectedVariant($event, '{{ product.id }}')">
+            <option value="">Select variant</option>
+            {% for variant in product.variants %}
+              <option value="{{ variant.id }}">{{ variant.title }}</option>
+            {% endfor %}
+          </select>
+
+          <button class="add-to-bundle-button"
+                  @click="addToBundle({
+                    id: '{{ product.id }}',
+                    variant_id: selectedVariant,
+                    title: '{{ product.title | escape }}',
+                    price: {{ product.price }},
+                    variant_title: $el.querySelector('select').selectedOptions[0].text
+                  })"
+                  :disabled="!selectedVariant || isProductSelected('{{ product.id }}')"
+                  x-show="!isProductSelected('{{ product.id }}')">
+            Add to Bundle
+          </button>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+  <!-- Bundle counter -->
+  <div class="bundle-counter"
+       :class="{ 'complete': selectedItems.length === bundleSize }">
     <span x-text="selectedItems.length === bundleSize ? 'All Items Added' : `${selectedItems.length} / ${bundleSize} Items Added`"></span>
-  </button>
+  </div>
 
   <!-- Bundle View Sidebar -->
   <div class="bundle-view"
