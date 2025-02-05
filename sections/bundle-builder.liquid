@@ -1,6 +1,15 @@
 <!-- Add Liquid Ajax Cart -->
-<script src="https://cdn.jsdelivr.net/npm/liquid-ajax-cart@2.3.0/liquid-ajax-cart.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/liquid-ajax-cart@2.3.0/liquid-ajax-cart.js" defer="defer"></script>
 <link href="https://cdn.jsdelivr.net/npm/liquid-ajax-cart@2.3.0/liquid-ajax-cart.css" rel="stylesheet">
+
+<!-- Initialize Liquid Ajax Cart -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    if (typeof window.liquidAjaxCart === 'undefined') {
+      console.warn('Liquid Ajax Cart not loaded, falling back to standard cart functionality');
+    }
+  });
+</script>
 
 {%- style -%}
   .bundle-builder {
@@ -595,15 +604,32 @@
             }
           }));
 
-          // Add items to cart using Liquid Ajax Cart
-          const response = await liquidAjaxCart.add({
-            items: items,
-            sections: ['cart-drawer'] // Request cart drawer section to be updated
-          });
+          // Check if liquidAjaxCart is available
+          if (typeof window.liquidAjaxCart !== 'undefined') {
+            // Use Liquid Ajax Cart
+            const response = await window.liquidAjaxCart.add({
+              items: items,
+              sections: ['cart-drawer']
+            });
 
-          if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.description || 'Failed to add bundle to cart');
+            if (!response.ok) {
+              const errorData = await response.json();
+              throw new Error(errorData.description || 'Failed to add bundle to cart');
+            }
+          } else {
+            // Fallback to regular fetch
+            const response = await fetch('/cart/add.js', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({ items })
+            });
+
+            if (!response.ok) {
+              const errorData = await response.json();
+              throw new Error(errorData.description || 'Failed to add bundle to cart');
+            }
           }
 
           // Clear the bundle
@@ -614,10 +640,24 @@
           // Show success message
           this.showNotification('Bundle added to cart!', 'success');
 
-          // Open cart drawer
+          // Try multiple methods to open cart drawer
+          // 1. Theme event
           document.dispatchEvent(new CustomEvent('theme:cart-drawer:show', {
             bubbles: true
           }));
+
+          // 2. Standard drawer open
+          const cartDrawer = document.querySelector('.drawer--cart');
+          if (cartDrawer) {
+            cartDrawer.setAttribute('open', '');
+            cartDrawer.classList.add('is-open');
+          }
+
+          // 3. Theme specific cart button click
+          const cartButton = document.querySelector('[data-cart-toggle]');
+          if (cartButton) {
+            cartButton.click();
+          }
 
         } catch (error) {
           console.error('Bundle addition error:', error);
