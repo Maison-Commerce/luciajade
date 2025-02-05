@@ -668,12 +668,6 @@
           // Show success message
           this.showNotification('Bundle added to cart!', 'success');
 
-          // Open cart drawer
-          const cartDrawer = document.querySelector('.drawer--cart.color-scheme-1');
-          if (cartDrawer) {
-            cartDrawer.setAttribute('open', '');
-            cartDrawer.classList.add('is-open');
-          }
 
         } catch (error) {
           console.error('Bundle addition error:', error);
