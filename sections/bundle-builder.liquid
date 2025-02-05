@@ -36,9 +36,22 @@
 
   .bundle-builder__products {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-template-columns: repeat(4, 1fr);
     gap: 1.5rem;
     position: relative;
+  }
+
+  @media screen and (max-width: 768px) {
+    .bundle-builder__products {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+  }
+
+  @media screen and (min-width: 769px) and (max-width: 1024px) {
+    .bundle-builder__products {
+      grid-template-columns: repeat(3, 1fr);
+    }
   }
 
   .bundle-builder__summary {
@@ -683,9 +696,6 @@
           this.showNotification('Bundle added to cart!', 'success');
 
           // Wait a brief moment for the cart to update
-          await new Promise(resolve => setTimeout(resolve, 100));
-
-          // Update cart drawer with latest information
           await this.updateCartDrawer();
 
           // Try multiple methods to open cart drawer
