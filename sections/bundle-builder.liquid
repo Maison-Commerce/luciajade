@@ -154,14 +154,23 @@
     position: fixed;
     top: 0;
     right: 0;
-    width: 400px;
+    width: 100%;
+    max-width: 450px;
     height: 100vh;
-    background: var(--color-background);
-    border-left: 1px solid var(--color-border);
-    padding: 20px;
+    background: #ffffff;
+    box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+    padding: 30px;
     transform: translateX(100%);
     transition: transform 0.3s ease;
     z-index: 1000;
+    overflow-y: auto;
+  }
+
+  @media screen and (max-width: 768px) {
+    .bundle-view {
+      width: 100%;
+      max-width: 100%;
+    }
   }
 
   .bundle-view.active {
@@ -172,34 +181,133 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid var(--color-border);
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #e5e5e5;
+  }
+
+  .bundle-view-header h3 {
+    font-size: 24px;
+    font-weight: 500;
+    margin: 0;
+  }
+
+  .close-button {
+    background: transparent;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 5px;
+    color: #333;
+  }
+
+  .bundle-item {
+    padding: 15px 0;
+    border-bottom: 1px solid #e5e5e5;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .bundle-item-title {
+    font-size: 16px;
+    color: #333;
+    margin: 0;
+  }
+
+  .bundle-item-price {
+    font-size: 14px;
+    color: #666;
+  }
+
+  .bundle-item-remove {
+    background: transparent;
+    border: none;
+    color: #666;
+    text-decoration: underline;
+    cursor: pointer;
+    padding: 5px 0;
+    text-align: left;
+    font-size: 14px;
+  }
+
+  .bundle-item-remove:hover {
+    color: #333;
+  }
+
+  .bundle-total {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 2px solid #e5e5e5;
+  }
+
+  .bundle-total p {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 0;
+    font-size: 14px;
+    color: #666;
+  }
+
+  .bundle-total .final-price {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    margin-top: 15px;
   }
 
   .bundle-actions {
-    display: flex;
-    gap: 10px;
-    margin-top: 20px;
+    position: sticky;
+    bottom: 0;
+    background: #ffffff;
+    padding: 20px 0;
+    margin-top: 30px;
+  }
+
+  .add-bundle-to-cart {
+    width: 100%;
+    padding: 15px;
+    background: #000000;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  .add-bundle-to-cart:hover {
+    background: #333;
+  }
+
+  .add-bundle-to-cart:disabled {
+    background: #cccccc;
+    cursor: not-allowed;
   }
 
   .bundle-view-button {
     position: fixed;
     right: 20px;
     bottom: 20px;
-    padding: 15px 30px;
-    background: var(--color-button);
-    color: var(--color-button-text);
+    padding: 12px 24px;
+    background: #000000;
+    color: #ffffff;
     border: none;
     border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
     cursor: pointer;
     z-index: 999;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
   }
 
-  .close-button {
-    background: transparent;
-    border: 1px solid var(--color-border);
-    color: var(--color-text);
+  @media screen and (max-width: 768px) {
+    .bundle-view-button {
+      right: 10px;
+      bottom: 10px;
+      padding: 10px 20px;
+    }
   }
 {%- endstyle -%}
 
@@ -408,16 +516,15 @@
        x-transition>
     
     <div class="bundle-view-header">
-      <h3 class="h3">Your Box</h3>
+      <h3>Your Box</h3>
       <button class="close-button" @click="toggleView()">Close</button>
     </div>
     
     <template x-for="item in selectedItems" :key="item.variant_id">
       <div class="bundle-item">
-        <span x-text="item.title"></span>
-        <span x-text="item.variant_title"></span>
-        <span x-text="formatMoney(item.price)"></span>
-        <button class="bundle-button"
+        <h4 class="bundle-item-title" x-text="item.title"></h4>
+        <span class="bundle-item-price" x-text="formatMoney(item.price)"></span>
+        <button class="bundle-item-remove"
                 @click="removeFromBundle(item.id)">
           Remove
         </button>
@@ -425,10 +532,22 @@
     </template>
     
     <div class="bundle-total" x-show="selectedItems.length > 0">
-      <p>Original Total: <span x-text="formatMoney(originalTotal)"></span></p>
-      <p>Bundle Discount: <span x-text="discountPercentage + '%'"></span></p>
-      <p class="bundle-savings">You Save: <span x-text="formatMoney(savings)"></span></p>
-      <p class="h3">Final Price: <span x-text="formatMoney(finalPrice)"></span></p>
+      <p>
+        <span>Original Total:</span>
+        <span x-text="formatMoney(originalTotal)"></span>
+      </p>
+      <p>
+        <span>Bundle Discount:</span>
+        <span x-text="discountPercentage + '%'"></span>
+      </p>
+      <p>
+        <span>You Save:</span>
+        <span class="savings" x-text="formatMoney(savings)"></span>
+      </p>
+      <p class="final-price">
+        <span>Final Price:</span>
+        <span x-text="formatMoney(finalPrice)"></span>
+      </p>
     </div>
 
     <div class="bundle-actions">
