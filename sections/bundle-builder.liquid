@@ -602,12 +602,20 @@
 
           this.showNotification('Bundle added to cart!', 'success');
           
-          // Update cart drawer/counter if they exist
-          if (typeof window.updateCartDrawer === 'function') {
-            await window.updateCartDrawer();
+          // Open cart drawer instead of redirecting
+          if (window.Shopify && window.Shopify.theme) {
+            // For Dawn theme and similar modern themes
+            document.querySelector('cart-drawer').open();
+          } else {
+            // Fallback for other themes - trigger cart drawer open event
+            document.documentElement.dispatchEvent(new CustomEvent('cart:open'));
           }
 
-          setTimeout(() => window.location.href = '/cart', 1500);
+          // Clear the bundle after successful addition
+          this.selectedItems = [];
+          localStorage.removeItem('currentBundle');
+          this.isViewOpen = false;
+
         } catch (error) {
           console.error('Bundle addition error:', error);
           this.showNotification('Error adding bundle to cart', 'error');
