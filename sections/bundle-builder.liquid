@@ -590,10 +590,7 @@
             }
           }));
 
-          // Log the items being added for debugging
-          console.log('Adding items to cart:', items);
-
-          // Use fetch instead of liquidAjaxCart
+          // Add items to cart
           const response = await fetch(window.Shopify.routes.root + 'cart/add.js', {
             method: 'POST',
             headers: {
@@ -615,17 +612,21 @@
           // Show success message
           this.showNotification('Bundle added to cart!', 'success');
 
-          // Trigger cart drawer refresh and open
-          if (window.liquidAjaxCart) {
-            await window.liquidAjaxCart.refreshCart();
-          }
-          
-          // Dispatch cart:open event
+          // Update cart state and open drawer
           document.documentElement.dispatchEvent(
-            new CustomEvent('cart:open', {
+            new CustomEvent('cart:refresh', {
               bubbles: true
             })
           );
+
+          // Wait for cart to refresh before opening
+          setTimeout(() => {
+            document.documentElement.dispatchEvent(
+              new CustomEvent('cart:open', {
+                bubbles: true
+              })
+            );
+          }, 200);
 
         } catch (error) {
           console.error('Bundle addition error:', error);
@@ -664,6 +665,26 @@
         }).format(cents / 100);
       }
     }));
+  });
+</script>
+
+<!-- Add Liquid Ajax Cart event listeners -->
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Listen for cart state changes
+    document.addEventListener('cart:refresh', (event) => {
+      if (window.liquidAjaxCart) {
+        window.liquidAjaxCart.refreshCart();
+      }
+    });
+
+    // Listen for cart open requests
+    document.addEventListener('cart:open', (event) => {
+      const cartDrawer = document.querySelector('[data-ajax-cart-section]');
+      if (cartDrawer) {
+        cartDrawer.setAttribute('open', '');
+      }
+    });
   });
 </script>
 
