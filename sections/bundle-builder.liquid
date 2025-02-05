@@ -607,7 +607,7 @@
           if (typeof window.liquidAjaxCart !== 'undefined') {
             const response = await window.liquidAjaxCart.add({
               items: items,
-              sections: ['cart-drawer', 'cart-icon-bubble', 'cart-notification-product', 'cart-notification']
+              sections: ['cart-drawer']
             });
 
             if (!response.ok) {
@@ -615,7 +615,7 @@
               throw new Error(errorData.description || 'Failed to add bundle to cart');
             }
 
-            // Wait for Liquid Ajax Cart to finish processing
+            // Force a cart refresh
             await window.liquidAjaxCart.get();
           } else {
             const response = await fetch('/cart/add.js', {
@@ -640,69 +640,26 @@
           // Show success message
           this.showNotification('Bundle added to cart!', 'success');
 
-          // Wait for cart data to be fully updated
-          await new Promise(resolve => setTimeout(resolve, 500));
+          // Wait a brief moment for the cart to update
+          await new Promise(resolve => setTimeout(resolve, 100));
 
-          // Try multiple cart drawer selectors that might be used by the theme
-          const cartDrawerSelectors = [
-            '#CartDrawer',
-            '[data-cart-drawer]',
-            '.drawer--cart',
-            '.cart-drawer',
-            '#cart-notification-wrapper',
-            '[data-drawer-cart]'
-          ];
+          // Update cart drawer with latest information
+          await this.updateCartDrawer();
 
-          // Find the first matching cart drawer element
-          const cartDrawer = cartDrawerSelectors.map(selector => 
-            document.querySelector(selector)).find(element => element);
+          // Try multiple methods to open cart drawer
+          document.dispatchEvent(new CustomEvent('theme:cart-drawer:show', {
+            bubbles: true
+          }));
 
+          const cartDrawer = document.querySelector('.drawer--cart');
           if (cartDrawer) {
-            // Fetch the latest cart drawer content
-            const cartResponse = await fetch(`${window.location.pathname}?section_id=cart-drawer`);
-            const cartHtml = await cartResponse.text();
-            
-            // Create a temporary element to parse the HTML
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(cartHtml, 'text/html');
-            
-            // Try to find the cart content using various possible selectors
-            const newCartContent = doc.querySelector(cartDrawer.tagName) || 
-                                 doc.querySelector('[data-cart-drawer-content]') ||
-                                 doc.querySelector('.cart-drawer__content');
-
-            if (newCartContent) {
-              // Replace the cart drawer content
-              cartDrawer.innerHTML = newCartContent.innerHTML;
-            }
-
-            // Try multiple methods to open the cart drawer
             cartDrawer.setAttribute('open', '');
-            cartDrawer.classList.add('is-open', 'active', 'is-active');
-            
-            // Dispatch cart open events that the theme might be listening for
-            document.dispatchEvent(new CustomEvent('theme:cart:open'));
-            document.dispatchEvent(new CustomEvent('cart:open'));
-            document.dispatchEvent(new CustomEvent('cart-drawer:open'));
+            cartDrawer.classList.add('is-open');
           }
 
-          // Update cart count bubbles
-          const cartCountSelectors = [
-            '.cart-count-bubble',
-            '[data-cart-count]',
-            '.cart-count',
-            '.cart-item-count'
-          ];
-
-          const cartCountElements = cartCountSelectors.flatMap(selector => 
-            Array.from(document.querySelectorAll(selector)));
-
-          if (cartCountElements.length) {
-            const cartResponse = await fetch('/cart.js');
-            const cartData = await cartResponse.json();
-            cartCountElements.forEach(element => {
-              element.textContent = cartData.item_count;
-            });
+          const cartButton = document.querySelector('[data-cart-toggle]');
+          if (cartButton) {
+            cartButton.click();
           }
 
         } catch (error) {
@@ -713,6 +670,48 @@
           );
         } finally {
           this.loading = false;
+        }
+      },
+
+      async updateCartDrawer() {
+        try {
+          const response = await fetch('/cart.js');
+          const cart = await response.json();
+          
+          // Update cart count
+          const cartCountElements = document.querySelectorAll('[data-cart-count]');
+          cartCountElements.forEach(element => {
+            element.textContent = cart.item_count;
+            element.setAttribute('data-cart-count', cart.item_count);
+          });
+
+          // Update cart total
+          const cartTotalElements = document.querySelectorAll('[data-cart-total]');
+          cartTotalElements.forEach(element => {
+            const formattedTotal = this.formatMoney(cart.total_price);
+            element.textContent = formattedTotal;
+            element.setAttribute('data-cart-total', cart.total_price);
+          });
+
+          // If there's a cart drawer items container, update its contents
+          const cartDrawerItems = document.querySelector('[data-cart-drawer-items]');
+          if (cartDrawerItems) {
+            // Fetch the cart drawer section HTML
+            const drawerResponse = await fetch('/?section_id=cart-drawer');
+            const drawerHtml = await drawerResponse.text();
+            
+            // Create a temporary element to parse the HTML
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(drawerHtml, 'text/html');
+            
+            // Find the items container in the parsed HTML
+            const newItems = doc.querySelector('[data-cart-drawer-items]');
+            if (newItems) {
+              cartDrawerItems.innerHTML = newItems.innerHTML;
+            }
+          }
+        } catch (error) {
+          console.error('Error updating cart drawer:', error);
         }
       },
 
