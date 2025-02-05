@@ -617,11 +617,8 @@
             await window.liquidAjaxCart.refreshCart();
           }
 
-          // Simulate cart button click to open drawer
-          const cartButton = document.querySelector('.cart-open-btn');
-          if (cartButton) {
-            cartButton.click();
-          }
+          // Open cart drawer
+          document.querySelector('#cart-drawer').classList.add('is-open');
 
         } catch (error) {
           console.error('Bundle addition error:', error);
