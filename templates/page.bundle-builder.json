@@ -26,16 +26,14 @@
       }
     },
     "bundle_builder": {
-      "type": "bundle-builder",
+      "type": "bundle-builder-2",
       "settings": {
-        "title": "Create Your Custom Bundle",
-        "bundle_size": 7,
-        "discount_percentage": 20,
-        "bundle_collection": "all",
-        "background_color": "#ffffff",
-        "text_color": "#000000",
-        "button_color": "#000000",
-        "button_text_color": "#ffffff"
+        "max_items": 7,
+        "heading": "Build Your Bundle",
+        "primary_color": "#4F46E5",
+        "success_color": "#22C55E",
+        "grid_desktop": "4",
+        "grid_mobile": "2"
       }
     },
     "section_multicolumn_eqFPgc": {
