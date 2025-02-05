@@ -505,57 +505,6 @@
     background: #ffffff;
     color: #000000;
   }
-
-  .btn__loader {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.2s ease-in-out;
-  }
-
-  .btn__loader .svg-loader {
-    animation: rotate 0.8s linear infinite;
-  }
-
-  .btn__loader circle {
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 2;
-    stroke-linecap: round;
-  }
-
-  .btn__loader circle:last-child {
-    animation: dash 1.4s ease-in-out infinite;
-  }
-
-  button[data-add-to-cart].loading {
-    color: transparent !important;
-  }
-
-  button[data-add-to-cart].loading .btn__loader {
-    opacity: 1;
-    visibility: visible;
-  }
-
-  @keyframes rotate {
-    100% {
-      transform: rotate(360deg);
-    }
-  }
-
-  @keyframes dash {
-    0% {
-      stroke-dashoffset: 87.96459430051421;
-    }
-    50% {
-      stroke-dashoffset: 21.991148575128552;
-    }
-    100% {
-      stroke-dashoffset: 87.96459430051421;
-    }
-  }
 {%- endstyle -%}
 
 <!-- Add Toastify CDN in the head of your document -->
@@ -627,8 +576,6 @@
           return;
         }
 
-        const button = document.querySelector('.add-bundle-to-cart');
-        button.classList.add('loading');
         this.loading = true;
 
         try {
@@ -644,6 +591,7 @@
             }
           }));
 
+          // Add items to cart
           const response = await fetch('/cart/add.js', {
             method: 'POST',
             headers: {
@@ -660,7 +608,7 @@
 
           await response.json();
 
-          // Clear the bundle
+          // Clear the bundle first
           this.selectedItems = [];
           localStorage.removeItem('currentBundle');
           this.isViewOpen = false;
@@ -668,6 +616,33 @@
           // Show success message
           this.showNotification('Bundle added to cart!', 'success');
 
+          // Wait a moment for the cart to update
+          setTimeout(() => {
+            // Update cart count and open drawer
+            if (window.liquidAjaxCart) {
+              window.liquidAjaxCart.refreshCart();
+            }
+
+            // Try multiple methods to open the cart drawer
+            const cartDrawer = document.querySelector('.drawer--cart.color-scheme-1');
+            if (cartDrawer) {
+              cartDrawer.setAttribute('open', '');
+              cartDrawer.classList.add('is-open');
+              
+              // Dispatch a custom event that your theme might be listening for
+              document.dispatchEvent(new CustomEvent('drawerOpen', {
+                detail: {
+                  drawer: 'cart'
+                }
+              }));
+            }
+
+            // Trigger the cart button click as a fallback
+            const cartButton = document.querySelector('.cart-open-btn');
+            if (cartButton) {
+              cartButton.click();
+            }
+          }, 100);
 
         } catch (error) {
           console.error('Bundle addition error:', error);
@@ -676,7 +651,6 @@
             'error'
           );
         } finally {
-          button.classList.remove('loading');
           this.loading = false;
         }
       },
@@ -878,18 +852,11 @@
 
     <!-- Bundle actions -->
     <div class="bundle-actions" x-show="selectedItems.length > 0">
-      <button class="add-bundle-to-cart btn"
+      <button class="add-bundle-to-cart"
               @click="addBundleToCart()"
-              :disabled="selectedItems.length < bundleSize || loading"
-              data-add-to-cart>
-        <span class="btn__text" data-add-to-cart-text x-show="!loading">Add Bundle to Cart</span>
-        <span class="btn__added">&nbsp;</span>
-        <span class="btn__loader" x-show="loading">
-          <svg height="18" width="18" class="svg-loader">
-            <circle r="7" cx="9" cy="9" />
-            <circle stroke-dasharray="87.96459430051421 87.96459430051421" r="7" cx="9" cy="9" />
-          </svg>
-        </span>
+              :disabled="selectedItems.length < bundleSize || loading">
+        <span x-show="!loading">Add Bundle to Cart</span>
+        <span x-show="loading">Adding to Cart...</span>
       </button>
     </div>
   </div>
