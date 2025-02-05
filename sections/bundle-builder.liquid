@@ -429,6 +429,16 @@
     font-size: 14px;
   }
 
+  /* Add style for completed steps */
+  .bundle-progress-step.completed {
+    background: #000000;
+  }
+
+  .bundle-progress-step.completed::after {
+    content: '✓';
+    font-size: 14px;
+  }
+
   @keyframes pulse {
     0% { transform: scale(1); }
     50% { transform: scale(1.1); }
@@ -652,7 +662,8 @@
         <template x-for="index in bundleSize" :key="index">
           <div class="bundle-progress-step"
                :class="{
-                 'active': selectedItems.length === index
+                 'active': selectedItems.length === index,
+                 'completed': selectedItems.length > index
                }">
           </div>
         </template>
