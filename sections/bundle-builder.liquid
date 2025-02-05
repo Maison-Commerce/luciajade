@@ -149,6 +149,58 @@
     opacity: 0.5;
     cursor: not-allowed;
   }
+
+  .bundle-view {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 400px;
+    height: 100vh;
+    background: var(--color-background);
+    border-left: 1px solid var(--color-border);
+    padding: 20px;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+    z-index: 1000;
+  }
+
+  .bundle-view.active {
+    transform: translateX(0);
+  }
+
+  .bundle-view-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .bundle-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .bundle-view-button {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    padding: 15px 30px;
+    background: var(--color-button);
+    color: var(--color-button-text);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    z-index: 999;
+  }
+
+  .close-button {
+    background: transparent;
+    border: 1px solid var(--color-border);
+    color: var(--color-text);
+  }
 {%- endstyle -%}
 
 <script>
@@ -163,6 +215,19 @@
         type: 'success'
       },
       loading: false,
+      isViewOpen: false,
+
+      init() {
+        // Initialize from localStorage if exists
+        const savedBundle = localStorage.getItem('currentBundle');
+        if (savedBundle) {
+          this.selectedItems = JSON.parse(savedBundle);
+        }
+      },
+
+      toggleView() {
+        this.isViewOpen = !this.isViewOpen;
+      },
 
       get originalTotal() {
         return this.selectedItems.reduce((sum, item) => sum + item.price, 0);
@@ -187,11 +252,13 @@
         }
 
         this.selectedItems.push(product);
+        localStorage.setItem('currentBundle', JSON.stringify(this.selectedItems));
         this.showNotification('Item added to bundle', 'success');
       },
 
       removeFromBundle(productId) {
         this.selectedItems = this.selectedItems.filter(item => item.id !== productId);
+        localStorage.setItem('currentBundle', JSON.stringify(this.selectedItems));
         this.showNotification('Item removed from bundle', 'success');
       },
 
@@ -265,7 +332,7 @@
 
 <div class="bundle-builder" 
      x-data="bundleBuilder({{ section.settings.bundle_size }}, {{ section.settings.discount_percentage }})"
-     x-init="initializeBundleBuilder()">
+     x-init="init()">
   
   <div class="bundle-builder__header">
     <h2 class="h1">{{ section.settings.title }}</h2>
@@ -325,37 +392,51 @@
         </div>
       {% endfor %}
     </div>
+  </div>
 
-    <!-- Selected Items Summary -->
-    <div class="bundle-builder__summary" 
-         x-show="selectedItems.length > 0"
-         x-transition>
-      <h3 class="h3">Your Bundle</h3>
-      
-      <template x-for="item in selectedItems" :key="item.variant_id">
-        <div class="bundle-item">
-          <span x-text="item.title"></span>
-          <span x-text="item.variant_title"></span>
-          <span x-text="formatMoney(item.price)"></span>
-          <button class="bundle-button"
-                  @click="removeFromBundle(item.id)">
-            Remove
-          </button>
-        </div>
-      </template>
-      
-      <div class="bundle-total">
-        <p>Original Total: <span x-text="formatMoney(originalTotal)"></span></p>
-        <p>Bundle Discount: <span x-text="discountPercentage + '%'"></span></p>
-        <p class="bundle-savings">You Save: <span x-text="formatMoney(savings)"></span></p>
-        <p class="h3">Final Price: <span x-text="formatMoney(finalPrice)"></span></p>
+  <!-- View Box Button -->
+  <button class="bundle-view-button"
+          @click="toggleView()"
+          x-show="!isViewOpen">
+    View Box (<span x-text="selectedItems.length"></span>)
+  </button>
+
+  <!-- Bundle View Sidebar -->
+  <div class="bundle-view"
+       :class="{ 'active': isViewOpen }"
+       x-show="isViewOpen"
+       x-transition>
+    
+    <div class="bundle-view-header">
+      <h3 class="h3">Your Box</h3>
+      <button class="close-button" @click="toggleView()">Close</button>
+    </div>
+    
+    <template x-for="item in selectedItems" :key="item.variant_id">
+      <div class="bundle-item">
+        <span x-text="item.title"></span>
+        <span x-text="item.variant_title"></span>
+        <span x-text="formatMoney(item.price)"></span>
+        <button class="bundle-button"
+                @click="removeFromBundle(item.id)">
+          Remove
+        </button>
       </div>
+    </template>
+    
+    <div class="bundle-total" x-show="selectedItems.length > 0">
+      <p>Original Total: <span x-text="formatMoney(originalTotal)"></span></p>
+      <p>Bundle Discount: <span x-text="discountPercentage + '%'"></span></p>
+      <p class="bundle-savings">You Save: <span x-text="formatMoney(savings)"></span></p>
+      <p class="h3">Final Price: <span x-text="formatMoney(finalPrice)"></span></p>
+    </div>
 
+    <div class="bundle-actions">
       <button class="add-bundle-to-cart"
               @click="addBundleToCart()"
               :disabled="selectedItems.length < bundleSize || loading">
-        <span x-show="!loading">Add Bundle to Cart</span>
-        <span x-show="loading">Adding to Cart...</span>
+        <span x-show="!loading">Add to Cart</span>
+        <span x-show="loading">Adding...</span>
       </button>
     </div>
   </div>
