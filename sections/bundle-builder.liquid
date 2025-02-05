@@ -1,3 +1,7 @@
+<!-- Add Liquid Ajax Cart -->
+<script src="https://cdn.jsdelivr.net/npm/liquid-ajax-cart@2.3.0/liquid-ajax-cart.js" defer></script>
+<link href="https://cdn.jsdelivr.net/npm/liquid-ajax-cart@2.3.0/liquid-ajax-cart.css" rel="stylesheet">
+
 {%- style -%}
   .bundle-builder {
     padding: 2rem;
@@ -591,14 +595,10 @@
             }
           }));
 
-          // Add items to cart
-          const response = await fetch('/cart/add.js', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Accept': 'application/json'
-            },
-            body: JSON.stringify({ items })
+          // Add items to cart using Liquid Ajax Cart
+          const response = await liquidAjaxCart.add({
+            items: items,
+            sections: ['cart-drawer'] // Request cart drawer section to be updated
           });
 
           if (!response.ok) {
@@ -606,9 +606,7 @@
             throw new Error(errorData.description || 'Failed to add bundle to cart');
           }
 
-          await response.json();
-
-          // Clear the bundle first
+          // Clear the bundle
           this.selectedItems = [];
           localStorage.removeItem('currentBundle');
           this.isViewOpen = false;
@@ -616,33 +614,10 @@
           // Show success message
           this.showNotification('Bundle added to cart!', 'success');
 
-          // Wait a moment for the cart to update
-          setTimeout(() => {
-            // Update cart count and open drawer
-            if (window.liquidAjaxCart) {
-              window.liquidAjaxCart.refreshCart();
-            }
-
-            // Try multiple methods to open the cart drawer
-            const cartDrawer = document.querySelector('.drawer--cart.color-scheme-1');
-            if (cartDrawer) {
-              cartDrawer.setAttribute('open', '');
-              cartDrawer.classList.add('is-open');
-              
-              // Dispatch a custom event that your theme might be listening for
-              document.dispatchEvent(new CustomEvent('drawerOpen', {
-                detail: {
-                  drawer: 'cart'
-                }
-              }));
-            }
-
-            // Trigger the cart button click as a fallback
-            const cartButton = document.querySelector('.cart-open-btn');
-            if (cartButton) {
-              cartButton.click();
-            }
-          }, 100);
+          // Open cart drawer
+          document.dispatchEvent(new CustomEvent('theme:cart-drawer:show', {
+            bubbles: true
+          }));
 
         } catch (error) {
           console.error('Bundle addition error:', error);
