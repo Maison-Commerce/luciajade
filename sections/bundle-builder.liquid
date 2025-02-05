@@ -593,17 +593,16 @@
           // Log the items being added for debugging
           console.log('Adding items to cart:', items);
 
-          // Use Liquid Ajax Cart's API to add items
-          const response = await window.liquidAjaxCart.add({
-            items: items,
-            sections: ['cart-drawer'] // Request cart drawer section update
+          // Use fetch instead of liquidAjaxCart
+          const response = await fetch(window.Shopify.routes.root + 'cart/add.js', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ items })
           });
 
-          // Log the response for debugging
-          console.log('Cart response:', response);
-
-          // Check both response.ok and response status
-          if (!response.ok || response.status >= 400) {
+          if (!response.ok) {
             const errorData = await response.json();
             throw new Error(errorData.description || 'Failed to add bundle to cart');
           }
@@ -616,7 +615,12 @@
           // Show success message
           this.showNotification('Bundle added to cart!', 'success');
 
-          // Open cart drawer
+          // Trigger cart drawer refresh and open
+          if (window.liquidAjaxCart) {
+            await window.liquidAjaxCart.refreshCart();
+          }
+          
+          // Dispatch cart:open event
           document.documentElement.dispatchEvent(
             new CustomEvent('cart:open', {
               bubbles: true
@@ -625,7 +629,6 @@
 
         } catch (error) {
           console.error('Bundle addition error:', error);
-          // Show more specific error message
           this.showNotification(
             error.message || 'Error adding bundle to cart. Please try again.',
             'error'
