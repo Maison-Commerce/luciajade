@@ -38,8 +38,8 @@
   .bundle-builder__products {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 1.5rem;
-    position: relative;
+    gap: 2rem;
+    padding: 2rem 0;
   }
 
   @media screen and (max-width: 768px) {
@@ -59,27 +59,23 @@
   }
 
   .bundle-product-card {
-    border: 1px solid #e5e5e5;
-    padding: 1rem;
-    border-radius: 8px;
-    text-align: center;
-    transition: all 0.3s ease;
-    background: #ffffff;
-    height: 100%;
     display: flex;
     flex-direction: column;
-    position: relative;
-    z-index: 1;
+    padding: 1.5rem;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    background: #ffffff;
   }
 
-  .bundle-product-card.selected {
-    border: 2px solid #000000;
-    z-index: 1;
+  .bundle-product-card:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   }
 
   .bundle-product-card img {
     width: 100%;
     height: auto;
+    aspect-ratio: 1;
     object-fit: cover;
     border-radius: 4px;
     margin-bottom: 1rem;
@@ -92,9 +88,9 @@
   }
 
   .bundle-product-title {
-    margin: 0.5rem 0;
-    font-size: 1rem;
-    line-height: 1.4;
+    font-size: 1.1rem;
+    margin: 1rem 0;
+    font-weight: 500;
   }
 
   .bundle-product-price {
@@ -522,6 +518,44 @@
     background: #ffffff;
     color: #000000;
   }
+
+  /* Sorting and filtering controls */
+  .bundle-controls {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .bundle-dropdown {
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    min-width: 200px;
+    background: #ffffff;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+
+  /* Variant dropdown styling */
+  .variant-dropdown {
+    width: 100%;
+    padding: 0.75rem;
+    margin: 0.5rem 0;
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    background: #ffffff;
+    font-size: 0.9rem;
+  }
+
+  .variant-dropdown option {
+    padding: 0.5rem;
+  }
+
+  /* Size selector dropdown */
+  .size-dropdown {
+    margin-bottom: 1rem;
+  }
 {%- endstyle -%}
 
 <!-- Add Toastify CDN in the head of your document -->
@@ -745,14 +779,29 @@
         }).format(cents / 100);
       },
 
-      filterProducts(type) {
+      filterProducts(category) {
         const products = document.querySelectorAll('.bundle-product-card');
         products.forEach(product => {
-          if (!type || product.dataset.productType === type) {
-            product.style.display = 'block';
-          } else {
-            product.style.display = 'none';
-          }
+          const shouldShow = !category || product.dataset.productType.includes(category);
+          product.style.display = shouldShow ? 'flex' : 'none';
+        });
+      },
+
+      filterBySize(size) {
+        const products = document.querySelectorAll('.bundle-product-card');
+        products.forEach(product => {
+          const sizes = product.dataset.productSize.split(',');
+          const shouldShow = !size || sizes.includes(size);
+          product.style.display = shouldShow ? 'flex' : 'none';
+        });
+      },
+
+      filterByMaterial(material) {
+        const products = document.querySelectorAll('.bundle-product-card');
+        products.forEach(product => {
+          const materials = product.dataset.productMaterial.split(',');
+          const shouldShow = !material || materials.includes(material);
+          product.style.display = shouldShow ? 'flex' : 'none';
         });
       }
     }));
@@ -779,50 +828,71 @@
     <h2 class="h1">{{ section.settings.title }}</h2>
   </div>
 
-  <!-- Filter System -->
-  <div class="bundle-filter">
-    <select @change="filterProducts($event.target.value)">
-      <option value="">All Products</option>
-      {% for product_type in collection.all_types %}
-        <option value="{{ product_type | handle }}">{{ product_type }}</option>
-      {% endfor %}
+  <!-- Enhanced filtering and sorting controls -->
+  <div class="bundle-controls">
+    <!-- Category filter -->
+    <select class="bundle-dropdown" @change="filterProducts($event.target.value)">
+      <option value="">All Categories</option>
+      <option value="pink-stone">Pink Stone</option>
+      <option value="tiger-eye">Tiger Eye Stone</option>
+    </select>
+
+    <!-- Size filter -->
+    <select class="bundle-dropdown" @change="filterBySize($event.target.value)">
+      <option value="">All Sizes</option>
+      <option value="6">US 6</option>
+      <option value="7">US 7</option>
+      <option value="8">US 8</option>
+    </select>
+
+    <!-- Material filter -->
+    <select class="bundle-dropdown" @change="filterByMaterial($event.target.value)">
+      <option value="">All Materials</option>
+      <option value="gold">Gold</option>
+      <option value="silver">Silver</option>
     </select>
   </div>
 
   <div class="bundle-builder__content">
-    <!-- Product Grid -->
     <div class="bundle-builder__products">
       {% for product in collections[section.settings.bundle_collection].products %}
         <div class="bundle-product-card" 
-             x-data="{ selectedVariant: null }"
+             x-data="{ 
+               selectedVariant: null,
+               variants: {{ product.variants | json }}
+             }"
              :class="{ 'selected': isProductSelected('{{ product.id }}') }"
-             data-product-type="{{ product.type | handle }}">
+             data-product-type="{{ product.type | handle }}"
+             data-product-size="{{ product.options_with_values[0].values | join: ',' }}"
+             data-product-material="{{ product.options_with_values[1].values | join: ',' }}">
           
-          <img src="{{ product.featured_image | img_url: '300x300', crop: 'center' }}" 
+          <img src="{{ product.featured_image | img_url: '400x400', crop: 'center' }}" 
                alt="{{ product.title }}"
                loading="lazy"
-               width="300"
-               height="300">
+               width="400"
+               height="400">
           
-          <h3 class="h4">{{ product.title }}</h3>
+          <h3 class="bundle-product-title">{{ product.title }}</h3>
           <p class="price" x-text="formatMoney({{ product.price }})"></p>
           
-          <!-- Always visible variant selector -->
-          <div class="variant-selector">
+          <!-- Variant dropdown -->
+          <select class="variant-dropdown"
+                  x-model="selectedVariant"
+                  @change="addToBundle({
+                    id: '{{ product.id }}',
+                    variant_id: selectedVariant,
+                    title: '{{ product.title | escape }}',
+                    price: variants.find(v => v.id == selectedVariant)?.price || {{ product.price }},
+                    variant_title: variants.find(v => v.id == selectedVariant)?.title || ''
+                  })"
+                  :disabled="isProductSelected('{{ product.id }}')">
+            <option value="">Select Size & Material</option>
             {% for variant in product.variants %}
-              <button class="variant-button"
-                      @click="addToBundle({
-                        id: '{{ product.id }}',
-                        variant_id: '{{ variant.id }}',
-                        title: '{{ product.title | escape }}',
-                        price: {{ variant.price }},
-                        variant_title: '{{ variant.title | escape }}'
-                      })"
-                      :disabled="selectedItems.length >= bundleSize && !isProductSelected('{{ product.id }}')">
-                {{ variant.title }}
-              </button>
+              <option value="{{ variant.id }}">
+                {{ variant.title }} - {{ variant.price | money }}
+              </option>
             {% endfor %}
-          </div>
+          </select>
           
           <button class="bundle-button"
                   x-show="isProductSelected('{{ product.id }}')"
