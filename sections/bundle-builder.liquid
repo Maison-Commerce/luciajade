@@ -613,14 +613,11 @@
           // Show success message
           this.showNotification('Bundle added to cart!', 'success');
 
-          // Wait a brief moment before opening cart drawer
-          setTimeout(() => {
-            if (typeof Shopify !== 'undefined' && 
-                Shopify.theme && 
-                Shopify.theme.cartDrawer) {
-              Shopify.theme.cartDrawer.open();
-            }
-          }, 100);
+          // Open cart drawer
+          const cartDrawer = document.querySelector("#cart-drawer");
+          if (cartDrawer) {
+            cartDrawer.setAttribute("open", "");
+          }
 
         } catch (error) {
           console.error('Bundle addition error:', error);
