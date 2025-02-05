@@ -604,9 +604,7 @@
             }
           }));
 
-          // Check if liquidAjaxCart is available
           if (typeof window.liquidAjaxCart !== 'undefined') {
-            // Use Liquid Ajax Cart
             const response = await window.liquidAjaxCart.add({
               items: items,
               sections: ['cart-drawer']
@@ -620,7 +618,6 @@
             // Force a cart refresh
             await window.liquidAjaxCart.get();
           } else {
-            // Fallback to regular fetch
             const response = await fetch('/cart/add.js', {
               method: 'POST',
               headers: {
@@ -646,20 +643,20 @@
           // Wait a brief moment for the cart to update
           await new Promise(resolve => setTimeout(resolve, 100));
 
+          // Update cart drawer with latest information
+          await this.updateCartDrawer();
+
           // Try multiple methods to open cart drawer
-          // 1. Theme event
           document.dispatchEvent(new CustomEvent('theme:cart-drawer:show', {
             bubbles: true
           }));
 
-          // 2. Standard drawer open
           const cartDrawer = document.querySelector('.drawer--cart');
           if (cartDrawer) {
             cartDrawer.setAttribute('open', '');
             cartDrawer.classList.add('is-open');
           }
 
-          // 3. Theme specific cart button click
           const cartButton = document.querySelector('[data-cart-toggle]');
           if (cartButton) {
             cartButton.click();
@@ -673,6 +670,48 @@
           );
         } finally {
           this.loading = false;
+        }
+      },
+
+      async updateCartDrawer() {
+        try {
+          const response = await fetch('/cart.js');
+          const cart = await response.json();
+          
+          // Update cart count
+          const cartCountElements = document.querySelectorAll('[data-cart-count]');
+          cartCountElements.forEach(element => {
+            element.textContent = cart.item_count;
+            element.setAttribute('data-cart-count', cart.item_count);
+          });
+
+          // Update cart total
+          const cartTotalElements = document.querySelectorAll('[data-cart-total]');
+          cartTotalElements.forEach(element => {
+            const formattedTotal = this.formatMoney(cart.total_price);
+            element.textContent = formattedTotal;
+            element.setAttribute('data-cart-total', cart.total_price);
+          });
+
+          // If there's a cart drawer items container, update its contents
+          const cartDrawerItems = document.querySelector('[data-cart-drawer-items]');
+          if (cartDrawerItems) {
+            // Fetch the cart drawer section HTML
+            const drawerResponse = await fetch('/?section_id=cart-drawer');
+            const drawerHtml = await drawerResponse.text();
+            
+            // Create a temporary element to parse the HTML
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(drawerHtml, 'text/html');
+            
+            // Find the items container in the parsed HTML
+            const newItems = doc.querySelector('[data-cart-drawer-items]');
+            if (newItems) {
+              cartDrawerItems.innerHTML = newItems.innerHTML;
+            }
+          }
+        } catch (error) {
+          console.error('Error updating cart drawer:', error);
         }
       },
 
