@@ -518,6 +518,21 @@
     background: #ffffff;
     color: #000000;
   }
+
+  .variant-dropdown {
+    width: 100%;
+    padding: 0.8rem;
+    margin: 1rem 0;
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    background: var(--color-background);
+    cursor: pointer;
+  }
+
+  .variant-dropdown:focus {
+    outline: none;
+    border-color: var(--color-button);
+  }
 {%- endstyle -%}
 
 <!-- Add Toastify CDN in the head of your document -->
@@ -807,22 +822,57 @@
     <div class="bundle-builder__products">
       {% for product in collections[section.settings.bundle_collection].products %}
         <div class="bundle-product-card" 
-             x-data="{ showVariants: false }"
+             x-data="{ 
+               showVariants: false,
+               selectedVariant: null,
+               variantImage: '{{ product.featured_image | img_url: '300x300', crop: 'center' }}'
+             }"
              :class="{ 'selected': isProductSelected('{{ product.id }}') }">
           
-          <img src="{{ product.featured_image | img_url: '300x300', crop: 'center' }}" 
+          <img :src="variantImage" 
                alt="{{ product.title }}"
                loading="lazy"
                width="300"
                height="300">
           
           <h3 class="h4">{{ product.title }}</h3>
-          <p class="price" x-text="formatMoney({{ product.price }})"></p>
+          <p class="price" x-text="selectedVariant ? formatMoney(selectedVariant.price) : formatMoney({{ product.price }})"></p>
+          
+          <!-- Variant Dropdown -->
+          <select class="variant-dropdown"
+                  x-model="selectedVariant"
+                  @change="
+                    const variant = $event.target.selectedOptions[0].dataset;
+                    selectedVariant = {
+                      id: variant.id,
+                      price: parseFloat(variant.price),
+                      title: variant.title
+                    };
+                    variantImage = variant.image;
+                  ">
+            <option value="">Select Option</option>
+            {% for variant in product.variants %}
+              <option value="{{ variant.id }}"
+                      data-id="{{ variant.id }}"
+                      data-price="{{ variant.price }}"
+                      data-title="{{ variant.title | escape }}"
+                      data-image="{{ variant.featured_image | default: product.featured_image | img_url: '300x300', crop: 'center' }}">
+                {{ variant.title }}
+              </option>
+            {% endfor %}
+          </select>
           
           <button class="bundle-button"
                   x-show="!isProductSelected('{{ product.id }}')"
-                  @click="showVariants = true"
-                  :disabled="selectedItems.length >= bundleSize">
+                  @click="addToBundle({
+                    id: '{{ product.id }}',
+                    variant_id: selectedVariant.id,
+                    title: '{{ product.title | escape }}',
+                    price: selectedVariant.price,
+                    variant_title: selectedVariant.title,
+                    image: variantImage
+                  })"
+                  :disabled="selectedItems.length >= bundleSize || !selectedVariant">
             Add to Bundle
           </button>
           
@@ -831,24 +881,6 @@
                   @click="removeFromBundle('{{ product.id }}')">
             Remove
           </button>
-          
-          <!-- Variant Selector -->
-          <div x-show="showVariants" 
-               x-transition
-               class="variant-selector">
-            {% for variant in product.variants %}
-              <button class="variant-button"
-                      @click="addToBundle({
-                        id: '{{ product.id }}',
-                        variant_id: '{{ variant.id }}',
-                        title: '{{ product.title | escape }}',
-                        price: {{ variant.price }},
-                        variant_title: '{{ variant.title | escape }}'
-                      }); showVariants = false">
-                {{ variant.title }}
-              </button>
-            {% endfor %}
-          </div>
         </div>
       {% endfor %}
     </div>
