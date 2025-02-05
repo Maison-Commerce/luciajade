@@ -607,7 +607,7 @@
           if (typeof window.liquidAjaxCart !== 'undefined') {
             const response = await window.liquidAjaxCart.add({
               items: items,
-              sections: ['cart-drawer', 'cart-icon-bubble']
+              sections: ['cart-drawer', 'cart-icon-bubble', 'cart-notification-product', 'cart-notification']
             });
 
             if (!response.ok) {
@@ -643,36 +643,65 @@
           // Wait for cart data to be fully updated
           await new Promise(resolve => setTimeout(resolve, 500));
 
-          // Fetch and update cart drawer content
-          const cartResponse = await fetch('/?section_id=cart-drawer');
-          const cartHtml = await cartResponse.text();
-          
-          // Find the cart drawer element
-          const cartDrawer = document.querySelector('.drawer--cart');
+          // Try multiple cart drawer selectors that might be used by the theme
+          const cartDrawerSelectors = [
+            '#CartDrawer',
+            '[data-cart-drawer]',
+            '.drawer--cart',
+            '.cart-drawer',
+            '#cart-notification-wrapper',
+            '[data-drawer-cart]'
+          ];
+
+          // Find the first matching cart drawer element
+          const cartDrawer = cartDrawerSelectors.map(selector => 
+            document.querySelector(selector)).find(element => element);
+
           if (cartDrawer) {
+            // Fetch the latest cart drawer content
+            const cartResponse = await fetch(`${window.location.pathname}?section_id=cart-drawer`);
+            const cartHtml = await cartResponse.text();
+            
             // Create a temporary element to parse the HTML
             const parser = new DOMParser();
             const doc = parser.parseFromString(cartHtml, 'text/html');
             
-            // Find the cart drawer content in the parsed HTML
-            const newCartContent = doc.querySelector('.drawer--cart');
+            // Try to find the cart content using various possible selectors
+            const newCartContent = doc.querySelector(cartDrawer.tagName) || 
+                                 doc.querySelector('[data-cart-drawer-content]') ||
+                                 doc.querySelector('.cart-drawer__content');
+
             if (newCartContent) {
-              // Replace the entire cart drawer content
+              // Replace the cart drawer content
               cartDrawer.innerHTML = newCartContent.innerHTML;
             }
 
-            // Open the cart drawer
+            // Try multiple methods to open the cart drawer
             cartDrawer.setAttribute('open', '');
-            cartDrawer.classList.add('is-open');
+            cartDrawer.classList.add('is-open', 'active', 'is-active');
+            
+            // Dispatch cart open events that the theme might be listening for
+            document.dispatchEvent(new CustomEvent('theme:cart:open'));
+            document.dispatchEvent(new CustomEvent('cart:open'));
+            document.dispatchEvent(new CustomEvent('cart-drawer:open'));
           }
 
           // Update cart count bubbles
-          const cartCountBubbles = document.querySelectorAll('.cart-count-bubble');
-          if (cartCountBubbles.length) {
+          const cartCountSelectors = [
+            '.cart-count-bubble',
+            '[data-cart-count]',
+            '.cart-count',
+            '.cart-item-count'
+          ];
+
+          const cartCountElements = cartCountSelectors.flatMap(selector => 
+            Array.from(document.querySelectorAll(selector)));
+
+          if (cartCountElements.length) {
             const cartResponse = await fetch('/cart.js');
             const cartData = await cartResponse.json();
-            cartCountBubbles.forEach(bubble => {
-              bubble.textContent = cartData.item_count;
+            cartCountElements.forEach(element => {
+              element.textContent = cartData.item_count;
             });
           }
 
