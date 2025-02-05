@@ -652,7 +652,7 @@
         <template x-for="index in bundleSize" :key="index">
           <div class="bundle-progress-step"
                :class="{
-                 'active': selectedItems.length > 0 && selectedItems.length === index - 1
+                 'active': selectedItems.length === index
                }">
           </div>
         </template>
