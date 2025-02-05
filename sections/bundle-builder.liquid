@@ -259,12 +259,29 @@
       },
       loading: false,
       isViewOpen: false,
+      variantSelections: {},
+      productImages: {},
 
       init() {
         const savedBundle = localStorage.getItem('currentBundle');
         if (savedBundle) {
           this.selectedItems = JSON.parse(savedBundle);
         }
+        
+        this.initializeVariantSelections();
+      },
+
+      initializeVariantSelections() {
+        document.querySelectorAll('.bundle-product-card').forEach(card => {
+          const productId = card.dataset.productId;
+          if (productId) {
+            this.variantSelections[productId] = {
+              selectedVariant: '',
+              variants: JSON.parse(card.dataset.variants || '[]'),
+              currentImage: card.dataset.featuredImage
+            };
+          }
+        });
       },
 
       toggleView() {
@@ -301,34 +318,24 @@
           return;
         }
 
-        if (this.isProductSelected(product.id)) {
-          this.showNotification('This item is already in your bundle', 'error');
-          return;
-        }
-
-        // Validate that a variant is selected
-        if (!product.variant_id) {
+        const variantData = this.variantSelections[product.id];
+        if (!variantData?.selectedVariant) {
           this.showNotification('Please select a variant first', 'error');
           return;
         }
 
-        // Add the item to selectedItems array
         this.selectedItems.push({
           id: product.id,
-          variant_id: product.variant_id,
+          variant_id: variantData.selectedVariant.id,
           title: product.title,
-          price: product.price,
-          variant_title: product.variant_title,
-          image: product.image || ''  // Add image if available
+          price: variantData.selectedVariant.price,
+          variant_title: variantData.selectedVariant.title,
+          image: this.productImages[product.id] || product.image
         });
 
-        // Save to localStorage
         localStorage.setItem('currentBundle', JSON.stringify(this.selectedItems));
-        
-        // Show success notification
         this.showNotification('Item added to bundle', 'success');
-
-        // Show the bundle box by ensuring it's active
+        
         const bundleBox = document.querySelector('.bundle-box');
         if (bundleBox) {
           bundleBox.classList.add('active');
@@ -373,7 +380,6 @@
               throw new Error(errorData.description || 'Failed to add bundle to cart');
             }
 
-            // Force a cart refresh
             await liquidAjaxcart.update();
           } else {
             const response = await fetch('/cart/add.js', {
@@ -390,18 +396,14 @@
             }
           }
 
-          // Clear the bundle
           this.selectedItems = [];
           localStorage.removeItem('currentBundle');
           this.isViewOpen = false;
 
-          // Show success message
           this.showNotification('Bundle added to cart!', 'success');
 
-          // Wait a brief moment for the cart to update
           await this.updateCartDrawer();
 
-          // Try multiple methods to open cart drawer
           document.dispatchEvent(new CustomEvent('theme:cart-drawer:show', {
             bubbles: true
           }));
@@ -433,14 +435,12 @@
           const response = await fetch('/cart.js');
           const cart = await response.json();
           
-          // Update cart count
           const cartCountElements = document.querySelectorAll('[data-cart-count]');
           cartCountElements.forEach(element => {
             element.textContent = cart.item_count;
             element.setAttribute('data-cart-count', cart.item_count);
           });
 
-          // Update cart total
           const cartTotalElements = document.querySelectorAll('[data-cart-total]');
           cartTotalElements.forEach(element => {
             const formattedTotal = this.formatMoney(cart.total_price);
@@ -448,18 +448,14 @@
             element.setAttribute('data-cart-total', cart.total_price);
           });
 
-          // If there's a cart drawer items container, update its contents
           const cartDrawerItems = document.querySelector('[data-cart-drawer-items]');
           if (cartDrawerItems) {
-            // Fetch the cart drawer section HTML
             const drawerResponse = await fetch('/?section_id=cart-drawer');
             const drawerHtml = await drawerResponse.text();
             
-            // Create a temporary element to parse the HTML
             const parser = new DOMParser();
             const doc = parser.parseFromString(drawerHtml, 'text/html');
             
-            // Find the items container in the parsed HTML
             const newItems = doc.querySelector('[data-cart-drawer-items]');
             if (newItems) {
               cartDrawerItems.innerHTML = newItems.innerHTML;
@@ -471,11 +467,9 @@
       },
 
       showNotification(message, type = 'success') {
-        // Clear any existing toasts first
         const existingToasts = document.querySelectorAll('.toastify');
         existingToasts.forEach(toast => toast.remove());
 
-        // Show new toast
         Toastify({
           text: message,
           duration: 3000,
@@ -485,7 +479,7 @@
           style: {
             background: type === 'success' ? "#000000" : "#ef4444"
           },
-          onClick: function(){} // Callback after click
+          onClick: function(){}
         }).showToast();
       },
 
@@ -497,7 +491,23 @@
       },
 
       updateSelectedVariant(event, productId) {
-        // Additional variant handling if needed
+        const variantId = event.target.value;
+        const variantData = this.variantSelections[productId];
+        
+        if (!variantData) return;
+        
+        const selectedVariant = variantData.variants.find(v => v.id === variantId);
+        if (selectedVariant) {
+          if (selectedVariant.featured_image) {
+            this.productImages[productId] = selectedVariant.featured_image.src;
+            const imageElement = event.target.closest('.bundle-product-card').querySelector('.bundle-product-image');
+            if (imageElement) {
+              imageElement.src = selectedVariant.featured_image.src;
+            }
+          }
+          
+          variantData.selectedVariant = selectedVariant;
+        }
       }
     }));
   });
@@ -506,7 +516,6 @@
 <!-- Add event listener for cart drawer -->
 <script>
   document.addEventListener('DOMContentLoaded', () => {
-    // Prevent default cart form submission
     document.addEventListener('submit', (e) => {
       if (e.target.action && e.target.action.includes('/cart/add')) {
         e.preventDefault();
@@ -537,11 +546,15 @@
            x-data="{ selectedVariant: '' }"
            :class="{ 'selected': isProductSelected('{{ product.id }}') }"
            data-product-type="{{ product.type | handle }}"
+           data-product-id="{{ product.id }}"
+           data-variants='{{ product.variants | json }}'
+           data-featured-image="{{ product.featured_image | img_url: '400x400', crop: 'center' }}"
            x-show="shouldShowProduct('{{ product.type | handle }}')">
         
         <img src="{{ product.featured_image | img_url: '400x400', crop: 'center' }}"
              alt="{{ product.title }}"
              class="bundle-product-image"
+             :src="productImages['{{ product.id }}'] || '{{ product.featured_image | img_url: '400x400', crop: 'center' }}'"
              loading="lazy">
         
         <h3 class="bundle-product-title">{{ product.title }}</h3>
