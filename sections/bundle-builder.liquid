@@ -604,20 +604,18 @@
             }
           }));
 
+          // Check if liquidAjaxCart is available
           if (typeof window.liquidAjaxCart !== 'undefined') {
-            // Use Liquid Ajax Cart with sections update
+            // Use Liquid Ajax Cart
             const response = await window.liquidAjaxCart.add({
               items: items,
-              sections: ['cart-drawer', 'cart-icon-bubble', 'cart-live-region-text', 'cart-notification-product', 'cart-notification-button']
+              sections: ['cart-drawer']
             });
 
             if (!response.ok) {
               const errorData = await response.json();
               throw new Error(errorData.description || 'Failed to add bundle to cart');
             }
-
-            // Force a cart state update
-            window.liquidAjaxCart.cartRequestUpdate();
           } else {
             // Fallback to regular fetch
             const response = await fetch('/cart/add.js', {
@@ -632,11 +630,6 @@
               const errorData = await response.json();
               throw new Error(errorData.description || 'Failed to add bundle to cart');
             }
-
-            // Refresh the page sections
-            if (window.Shopify && window.Shopify.section) {
-              window.Shopify.section.load('cart-drawer');
-            }
           }
 
           // Clear the bundle
@@ -647,10 +640,24 @@
           // Show success message
           this.showNotification('Bundle added to cart!', 'success');
 
-          // Open cart drawer
+          // Try multiple methods to open cart drawer
+          // 1. Theme event
           document.dispatchEvent(new CustomEvent('theme:cart-drawer:show', {
             bubbles: true
           }));
+
+          // 2. Standard drawer open
+          const cartDrawer = document.querySelector('.drawer--cart');
+          if (cartDrawer) {
+            cartDrawer.setAttribute('open', '');
+            cartDrawer.classList.add('is-open');
+          }
+
+          // 3. Theme specific cart button click
+          const cartButton = document.querySelector('[data-cart-toggle]');
+          if (cartButton) {
+            cartButton.click();
+          }
 
         } catch (error) {
           console.error('Bundle addition error:', error);
