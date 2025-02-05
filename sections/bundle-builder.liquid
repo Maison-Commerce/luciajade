@@ -617,8 +617,8 @@
             await window.liquidAjaxCart.refreshCart();
           }
 
-          // Open cart drawer
-          document.querySelector('#cart-drawer').classList.add('is-open');
+          // Open cart drawer with correct class
+          document.querySelector('.drawer--cart.color-scheme-1').classList.add('is-open');
 
         } catch (error) {
           console.error('Bundle addition error:', error);
