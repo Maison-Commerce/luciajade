@@ -345,6 +345,20 @@
     justify-content: space-between;
     margin-top: 10px;
     position: relative;
+    padding: 0 10px;
+  }
+
+  /* Add line connecting steps */
+  .bundle-progress-steps::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: #e5e5e5;
+    transform: translateY(-50%);
+    z-index: 1;
   }
 
   .bundle-progress-step {
@@ -365,7 +379,6 @@
   .bundle-progress-step.active {
     background: #000000;
     color: #ffffff;
-    transform: scale(1.2);
   }
 
   .bundle-progress-step.completed {
@@ -556,10 +569,15 @@
         <template x-for="index in bundleSize" :key="index">
           <div class="bundle-progress-step"
                :class="{
-                 'active': selectedItems.length === index - 1,
-                 'completed': selectedItems.length >= index
-               }"
-               x-text="selectedItems.length >= index ? '✓' : index">
+                 'active': selectedItems.length === index,
+                 'completed': selectedItems.length > index - 1
+               }">
+            <template x-if="selectedItems.length <= index - 1">
+              <span x-text="index"></span>
+            </template>
+            <template x-if="selectedItems.length > index - 1">
+              <span>✓</span>
+            </template>
           </div>
         </template>
       </div>
