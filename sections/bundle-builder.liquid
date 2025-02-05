@@ -607,7 +607,7 @@
           if (typeof window.liquidAjaxCart !== 'undefined') {
             const response = await window.liquidAjaxCart.add({
               items: items,
-              sections: ['cart-drawer']
+              sections: ['cart-drawer', 'cart-icon-bubble']
             });
 
             if (!response.ok) {
@@ -615,7 +615,7 @@
               throw new Error(errorData.description || 'Failed to add bundle to cart');
             }
 
-            // Force a cart refresh
+            // Wait for Liquid Ajax Cart to finish processing
             await window.liquidAjaxCart.get();
           } else {
             const response = await fetch('/cart/add.js', {
@@ -640,26 +640,40 @@
           // Show success message
           this.showNotification('Bundle added to cart!', 'success');
 
-          // Wait a brief moment for the cart to update
-          await new Promise(resolve => setTimeout(resolve, 100));
+          // Wait for cart data to be fully updated
+          await new Promise(resolve => setTimeout(resolve, 500));
 
-          // Update cart drawer with latest information
-          await this.updateCartDrawer();
-
-          // Try multiple methods to open cart drawer
-          document.dispatchEvent(new CustomEvent('theme:cart-drawer:show', {
-            bubbles: true
-          }));
-
+          // Fetch and update cart drawer content
+          const cartResponse = await fetch('/?section_id=cart-drawer');
+          const cartHtml = await cartResponse.text();
+          
+          // Find the cart drawer element
           const cartDrawer = document.querySelector('.drawer--cart');
           if (cartDrawer) {
+            // Create a temporary element to parse the HTML
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(cartHtml, 'text/html');
+            
+            // Find the cart drawer content in the parsed HTML
+            const newCartContent = doc.querySelector('.drawer--cart');
+            if (newCartContent) {
+              // Replace the entire cart drawer content
+              cartDrawer.innerHTML = newCartContent.innerHTML;
+            }
+
+            // Open the cart drawer
             cartDrawer.setAttribute('open', '');
             cartDrawer.classList.add('is-open');
           }
 
-          const cartButton = document.querySelector('[data-cart-toggle]');
-          if (cartButton) {
-            cartButton.click();
+          // Update cart count bubbles
+          const cartCountBubbles = document.querySelectorAll('.cart-count-bubble');
+          if (cartCountBubbles.length) {
+            const cartResponse = await fetch('/cart.js');
+            const cartData = await cartResponse.json();
+            cartCountBubbles.forEach(bubble => {
+              bubble.textContent = cartData.item_count;
+            });
           }
 
         } catch (error) {
@@ -670,48 +684,6 @@
           );
         } finally {
           this.loading = false;
-        }
-      },
-
-      async updateCartDrawer() {
-        try {
-          const response = await fetch('/cart.js');
-          const cart = await response.json();
-          
-          // Update cart count
-          const cartCountElements = document.querySelectorAll('[data-cart-count]');
-          cartCountElements.forEach(element => {
-            element.textContent = cart.item_count;
-            element.setAttribute('data-cart-count', cart.item_count);
-          });
-
-          // Update cart total
-          const cartTotalElements = document.querySelectorAll('[data-cart-total]');
-          cartTotalElements.forEach(element => {
-            const formattedTotal = this.formatMoney(cart.total_price);
-            element.textContent = formattedTotal;
-            element.setAttribute('data-cart-total', cart.total_price);
-          });
-
-          // If there's a cart drawer items container, update its contents
-          const cartDrawerItems = document.querySelector('[data-cart-drawer-items]');
-          if (cartDrawerItems) {
-            // Fetch the cart drawer section HTML
-            const drawerResponse = await fetch('/?section_id=cart-drawer');
-            const drawerHtml = await drawerResponse.text();
-            
-            // Create a temporary element to parse the HTML
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(drawerHtml, 'text/html');
-            
-            // Find the items container in the parsed HTML
-            const newItems = doc.querySelector('[data-cart-drawer-items]');
-            if (newItems) {
-              cartDrawerItems.innerHTML = newItems.innerHTML;
-            }
-          }
-        } catch (error) {
-          console.error('Error updating cart drawer:', error);
         }
       },
 
