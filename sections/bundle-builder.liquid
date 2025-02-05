@@ -592,7 +592,7 @@
           }));
 
           // Add items to cart
-          const response = await fetch(window.Shopify.routes.root + 'cart/add.js', {
+          const response = await fetch('/cart/add.js', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -618,15 +618,29 @@
 
           // Wait a moment for the cart to update
           setTimeout(() => {
-            // Trigger cart update
+            // Update cart count and open drawer
             if (window.liquidAjaxCart) {
               window.liquidAjaxCart.refreshCart();
             }
 
-            // Open cart drawer with correct class
+            // Try multiple methods to open the cart drawer
             const cartDrawer = document.querySelector('.drawer--cart.color-scheme-1');
             if (cartDrawer) {
+              cartDrawer.setAttribute('open', '');
               cartDrawer.classList.add('is-open');
+              
+              // Dispatch a custom event that your theme might be listening for
+              document.dispatchEvent(new CustomEvent('drawerOpen', {
+                detail: {
+                  drawer: 'cart'
+                }
+              }));
+            }
+
+            // Trigger the cart button click as a fallback
+            const cartButton = document.querySelector('.cart-open-btn');
+            if (cartButton) {
+              cartButton.click();
             }
           }, 100);
 
@@ -670,21 +684,13 @@
   });
 </script>
 
-<!-- Add Liquid Ajax Cart event listeners -->
+<!-- Add event listener for cart drawer -->
 <script>
   document.addEventListener('DOMContentLoaded', () => {
-    // Listen for cart state changes
-    document.addEventListener('cart:refresh', (event) => {
-      if (window.liquidAjaxCart) {
-        window.liquidAjaxCart.refreshCart();
-      }
-    });
-
-    // Listen for cart open requests
-    document.addEventListener('cart:open', (event) => {
-      const cartDrawer = document.querySelector('[data-ajax-cart-section]');
-      if (cartDrawer) {
-        cartDrawer.setAttribute('open', '');
+    // Prevent default cart form submission
+    document.addEventListener('submit', (e) => {
+      if (e.target.action && e.target.action.includes('/cart/add')) {
+        e.preventDefault();
       }
     });
   });
