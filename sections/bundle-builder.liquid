@@ -581,12 +581,13 @@
         try {
           const bundleId = new Date().getTime();
           const items = this.selectedItems.map(item => ({
-            id: item.variant_id,
+            id: parseInt(item.variant_id),
             quantity: 1,
             properties: {
               '_bundle_id': bundleId,
               '_bundle_discount': this.discountPercentage + '%',
-              'Bundle': 'Jewelry Bundle Set'
+              'Bundle': 'Jewelry Bundle Set',
+              '_original_price': item.price
             }
           }));
 
@@ -594,7 +595,8 @@
           const response = await fetch(window.Shopify.routes.root + 'cart/add.js', {
             method: 'POST',
             headers: {
-              'Content-Type': 'application/json'
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
             },
             body: JSON.stringify({ items })
           });
@@ -604,6 +606,8 @@
             throw new Error(errorData.description || 'Failed to add bundle to cart');
           }
 
+          await response.json();
+
           // Clear the bundle first
           this.selectedItems = [];
           localStorage.removeItem('currentBundle');
@@ -612,13 +616,19 @@
           // Show success message
           this.showNotification('Bundle added to cart!', 'success');
 
-          // Trigger cart update
-          if (window.liquidAjaxCart) {
-            await window.liquidAjaxCart.refreshCart();
-          }
+          // Wait a moment for the cart to update
+          setTimeout(() => {
+            // Trigger cart update
+            if (window.liquidAjaxCart) {
+              window.liquidAjaxCart.refreshCart();
+            }
 
-          // Open cart drawer with correct class
-          document.querySelector('.drawer--cart.color-scheme-1').classList.add('is-open');
+            // Open cart drawer with correct class
+            const cartDrawer = document.querySelector('.drawer--cart.color-scheme-1');
+            if (cartDrawer) {
+              cartDrawer.classList.add('is-open');
+            }
+          }, 100);
 
         } catch (error) {
           console.error('Bundle addition error:', error);
