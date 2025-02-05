@@ -281,19 +281,37 @@
         }
 
         if (this.isProductSelected(product.id)) {
+          this.showNotification('This item is already in your bundle', 'error');
           return;
         }
 
+        // Validate that a variant is selected
+        if (!product.variant_id) {
+          this.showNotification('Please select a variant first', 'error');
+          return;
+        }
+
+        // Add the item to selectedItems array
         this.selectedItems.push({
           id: product.id,
           variant_id: product.variant_id,
           title: product.title,
           price: product.price,
-          variant_title: product.variant_title
+          variant_title: product.variant_title,
+          image: product.image || ''  // Add image if available
         });
 
+        // Save to localStorage
         localStorage.setItem('currentBundle', JSON.stringify(this.selectedItems));
+        
+        // Show success notification
         this.showNotification('Item added to bundle', 'success');
+
+        // Show the bundle box by ensuring it's active
+        const bundleBox = document.querySelector('.bundle-box');
+        if (bundleBox) {
+          bundleBox.classList.add('active');
+        }
       },
 
       removeFromBundle(productId) {
@@ -525,7 +543,8 @@
                     variant_id: selectedVariant,
                     title: '{{ product.title | escape }}',
                     price: {{ product.price }},
-                    variant_title: $el.querySelector('select').selectedOptions[0].text
+                    variant_title: $el.querySelector('select').selectedOptions[0].text,
+                    image: '{{ product.featured_image | img_url: '100x100', crop: 'center' }}'
                   })"
                   :disabled="!selectedVariant || isProductSelected('{{ product.id }}')"
                   x-show="!isProductSelected('{{ product.id }}')">
