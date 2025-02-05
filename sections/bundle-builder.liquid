@@ -590,20 +590,12 @@
             }
           }));
 
-          const response = await fetch(window.Shopify.routes.root + 'cart/add.js', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ items })
-          });
+          // Use Liquid Ajax Cart's API to add items
+          const response = await window.liquidAjaxCart.add({items});
 
           if (!response.ok) {
             throw new Error('Failed to add bundle to cart');
           }
-
-          // Wait for the cart addition to complete
-          await response.json();
 
           // Clear the bundle first
           this.selectedItems = [];
@@ -613,11 +605,8 @@
           // Show success message
           this.showNotification('Bundle added to cart!', 'success');
 
-          // Open cart drawer
-          const cartDrawer = document.querySelector("#cart-drawer");
-          if (cartDrawer) {
-            cartDrawer.setAttribute("open", "");
-          }
+          // Trigger cart drawer open using Liquid Ajax Cart
+          document.body.classList.add('js-show-ajax-cart');
 
         } catch (error) {
           console.error('Bundle addition error:', error);
