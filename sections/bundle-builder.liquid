@@ -612,21 +612,16 @@
           // Show success message
           this.showNotification('Bundle added to cart!', 'success');
 
-          // Update cart state and open drawer
-          document.documentElement.dispatchEvent(
-            new CustomEvent('cart:refresh', {
-              bubbles: true
-            })
-          );
+          // Trigger cart update
+          if (window.liquidAjaxCart) {
+            await window.liquidAjaxCart.refreshCart();
+          }
 
-          // Wait for cart to refresh before opening
-          setTimeout(() => {
-            document.documentElement.dispatchEvent(
-              new CustomEvent('cart:open', {
-                bubbles: true
-              })
-            );
-          }, 200);
+          // Simulate cart button click to open drawer
+          const cartButton = document.querySelector('.cart-open-btn');
+          if (cartButton) {
+            cartButton.click();
+          }
 
         } catch (error) {
           console.error('Bundle addition error:', error);
