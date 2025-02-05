@@ -569,13 +569,13 @@
         <template x-for="index in bundleSize" :key="index">
           <div class="bundle-progress-step"
                :class="{
-                 'active': selectedItems.length === index,
+                 'active': selectedItems.length === index - 1,
                  'completed': selectedItems.length > index - 1
                }">
-            <template x-if="selectedItems.length <= index - 1">
+            <template x-if="selectedItems.length !== index - 1">
               <span x-text="index"></span>
             </template>
-            <template x-if="selectedItems.length > index - 1">
+            <template x-if="selectedItems.length === index - 1">
               <span>✓</span>
             </template>
           </div>
