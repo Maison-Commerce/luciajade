@@ -867,6 +867,9 @@
           // Wait a brief moment for the cart to update
           await this.updateCartDrawer();
 
+          // Dispatch the refresh event for the cart drawer
+          document.dispatchEvent(new CustomEvent('cart:refresh'));
+
           // Try multiple methods to open cart drawer
           document.dispatchEvent(new CustomEvent('theme:cart-drawer:show', {
             bubbles: true
