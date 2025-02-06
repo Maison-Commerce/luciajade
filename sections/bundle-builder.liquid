@@ -1359,7 +1359,8 @@
   <div class="bundle-view"
        :class="{ 'active': isViewOpen }"
        x-show="isViewOpen"
-       x-transition>
+       x-transition
+       @click.outside="if (!$event.target.closest('.bundle-product-card')) isViewOpen = false">
     
     <div class="bundle-view-header">
       <h3>Your Box</h3>
