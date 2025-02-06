@@ -27,6 +27,9 @@
     },
     "bundle_builder": {
       "type": "bundle-builder",
+      "custom_css": [
+        "@media screen and (max-width: 768px) {.h4-title {font-size: 14px }}"
+      ],
       "settings": {
         "title": "Create Your Custom Bundle",
         "bundle_size": 7,
