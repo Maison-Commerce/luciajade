@@ -120,11 +120,39 @@
     border-radius: 8px;
     font-weight: 500;
     transition: all 0.3s ease;
+    transform-origin: center;
   }
 
-  .bundle-button:hover {
+  .bundle-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+    animation: none;
+  }
+
+  .bundle-button:not(:disabled) {
+    animation: buttonEnable 0.5s ease;
+  }
+
+  @keyframes buttonEnable {
+    0% {
+      transform: scale(1);
+      box-shadow: 0 0 0 rgba(0,0,0,0);
+    }
+    50% {
+      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    100% {
+      transform: scale(1);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+  }
+
+  .bundle-button:not(:disabled):hover {
     opacity: 0.9;
-    transform: translateY(-1px);
+    transform: translateY(-1px) scale(1.02);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
   }
 
   .variant-selector {
