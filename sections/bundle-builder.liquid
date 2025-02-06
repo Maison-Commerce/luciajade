@@ -66,118 +66,153 @@
   }
 
   .bundle-product-card {
-    border: 1px solid #e5e5e5;
-    padding: 1.5rem;
-    border-radius: 12px;
-    text-align: center;
-    transition: all 0.3s ease;
     background: #ffffff;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
+    border-radius: 16px;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
   }
 
-  .bundle-product-card img {
+  .bundle-product-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  }
+
+  .bundle-product-card.selected {
+    border: 2px solid var(--color-button);
+    box-shadow: 0 0 0 2px var(--color-button-text);
+  }
+
+  .bundle-product-image-wrapper {
+    position: relative;
+    padding-top: 100%;
+    background: #f8f8f8;
+    overflow: hidden;
+  }
+
+  .bundle-product-image-wrapper img {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
-    height: auto;
+    height: 100%;
     object-fit: cover;
-    border-radius: 8px;
-    margin-bottom: 1rem;
-    transition: transform 0.3s ease;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .bundle-product-card:hover img {
-    transform: scale(1.02);
+    transform: scale(1.05);
   }
 
-  .bundle-product-card-content {
-    flex: 1;
+  .bundle-product-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: var(--color-button);
+    color: var(--color-button-text);
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
     display: flex;
-    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 4px rgb(0 0 0 / 0.1);
+  }
+
+  .bundle-product-content {
+    padding: 1.5rem;
   }
 
   .bundle-product-title {
     font-size: 1rem;
-    line-height: 1.4;
-    margin: 0.75rem 0;
     font-weight: 500;
+    color: #1f2937;
+    margin: 0 0 0.5rem;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 
   .bundle-product-price {
-    font-size: 1.1rem;
+    font-size: 1.125rem;
     font-weight: 600;
-    color: #333;
-    margin: 0.5rem 0;
+    color: #111827;
+    margin: 0 0 1rem;
+  }
+
+  .variant-dropdown {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    color: #374151;
+    background: #f9fafb;
+    margin-bottom: 1rem;
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 1.25rem;
+  }
+
+  .variant-dropdown:focus {
+    outline: 2px solid var(--color-button);
+    outline-offset: 2px;
+  }
+
+  .bundle-button-group {
+    margin-top: 0.5rem;
   }
 
   .bundle-button {
     width: 100%;
-    padding: 0.8rem;
-    margin-top: auto;
-    background: var(--color-button);
-    color: var(--color-button-text);
-    border: none;
+    padding: 0.875rem 1.5rem;
     border-radius: 8px;
     font-weight: 500;
-    transition: all 0.3s ease;
-    transform-origin: center;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background: var(--color-button);
+    color: var(--color-button-text);
+    border: 1px solid transparent;
+  }
+
+  .bundle-button:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
   }
 
   .bundle-button:disabled {
     opacity: 0.5;
     cursor: not-allowed;
-    transform: none;
-    animation: none;
   }
 
-  .bundle-button:not(:disabled) {
-    animation: buttonEnable 0.5s ease;
+  .bundle-button-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
   }
 
-  @keyframes buttonEnable {
-    0% {
-      transform: scale(1);
-      box-shadow: 0 0 0 rgba(0,0,0,0);
-    }
-    50% {
-      transform: scale(1.05);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-    100% {
-      transform: scale(1);
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
+  .bundle-button--add-another {
+    background: var(--color-button);
+    color: var(--color-button-text);
   }
 
-  .bundle-button:not(:disabled):hover {
-    opacity: 0.9;
-    transform: translateY(-1px) scale(1.02);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  .bundle-button--remove {
+    background: transparent;
+    border: 1px solid var(--color-button);
+    color: var(--color-button);
   }
 
-  .variant-selector {
-    margin-top: 1rem;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    justify-content: center;
-  }
-
-  .variant-button {
-    flex: 1;
-    min-width: 80px;
-    padding: 0.5rem;
-    background: var(--color-background);
-    border: 1px solid var(--color-border);
-    border-radius: 4px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-  }
-
-  .variant-button:hover {
-    background: var(--color-background-secondary);
+  .bundle-button--remove:hover:not(:disabled) {
+    background: var(--color-button);
+    color: var(--color-button-text);
   }
 
   .bundle-notifications {
@@ -603,21 +638,6 @@
   .bundle-product-card.selected .bundle-button:hover {
     background: #ffffff;
     color: #000000;
-  }
-
-  .variant-dropdown {
-    width: 100%;
-    padding: 0.8rem;
-    margin: 0.75rem 0;
-    border: 1px solid var(--color-border);
-    border-radius: 8px;
-    background: var(--color-background);
-    font-size: 0.9rem;
-  }
-
-  .variant-dropdown:focus {
-    outline: none;
-    border-color: var(--color-button);
   }
 
   .bundle-type-filter {
@@ -1085,74 +1105,82 @@
              x-show="selectedType === 'all' || selectedType === '{{ product.type | escape }}'"
              :class="{ 'selected': isProductSelected('{{ product.id }}') }">
           
-          <img :src="variantImage" 
-               alt="{{ product.title }}"
-               loading="lazy"
-               width="300"
-               height="300">
+          <div class="bundle-product-image-wrapper">
+            <img :src="variantImage" 
+                 alt="{{ product.title }}"
+                 loading="lazy"
+                 width="300"
+                 height="300">
+            <div class="bundle-product-badge" x-show="isProductSelected('{{ product.id }}')">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/>
+              </svg>
+            </div>
+          </div>
           
-          <h3 class="h4-title">{{ product.title }}</h3>
-          <p class="price" x-text="selectedVariant ? formatMoney(selectedVariant.price) : formatMoney({{ product.price }})"></p>
-          
-        
-          <select class="variant-dropdown"
-                  :value="selectedVariant.id"
-                  @change="
-                    const variant = $event.target.selectedOptions[0].dataset;
-                    selectedVariant = {
-                      id: variant.id,
-                      price: parseFloat(variant.price),
-                      title: variant.title
-                    };
-                    variantImage = variant.image;
-                  ">
-            {% for variant in product.variants %}
-              {% assign option_text = variant.title | split: ' / ' | first %}
-              <option value="{{ variant.id }}"
-                      data-id="{{ variant.id }}"
-                      data-price="{{ variant.price }}"
-                      data-title="{{ option_text }}"
-                      data-image="{{ variant.featured_image | default: product.featured_image | img_url: '300x300', crop: 'center' }}">
-                {{ option_text }}
-              </option>
-            {% endfor %}
-          </select>
-          
-          <div class="bundle-button-group">
-            <button class="bundle-button"
-                    x-show="!isProductSelected('{{ product.id }}')"
-                    @click="addToBundle({
-                      id: '{{ product.id }}',
-                      variant_id: selectedVariant.id,
-                      title: '{{ product.title | escape }}',
-                      price: selectedVariant.price,
-                      variant_title: selectedVariant.title,
-                      image: variantImage
-                    })"
-                    :disabled="selectedItems.length >= bundleSize">
-              Add to Bundle
-            </button>
+          <div class="bundle-product-content">
+            <h3 class="bundle-product-title">{{ product.title }}</h3>
+            <p class="bundle-product-price" x-text="formatMoney(selectedVariant.price)"></p>
             
-            <template x-if="isProductSelected('{{ product.id }}')">
-              <div class="bundle-button-row">
-                <button class="bundle-button bundle-button--add-another"
-                        @click="addToBundle({
-                          id: '{{ product.id }}',
-                          variant_id: selectedVariant.id,
-                          title: '{{ product.title | escape }}',
-                          price: selectedVariant.price,
-                          variant_title: selectedVariant.title,
-                          image: variantImage
-                        })"
-                        :disabled="selectedItems.length >= bundleSize">
-                  Add Another
-                </button>
-                <button class="bundle-button bundle-button--remove"
-                        @click="removeFromBundle('{{ product.id }}')">
-                  Remove
-                </button>
-              </div>
-            </template>
+            <select class="variant-dropdown"
+                    :value="selectedVariant.id"
+                    @change="
+                      const variant = $event.target.selectedOptions[0].dataset;
+                      selectedVariant = {
+                        id: variant.id,
+                        price: parseFloat(variant.price),
+                        title: variant.title
+                      };
+                      variantImage = variant.image;
+                    ">
+              {% for variant in product.variants %}
+                {% assign option_text = variant.title | split: ' / ' | first %}
+                <option value="{{ variant.id }}"
+                        data-id="{{ variant.id }}"
+                        data-price="{{ variant.price }}"
+                        data-title="{{ option_text }}"
+                        data-image="{{ variant.featured_image | default: product.featured_image | img_url: '300x300', crop: 'center' }}">
+                  {{ option_text }}
+                </option>
+              {% endfor %}
+            </select>
+            
+            <div class="bundle-button-group">
+              <button class="bundle-button"
+                      x-show="!isProductSelected('{{ product.id }}')"
+                      @click="addToBundle({
+                        id: '{{ product.id }}',
+                        variant_id: selectedVariant.id,
+                        title: '{{ product.title | escape }}',
+                        price: selectedVariant.price,
+                        variant_title: selectedVariant.title,
+                        image: variantImage
+                      })"
+                      :disabled="selectedItems.length >= bundleSize">
+                Add to Bundle
+              </button>
+              
+              <template x-if="isProductSelected('{{ product.id }}')">
+                <div class="bundle-button-row">
+                  <button class="bundle-button bundle-button--add-another"
+                          @click="addToBundle({
+                            id: '{{ product.id }}',
+                            variant_id: selectedVariant.id,
+                            title: '{{ product.title | escape }}',
+                            price: selectedVariant.price,
+                            variant_title: selectedVariant.title,
+                            image: variantImage
+                          })"
+                          :disabled="selectedItems.length >= bundleSize">
+                    Add Another
+                  </button>
+                  <button class="bundle-button bundle-button--remove"
+                          @click="removeFromBundle('{{ product.id }}')">
+                    Remove
+                  </button>
+                </div>
+              </template>
+            </div>
           </div>
         </div>
       {% endfor %}
