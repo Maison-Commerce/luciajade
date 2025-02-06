@@ -883,11 +883,19 @@
         this.showNotification('Item added to bundle', 'success');
       },
 
-      removeFromBundle(instanceId) {
-        // Remove by instanceId instead of product.id
-        this.selectedItems = this.selectedItems.filter(item => item.instanceId !== instanceId);
-        localStorage.setItem('currentBundle', JSON.stringify(this.selectedItems));
-        this.showNotification('Item removed from bundle', 'success');
+      removeFromBundle(productId) {
+        // Find the last instance of this product in the array
+        const lastIndex = [...this.selectedItems].reverse()
+          .findIndex(item => item.id === productId);
+        
+        if (lastIndex !== -1) {
+          // Convert the reverse index to the actual index
+          const actualIndex = this.selectedItems.length - 1 - lastIndex;
+          // Remove the item at the actual index
+          this.selectedItems.splice(actualIndex, 1);
+          localStorage.setItem('currentBundle', JSON.stringify(this.selectedItems));
+          this.showNotification('Item removed from bundle', 'success');
+        }
       },
 
       updateQuantity(instanceId, change) {
@@ -1218,7 +1226,7 @@
           </div>
         </div>
         <button class="bundle-item-remove"
-                @click="removeFromBundle(item.instanceId)">
+                @click="removeFromBundle(item.id)">
           Remove
         </button>
       </div>
