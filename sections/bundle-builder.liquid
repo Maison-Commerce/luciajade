@@ -741,11 +741,9 @@
       isViewOpen: false,
 
       init() {
-        // Initialize from localStorage if exists
-        const savedBundle = localStorage.getItem('currentBundle');
-        if (savedBundle) {
-          this.selectedItems = JSON.parse(savedBundle);
-        }
+        // Clear localStorage on page load
+        localStorage.removeItem('currentBundle');
+        this.selectedItems = [];
       },
 
       toggleView() {
