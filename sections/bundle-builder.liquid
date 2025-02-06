@@ -1087,6 +1087,7 @@
                       title: variant.title
                     };
                     variantImage = variant.image;
+                    $root.saveToLocalStorage();  // Save when variant changes
                   ">
             <option value="" disabled x-text="selectedVariant ? 'Change Option' : 'Select Option'">Select Option</option>
             {% for variant in product.variants %}
