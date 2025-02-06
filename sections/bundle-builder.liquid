@@ -1023,10 +1023,7 @@
              x-data="{ 
                showVariants: false,
                selectedVariant: null,
-               variantImage: '{{ product.featured_image | img_url: '300x300', crop: 'center' }}',
-               get selectedOptionText() {
-                 return this.selectedVariant ? this.selectedVariant.title : 'Select Option';
-               }
+               variantImage: '{{ product.featured_image | img_url: '300x300', crop: 'center' }}'
              }"
              x-show="selectedType === 'all' || selectedType === '{{ product.type | escape }}'"
              :class="{ 'selected': isProductSelected('{{ product.id }}') }">
@@ -1043,7 +1040,6 @@
           <!-- Variant Dropdown -->
           <select class="variant-dropdown"
                   x-model="selectedVariant"
-                  x-text="selectedOptionText"
                   @change="
                     const variant = $event.target.selectedOptions[0].dataset;
                     selectedVariant = {
@@ -1053,7 +1049,7 @@
                     };
                     variantImage = variant.image;
                   ">
-            <option value="" disabled x-text="selectedOptionText">Select Option</option>
+            <option value="" disabled x-text="selectedVariant ? 'Change Option' : 'Select Option'">Select Option</option>
             {% for variant in product.variants %}
               {% assign option_text = variant.title | split: ' / ' | first %}
               <option value="{{ variant.id }}"
