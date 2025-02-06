@@ -162,20 +162,19 @@
     white-space: nowrap;
     overflow: hidden;
     padding-right: 2.5rem; /* Make room for the dropdown arrow */
-  }
-
-  /* Add max-width for desktop dropdown text */
-  .variant-dropdown option {
     max-width: 18ch;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
   }
 
   /* Mobile styles */
   @media screen and (max-width: 768px) {
+    .variant-dropdown {
+      max-width: 10ch;
+      font-size: 0.75rem;
+    }
+    
     .variant-dropdown option {
       max-width: 10ch;
+      font-size: 0.75rem;
     }
   }
 
