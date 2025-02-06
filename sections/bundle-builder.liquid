@@ -323,15 +323,36 @@
   .bundle-item {
     padding: 20px 0;
     border-bottom: 1px solid #e5e5e5;
+  }
+
+  .bundle-item-content {
+    display: flex;
+    gap: 15px;
+  }
+
+  .bundle-item-image {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 4px;
+  }
+
+  .bundle-item-info {
+    flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 4px;
   }
 
   .bundle-item-title {
     font-size: 16px;
     color: #333;
     margin: 0;
+  }
+
+  .bundle-item-variant {
+    font-size: 14px;
+    color: #666;
   }
 
   .bundle-item-price {
@@ -1165,14 +1186,18 @@
     <!-- Selected items -->
     <template x-for="item in selectedItems" :key="item.instanceId">
       <div class="bundle-item">
-        <h4 class="bundle-item-title" x-text="item.title"></h4>
-        <div class="bundle-item-details">
-          <span class="bundle-item-price" x-text="formatMoney(item.price)"></span>
+        <div class="bundle-item-content">
+          <img class="bundle-item-image" :src="item.image" :alt="item.title">
+          <div class="bundle-item-info">
+            <h4 class="bundle-item-title" x-text="item.title"></h4>
+            <span class="bundle-item-variant" x-text="item.variant_title"></span>
+            <span class="bundle-item-price" x-text="formatMoney(item.price)"></span>
+            <button class="bundle-item-remove"
+                    @click="removeFromBundle(item.id)">
+              Remove
+            </button>
+          </div>
         </div>
-        <button class="bundle-item-remove"
-                @click="removeFromBundle(item.id)">
-          Remove
-        </button>
       </div>
     </template>
     
