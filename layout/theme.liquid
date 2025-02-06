@@ -9,9 +9,6 @@
   <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
-  
-  <!-- Add Liquid Ajax Cart library -->
-  <script src="https://cdn.jsdelivr.net/npm/liquid-ajax-cart@1.3.1/liquid-ajax-cart.js" defer></script>
 </head>
 
 <body id="{{ page_title | handle }}" class="template-{{ template.name | handle }} grid-{{ settings.grid_style }}{% if customer %} customer-logged-in{% endif %}{% if settings.animations_enable %} aos-initialized{% endif %}{% if settings.product_grid_outline %} has-line-design{% endif %}" data-animations="{{ settings.animations_enable }}">
@@ -85,15 +82,7 @@
   {%- endcomment -%}
   <!-- Paste marketing code or third party scripts below this comment line ============== -->
 
-  <script>
-    window.liquidAjaxCart = {
-      settings: {
-        cartDrawerEnabled: true,
-        cartDrawerSection: 'cart-drawer',  // Your cart drawer section name
-        cartIconSection: 'cart-icon-bubble'  // Your cart icon section name
-      }
-    };
-  </script>
+
 
   <!-- And above this comment line ================================================== -->
 </body>
