@@ -162,21 +162,27 @@
     white-space: nowrap;
     overflow: hidden;
     padding-right: 2.5rem; /* Make room for the dropdown arrow */
-    max-width: 18ch;
   }
 
-  /* Mobile styles */
-  @media screen and (max-width: 768px) {
-    .variant-dropdown {
-      max-width: 10ch;
-      font-size: 0.75rem;
-    }
-    
-    .variant-dropdown option {
-      max-width: 10ch;
-      font-size: 0.75rem;
-    }
+  /* Add max-width for desktop dropdown text */
+  .variant-dropdown option {
+    max-width: 18ch;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
+
+@media screen and (max-width: 768px) {
+  .variant-dropdown {
+    max-width: 10ch;
+    font-size: 0.75rem;
+  }
+  
+  .variant-dropdown option {
+    max-width: 10ch;
+    font-size: 0.75rem;
+  }
+}
 
   .variant-dropdown:focus {
     outline: 2px solid var(--color-button);
