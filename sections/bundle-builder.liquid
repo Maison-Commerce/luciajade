@@ -828,8 +828,8 @@
             }
           }));
 
-          // Use the correct Liquid Ajax Cart API
-          await window.liquidAjaxCart.addToCart({
+          // Use the correct cart.add method
+          await window.cart.add({
             items: items,
             sections: ['cart-drawer', 'cart-icon-bubble']
           });
