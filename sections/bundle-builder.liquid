@@ -158,9 +158,6 @@
     background-repeat: no-repeat;
     background-position: right 1rem center;
     background-size: 1.25rem;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
     padding-right: 2.5rem; /* Make room for the dropdown arrow */
   }
 
@@ -172,17 +169,7 @@
     white-space: nowrap;
   }
 
-@media screen and (max-width: 768px) {
-  .variant-dropdown {
-    max-width: 10ch;
-    font-size: 0.75rem;
-  }
-    .variant-dropdown option {
-    max-width: 10ch;
-    font-size: 0.75rem;
-  }
-  
-}
+
 
   .variant-dropdown:focus {
     outline: 2px solid var(--color-button);
@@ -1304,6 +1291,36 @@
     </div>
   </div>
 </div>
+
+<script>
+  function truncateVariantOptions() {
+    const isMobile = window.innerWidth <= 768;
+    const maxLength = isMobile ? 10 : 18;
+    
+    document.querySelectorAll('.variant-dropdown').forEach(dropdown => {
+      Array.from(dropdown.options).forEach(option => {
+        const originalText = option.getAttribute('data-original-text') || option.text;
+        if (!option.getAttribute('data-original-text')) {
+          option.setAttribute('data-original-text', originalText);
+        }
+        
+        option.text = originalText.length > maxLength 
+          ? originalText.substring(0, maxLength) + '...' 
+          : originalText;
+      });
+    });
+  }
+
+  // Run on page load
+  document.addEventListener('DOMContentLoaded', truncateVariantOptions);
+  
+  // Run on window resize
+  let resizeTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(truncateVariantOptions, 250);
+  });
+</script>
 
 {% schema %}
 {
