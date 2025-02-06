@@ -900,7 +900,7 @@
           const response = await fetch('/cart.js');
           const cart = await response.json();
           
-          // Update cart count and total as before
+          // Update cart count and total
           const cartCountElements = document.querySelectorAll('[data-cart-count]');
           cartCountElements.forEach(element => {
             element.textContent = cart.item_count;
@@ -914,44 +914,23 @@
             element.setAttribute('data-cart-total', cart.total_price);
           });
 
-          // Get all line items and their quantities
-          const updates = {};
-          cart.items.forEach(item => {
-            updates[item.variant_id] = item.quantity;
-          });
-
-          // Call the cart update endpoint
-          const updateResponse = await fetch('/cart/update.js', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ updates })
-          });
-
-          if (!updateResponse.ok) {
-            throw new Error('Failed to update cart');
-          }
-
-          // If there's a cart drawer items container, update its contents
-          const cartDrawerItems = document.querySelector('[data-cart-drawer-items]');
-          if (cartDrawerItems) {
-            // Fetch the cart drawer section HTML
-            const drawerResponse = await fetch('/?section_id=cart-drawer');
-            const drawerHtml = await drawerResponse.text();
-            
-            // Create a temporary element to parse the HTML
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(drawerHtml, 'text/html');
-            
-            // Find the items container in the parsed HTML
-            const newItems = doc.querySelector('[data-cart-drawer-items]');
-            if (newItems) {
-              cartDrawerItems.innerHTML = newItems.innerHTML;
+          // Improved cart drawer content update
+          if (typeof window.liquidAjaxCart !== 'undefined') {
+            // Let Liquid Ajax Cart handle the section update
+            await liquidAjaxCart.update();
+          } else {
+            // Fallback for manual update
+            const cartDrawer = document.querySelector('.drawer--cart');
+            if (cartDrawer) {
+              const response = await fetch('/?section_id=cart-drawer');
+              const text = await response.text();
+              const newCartDrawer = new DOMParser().parseFromString(text, 'text/html');
+              const newInnerHTML = newCartDrawer.querySelector('.drawer--cart').innerHTML;
+              cartDrawer.innerHTML = newInnerHTML;
             }
           }
 
-          // Trigger any cart update events your theme might be listening for
+          // Trigger custom event for any third-party listeners
           document.dispatchEvent(new CustomEvent('cart:updated', {
             bubbles: true,
             detail: { cart: cart }
