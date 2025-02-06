@@ -1,4 +1,8 @@
-<!-- Add Liquid Ajax Cart -->
+<!-- Add Liquid Ajax Cart with proper configuration -->
+<script type="application/json" data-ajax-cart-initial-state>
+  {{ cart | json }}
+</script>
+
 <script src="https://cdn.jsdelivr.net/npm/liquid-ajax-cart@2.3.0/liquid-ajax-cart.js" defer="defer"></script>
 <link href="https://cdn.jsdelivr.net/npm/liquid-ajax-cart@2.3.0/liquid-ajax-cart.css" rel="stylesheet">
 
@@ -828,26 +832,29 @@
             }
           }));
 
+          // Update to use proper sections parameter
+          const sections = ['cart-drawer', 'cart-icon-bubble'];
+          
           if (typeof window.liquidAjaxCart !== 'undefined') {
             const response = await window.liquidAjaxCart.add({
               items: items,
-              sections: ['cart-drawer']
+              sections: sections // Add sections to update
             });
 
             if (!response.ok) {
               const errorData = await response.json();
               throw new Error(errorData.description || 'Failed to add bundle to cart');
             }
-
-            // Force a cart refresh
-            await liquidAjaxcart.update();
           } else {
             const response = await fetch('/cart/add.js', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json'
               },
-              body: JSON.stringify({ items })
+              body: JSON.stringify({ 
+                items,
+                sections: sections // Add sections to update
+              })
             });
 
             if (!response.ok) {
@@ -864,24 +871,10 @@
           // Show success message
           this.showNotification('Bundle added to cart!', 'success');
 
-          // Wait a brief moment for the cart to update
-          await this.updateCartDrawer();
-
-          // Try multiple methods to open cart drawer
-          document.dispatchEvent(new CustomEvent('theme:cart-drawer:show', {
+          // Dispatch cart drawer open event
+          document.dispatchEvent(new CustomEvent('theme:cart:open', {
             bubbles: true
           }));
-
-          const cartDrawer = document.querySelector('.drawer--cart');
-          if (cartDrawer) {
-            cartDrawer.setAttribute('open', '');
-            cartDrawer.classList.add('is-open');
-          }
-
-          const cartButton = document.querySelector('[data-cart-toggle]');
-          if (cartButton) {
-            cartButton.click();
-          }
 
         } catch (error) {
           console.error('Bundle addition error:', error);
@@ -891,48 +884,6 @@
           );
         } finally {
           this.loading = false;
-        }
-      },
-
-      async updateCartDrawer() {
-        try {
-          const response = await fetch('/cart.js');
-          const cart = await response.json();
-          
-          // Update cart count
-          const cartCountElements = document.querySelectorAll('[data-cart-count]');
-          cartCountElements.forEach(element => {
-            element.textContent = cart.item_count;
-            element.setAttribute('data-cart-count', cart.item_count);
-          });
-
-          // Update cart total
-          const cartTotalElements = document.querySelectorAll('[data-cart-total]');
-          cartTotalElements.forEach(element => {
-            const formattedTotal = this.formatMoney(cart.total_price);
-            element.textContent = formattedTotal;
-            element.setAttribute('data-cart-total', cart.total_price);
-          });
-
-          // If there's a cart drawer items container, update its contents
-          const cartDrawerItems = document.querySelector('[data-cart-drawer-items]');
-          if (cartDrawerItems) {
-            // Fetch the cart drawer section HTML
-            const drawerResponse = await fetch('/?section_id=cart-drawer');
-            const drawerHtml = await drawerResponse.text();
-            
-            // Create a temporary element to parse the HTML
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(drawerHtml, 'text/html');
-            
-            // Find the items container in the parsed HTML
-            const newItems = doc.querySelector('[data-cart-drawer-items]');
-            if (newItems) {
-              cartDrawerItems.innerHTML = newItems.innerHTML;
-            }
-          }
-        } catch (error) {
-          console.error('Error updating cart drawer:', error);
         }
       },
 
