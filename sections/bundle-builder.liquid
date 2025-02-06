@@ -894,11 +894,12 @@
 
       async updateCartDrawer() {
         try {
-          // First update the cart data
-          const response = await fetch('/cart.js');
-          const cart = await response.json();
+          // First update the cart data using locale-aware URL
+          const cartResponse = await fetch('/cart.js');
+          if (!cartResponse.ok) throw new Error('Failed to fetch cart data');
+          const cart = await cartResponse.json();
           
-          // Update cart count and total as before
+          // Update cart count and total
           const cartCountElements = document.querySelectorAll('[data-cart-count]');
           cartCountElements.forEach(element => {
             element.textContent = cart.item_count;
@@ -912,44 +913,30 @@
             element.setAttribute('data-cart-total', cart.total_price);
           });
 
-          // Get all line items and their quantities
-          const updates = {};
-          cart.items.forEach(item => {
-            updates[item.variant_id] = item.quantity;
-          });
-
-          // Call the cart update endpoint
-          const updateResponse = await fetch('/cart/update.js', {
+          // Request cart drawer section HTML using bundled section rendering
+          const cartUpdateResponse = await fetch('/cart/update.js', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ updates })
+            body: JSON.stringify({
+              sections: ['cart-drawer'],
+              sections_url: window.location.pathname
+            })
           });
 
-          if (!updateResponse.ok) {
-            throw new Error('Failed to update cart');
-          }
+          if (!cartUpdateResponse.ok) throw new Error('Failed to update cart');
+          const cartData = await cartUpdateResponse.json();
 
-          // If there's a cart drawer items container, update its contents
-          const cartDrawerItems = document.querySelector('[data-cart-drawer-items]');
-          if (cartDrawerItems) {
-            // Fetch the cart drawer section HTML
-            const drawerResponse = await fetch('/?section_id=cart-drawer');
-            const drawerHtml = await drawerResponse.text();
-            
-            // Create a temporary element to parse the HTML
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(drawerHtml, 'text/html');
-            
-            // Find the items container in the parsed HTML
-            const newItems = doc.querySelector('[data-cart-drawer-items]');
-            if (newItems) {
-              cartDrawerItems.innerHTML = newItems.innerHTML;
+          // Update cart drawer contents if section was returned
+          if (cartData.sections && cartData.sections['cart-drawer']) {
+            const cartDrawerItems = document.querySelector('[data-cart-drawer-items]');
+            if (cartDrawerItems) {
+              cartDrawerItems.innerHTML = cartData.sections['cart-drawer'];
             }
           }
 
-          // Trigger any cart update events your theme might be listening for
+          // Trigger cart update event
           document.dispatchEvent(new CustomEvent('cart:updated', {
             bubbles: true,
             detail: { cart: cart }
