@@ -623,9 +623,10 @@
       border-radius: 10px;
     }
 
-    h3 .h4 {
-      font-size: 14px;
+    h3 .h4-title {
+      font-size: 12px;
     }
+
 
     .bundle-product-title {
       font-size: 0.9rem;
@@ -1048,7 +1049,7 @@
                width="300"
                height="300">
           
-          <h3 class="h4">{{ product.title }}</h3>
+          <h3 class="h4-title">{{ product.title }}</h3>
           <p class="price" x-text="selectedVariant ? formatMoney(selectedVariant.price) : formatMoney({{ product.price }})"></p>
           
         
