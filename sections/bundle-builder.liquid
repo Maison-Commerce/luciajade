@@ -1030,7 +1030,11 @@
         <div class="bundle-product-card" 
              x-data="{ 
                showVariants: false,
-               selectedVariant: null,
+               selectedVariant: {
+                 id: '{{ product.first_available_variant.id }}',
+                 price: {{ product.first_available_variant.price }},
+                 title: '{{ product.first_available_variant.title | split: ' / ' | first | escape }}'
+               },
                variantImage: '{{ product.featured_image | img_url: '300x300', crop: 'center' }}'
              }"
              x-show="selectedType === 'all' || selectedType === '{{ product.type | escape }}'"
@@ -1047,7 +1051,7 @@
           
         
           <select class="variant-dropdown"
-                  :value="selectedVariant ? selectedVariant.id : ''"
+                  :value="selectedVariant.id"
                   @change="
                     const variant = $event.target.selectedOptions[0].dataset;
                     selectedVariant = {
@@ -1057,7 +1061,6 @@
                     };
                     variantImage = variant.image;
                   ">
-            <option value="" disabled x-text="selectedVariant ? 'Change Option' : 'Select Option'">Select Option</option>
             {% for variant in product.variants %}
               {% assign option_text = variant.title | split: ' / ' | first %}
               <option value="{{ variant.id }}"
@@ -1080,7 +1083,7 @@
                     variant_title: selectedVariant.title,
                     image: variantImage
                   })"
-                  :disabled="selectedItems.length >= bundleSize || !selectedVariant">
+                  :disabled="selectedItems.length >= bundleSize">
             Add to Bundle
           </button>
           
