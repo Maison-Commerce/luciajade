@@ -1273,7 +1273,7 @@
                         image: variantImage
                       })"
                       :disabled="selectedItems.length >= bundleSize">
-                Add to Bundle
+                <span x-text="selectedItems.length >= bundleSize ? 'Bundle is Full' : 'Add to Bundle'"></span>
               </button>
               
               <template x-if="isProductSelected('{{ product.id }}')">
@@ -1288,7 +1288,7 @@
                             image: variantImage
                           })"
                           :disabled="selectedItems.length >= bundleSize">
-                    Add Another
+                    <span x-text="selectedItems.length >= bundleSize ? 'Bundle is Full' : 'Add Another'"></span>
                   </button>
                   <button class="bundle-button bundle-button--remove"
                           @click="removeFromBundle('{{ product.id }}')">
