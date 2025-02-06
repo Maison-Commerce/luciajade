@@ -839,8 +839,8 @@
               throw new Error(errorData.description || 'Failed to add bundle to cart');
             }
 
-            // Force a cart refresh
-            await liquidAjaxcart.update();
+            // Force a cart refresh using the correct reference.
+            await window.liquidAjaxCart.update();
           } else {
             const response = await fetch('/cart/add.js', {
               method: 'POST',
@@ -856,18 +856,18 @@
             }
           }
 
-          // Clear the bundle
+          // Clear the bundle after successful addition.
           this.selectedItems = [];
           localStorage.removeItem('currentBundle');
           this.isViewOpen = false;
 
-          // Show success message
+          // Show success message.
           this.showNotification('Bundle added to cart!', 'success');
 
-          // Wait a brief moment for the cart to update
+          // Wait a brief moment then update the cart drawer.
           await this.updateCartDrawer();
 
-          // Try multiple methods to open cart drawer
+          // Open the cart drawer.
           document.dispatchEvent(new CustomEvent('theme:cart-drawer:show', {
             bubbles: true
           }));
@@ -882,7 +882,6 @@
           if (cartButton) {
             cartButton.click();
           }
-
         } catch (error) {
           console.error('Bundle addition error:', error);
           this.showNotification(
@@ -894,13 +893,26 @@
         }
       },
 
+      // New method: updateVariant
+      updateVariant(item, event) {
+        const variantId = event.target.value;
+        const variant = item.variants.find(v => v.id == variantId);
+        if (variant) {
+          item.variant_id = variant.id;
+          item.price = parseFloat(variant.price);
+          item.variant_title = variant.title;
+          item.image = variant.image;
+          localStorage.setItem('currentBundle', JSON.stringify(this.selectedItems));
+        }
+      },
+
       async updateCartDrawer() {
         try {
-          // First update the cart data
+          // First update the cart data.
           const response = await fetch('/cart.js');
           const cart = await response.json();
           
-          // Update cart count and total as before
+          // Update cart count and total.
           const cartCountElements = document.querySelectorAll('[data-cart-count]');
           cartCountElements.forEach(element => {
             element.textContent = cart.item_count;
@@ -914,13 +926,13 @@
             element.setAttribute('data-cart-total', cart.total_price);
           });
 
-          // Get all line items and their quantities
+          // Get line items quantities.
           const updates = {};
           cart.items.forEach(item => {
             updates[item.variant_id] = item.quantity;
           });
 
-          // Call the cart update endpoint
+          // Update the cart using the cart update endpoint.
           const updateResponse = await fetch('/cart/update.js', {
             method: 'POST',
             headers: {
@@ -933,25 +945,24 @@
             throw new Error('Failed to update cart');
           }
 
-          // If there's a cart drawer items container, update its contents
+          // OPTIONAL: Wait slightly for the backend update.
+          await new Promise(resolve => setTimeout(resolve, 500));
+
+          // If a cart drawer element is found then update its contents.
           const cartDrawerItems = document.querySelector('[data-cart-drawer-items]');
           if (cartDrawerItems) {
-            // Fetch the cart drawer section HTML
             const drawerResponse = await fetch('/?section_id=cart-drawer');
             const drawerHtml = await drawerResponse.text();
             
-            // Create a temporary element to parse the HTML
             const parser = new DOMParser();
             const doc = parser.parseFromString(drawerHtml, 'text/html');
             
-            // Find the items container in the parsed HTML
             const newItems = doc.querySelector('[data-cart-drawer-items]');
             if (newItems) {
               cartDrawerItems.innerHTML = newItems.innerHTML;
             }
           }
 
-          // Trigger any cart update events your theme might be listening for
           document.dispatchEvent(new CustomEvent('cart:updated', {
             bubbles: true,
             detail: { cart: cart }
@@ -987,6 +998,18 @@
           style: 'currency',
           currency: '{{ cart.currency.iso_code }}'
         }).format(cents / 100);
+      },
+
+      updateVariant(item, event) {
+        const variantId = event.target.value;
+        const variant = item.variants.find(v => v.id == variantId);
+        if (variant) {
+          item.variant_id = variant.id;
+          item.price = parseFloat(variant.price);
+          item.variant_title = variant.title;
+          item.image = variant.image;
+          localStorage.setItem('currentBundle', JSON.stringify(this.selectedItems));
+        }
       }
     }));
   });
@@ -1130,7 +1153,8 @@
                     title: '{{ product.title | escape }}',
                     price: selectedVariant.price,
                     variant_title: selectedVariant.title,
-                    image: variantImage
+                    image: variantImage,
+                    variants: {{ product.variants | json }}
                   })"
                   :disabled="selectedItems.length >= bundleSize">
             Add to Bundle
@@ -1175,6 +1199,18 @@
       <div class="bundle-item">
         <h4 class="bundle-item-title" x-text="item.title"></h4>
         <span class="bundle-item-price" x-text="formatMoney(item.price)"></span>
+
+        <!-- If the product has more than one variant, show a variant dropdown -->
+        <template x-if="item.variants && item.variants.length > 1">
+          <select class="variant-dropdown"
+                  :value="item.variant_id"
+                  @change="updateVariant(item, $event)">
+            <template x-for="variant in item.variants" :key="variant.id">
+              <option :value="variant.id" x-text="variant.title"></option>
+            </template>
+          </select>
+        </template>
+
         <button class="bundle-item-remove"
                 @click="removeFromBundle(item.id)">
           Remove
