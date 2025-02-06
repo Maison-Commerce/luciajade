@@ -1066,12 +1066,17 @@
              }"
              x-init="
                $nextTick(() => {
-                 const savedVariants = JSON.parse(localStorage.getItem('currentBundleVariants') || '{}');
-                 if (savedVariants['{{ product.id }}']) {
-                   selectedVariant = savedVariants['{{ product.id }}'].variant;
-                   variantImage = savedVariants['{{ product.id }}'].image;
-                   // Set the dropdown value
-                   $refs.variantSelect.value = selectedVariant.id;
+                 const savedBundle = JSON.parse(localStorage.getItem('currentBundle') || '[]');
+                 const savedProduct = savedBundle.find(item => item.id === '{{ product.id }}');
+                 
+                 if (savedProduct) {
+                   selectedVariant = {
+                     id: savedProduct.variant_id,
+                     price: savedProduct.price,
+                     title: savedProduct.variant_title
+                   };
+                   variantImage = savedProduct.image;
+                   $refs.variantSelect.value = savedProduct.variant_id;
                  }
                })
              "
@@ -1087,7 +1092,6 @@
           <h3 class="h4">{{ product.title }}</h3>
           <p class="price" x-text="selectedVariant ? formatMoney(selectedVariant.price) : formatMoney({{ product.price }})"></p>
           
-        
           <select class="variant-dropdown"
                   x-ref="variantSelect"
                   :value="selectedVariant ? selectedVariant.id : ''"
@@ -1099,7 +1103,24 @@
                       title: variant.title
                     };
                     variantImage = variant.image;
-                    $root.saveToLocalStorage();
+                    
+                    // If product is in bundle, update its data
+                    if (isProductSelected('{{ product.id }}')) {
+                      const updatedItems = $root.selectedItems.map(item => {
+                        if (item.id === '{{ product.id }}') {
+                          return {
+                            ...item,
+                            variant_id: selectedVariant.id,
+                            price: selectedVariant.price,
+                            variant_title: selectedVariant.title,
+                            image: variantImage
+                          };
+                        }
+                        return item;
+                      });
+                      $root.selectedItems = updatedItems;
+                      localStorage.setItem('currentBundle', JSON.stringify(updatedItems));
+                    }
                   ">
             <option value="" disabled>Select Option</option>
             {% for variant in product.variants %}
