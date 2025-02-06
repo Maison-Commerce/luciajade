@@ -1039,7 +1039,7 @@
           
         
           <select class="variant-dropdown"
-                  x-model="selectedVariant"
+                  :value="selectedVariant ? selectedVariant.id : ''"
                   @change="
                     const variant = $event.target.selectedOptions[0].dataset;
                     selectedVariant = {
