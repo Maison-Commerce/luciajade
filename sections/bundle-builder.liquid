@@ -1005,7 +1005,7 @@
     </button>
     {% assign product_types = collections[section.settings.bundle_collection].products | map: 'type' | uniq %}
     {% for type in product_types %}
-      {% unless type == blank %}
+      {% unless type == blank or type == 'top page' or type == 'HIDDEN' %}
         <button class="type-filter-button"
                 @click="selectedType = '{{ type | escape }}'"
                 :class="{ 'active': selectedType === '{{ type | escape }}' }">
