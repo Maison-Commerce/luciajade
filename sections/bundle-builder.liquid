@@ -743,8 +743,20 @@
       init() {
         // Initialize from localStorage if exists
         const savedBundle = localStorage.getItem('currentBundle');
-        if (savedBundle) {
+        const savedVariants = localStorage.getItem('currentBundleVariants');
+        
+        if (savedBundle && savedVariants) {
           this.selectedItems = JSON.parse(savedBundle);
+          // Restore variant states for each product
+          const variants = JSON.parse(savedVariants);
+          document.querySelectorAll('.bundle-product-card').forEach(card => {
+            const productId = card.getAttribute('data-product-id');
+            if (variants[productId]) {
+              const scope = Alpine.$data(card);
+              scope.selectedVariant = variants[productId].variant;
+              scope.variantImage = variants[productId].image;
+            }
+          });
         }
       },
 
@@ -775,14 +787,32 @@
         }
 
         this.selectedItems.push(product);
-        localStorage.setItem('currentBundle', JSON.stringify(this.selectedItems));
+        this.saveToLocalStorage();
         this.showNotification('Item added to bundle', 'success');
       },
 
       removeFromBundle(productId) {
         this.selectedItems = this.selectedItems.filter(item => item.id !== productId);
-        localStorage.setItem('currentBundle', JSON.stringify(this.selectedItems));
+        this.saveToLocalStorage();
         this.showNotification('Item removed from bundle', 'success');
+      },
+
+      saveToLocalStorage() {
+        localStorage.setItem('currentBundle', JSON.stringify(this.selectedItems));
+        
+        // Save variant states
+        const variants = {};
+        document.querySelectorAll('.bundle-product-card').forEach(card => {
+          const productId = card.getAttribute('data-product-id');
+          const scope = Alpine.$data(card);
+          if (scope.selectedVariant) {
+            variants[productId] = {
+              variant: scope.selectedVariant,
+              image: scope.variantImage
+            };
+          }
+        });
+        localStorage.setItem('currentBundleVariants', JSON.stringify(variants));
       },
 
       async addBundleToCart() {
@@ -1028,6 +1058,7 @@
     <div class="bundle-builder__products">
       {% for product in collections[section.settings.bundle_collection].products %}
         <div class="bundle-product-card" 
+             data-product-id="{{ product.id }}"
              x-data="{ 
                showVariants: false,
                selectedVariant: null,
@@ -1056,6 +1087,7 @@
                       title: variant.title
                     };
                     variantImage = variant.image;
+                    $root.saveToLocalStorage();  // Save when variant changes
                   ">
             <option value="" disabled x-text="selectedVariant ? 'Change Option' : 'Select Option'">Select Option</option>
             {% for variant in product.variants %}
