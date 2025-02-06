@@ -874,12 +874,6 @@
           if (cartDrawer) {
             cartDrawer.setAttribute('open', '');
             cartDrawer.classList.add('is-open');
-            cartDrawer.classList.add('is-updated');
-            
-            // Remove is-updated class after animation
-            setTimeout(() => {
-              cartDrawer.classList.remove('is-updated');
-            }, 3000); // Adjust timing as needed
           }
 
           const cartButton = document.querySelector('[data-cart-toggle]');
@@ -904,13 +898,14 @@
           const response = await fetch('/cart.js');
           const cart = await response.json();
           
-          // Update cart count and total as before
+          // Update cart count and total
           const cartCountElements = document.querySelectorAll('[data-cart-count]');
           cartCountElements.forEach(element => {
             element.textContent = cart.item_count;
             element.setAttribute('data-cart-count', cart.item_count);
           });
 
+          // Update cart totals
           const cartTotalElements = document.querySelectorAll('[data-cart-total]');
           cartTotalElements.forEach(element => {
             const formattedTotal = this.formatMoney(cart.total_price);
@@ -918,44 +913,57 @@
             element.setAttribute('data-cart-total', cart.total_price);
           });
 
-          // Get all line items and their quantities
-          const updates = {};
-          cart.items.forEach(item => {
-            updates[item.variant_id] = item.quantity;
-          });
-
-          // Call the cart update endpoint
-          const updateResponse = await fetch('/cart/update.js', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ updates })
-          });
-
-          if (!updateResponse.ok) {
-            throw new Error('Failed to update cart');
-          }
-
-          // If there's a cart drawer items container, update its contents
+          // Get the cart drawer items container
           const cartDrawerItems = document.querySelector('[data-cart-drawer-items]');
           if (cartDrawerItems) {
             // Fetch the cart drawer section HTML
             const drawerResponse = await fetch('/?section_id=cart-drawer');
-            const drawerHtml = await drawerResponse.text();
+            const html = await drawerResponse.text();
             
             // Create a temporary element to parse the HTML
             const parser = new DOMParser();
-            const doc = parser.parseFromString(drawerHtml, 'text/html');
+            const doc = parser.parseFromString(html, 'text/html');
             
             // Find the items container in the parsed HTML
             const newItems = doc.querySelector('[data-cart-drawer-items]');
             if (newItems) {
               cartDrawerItems.innerHTML = newItems.innerHTML;
+
+              // Re-initialize cart remove events from theme.dev.js
+              const cartItemRemove = cartDrawerItems.querySelectorAll('[data-cart-item-remove]');
+              cartItemRemove.forEach((button) => {
+                const item = button.closest('[data-cart-item]');
+                button.addEventListener('click', (event) => {
+                  event.preventDefault();
+                  if (button.classList.contains('disabled')) return;
+
+                  // Use the theme's cart update function if available
+                  if (typeof window.theme?.Cart?.updateCart === 'function') {
+                    window.theme.Cart.updateCart({
+                      id: button.dataset.id,
+                      quantity: 0,
+                    }, item);
+                  } else {
+                    // Fallback to direct cart update
+                    fetch('/cart/change.js', {
+                      method: 'POST',
+                      headers: {
+                        'Content-Type': 'application/json',
+                      },
+                      body: JSON.stringify({
+                        id: button.dataset.id,
+                        quantity: 0
+                      })
+                    }).then(response => response.json())
+                      .then(() => this.updateCartDrawer())
+                      .catch(error => console.error('Error:', error));
+                  }
+                });
+              });
             }
           }
 
-          // Trigger any cart update events your theme might be listening for
+          // Dispatch cart update event
           document.dispatchEvent(new CustomEvent('cart:updated', {
             bubbles: true,
             detail: { cart: cart }
