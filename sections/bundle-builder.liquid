@@ -828,16 +828,11 @@
             }
           }));
 
-          // Use Liquid Ajax Cart to add items
-          const response = await window.liquidAjaxCart.add({
+          // Use the correct Liquid Ajax Cart API
+          await window.liquidAjaxCart.addToCart({
             items: items,
-            sections: ['cart-drawer', 'cart-icon-bubble']  // Request specific sections
+            sections: ['cart-drawer', 'cart-icon-bubble']
           });
-
-          if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.description || 'Failed to add bundle to cart');
-          }
 
           // Clear the bundle
           this.selectedItems = [];
@@ -846,9 +841,6 @@
 
           // Show success message
           this.showNotification('Bundle added to cart!', 'success');
-
-          // Open cart drawer using Liquid Ajax Cart
-          window.liquidAjaxCart.open();
 
         } catch (error) {
           console.error('Bundle addition error:', error);
