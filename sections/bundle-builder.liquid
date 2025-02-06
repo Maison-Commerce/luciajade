@@ -741,6 +741,58 @@
     0% { transform: translateX(-100%); }
     100% { transform: translateX(100%); }
   }
+
+  .bundle-item-details {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 8px 0;
+  }
+
+  .quantity-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .quantity-btn {
+    width: 24px;
+    height: 24px;
+    border: 1px solid var(--color-border);
+    background: var(--color-background);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .quantity-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .quantity-btn:not(:disabled):hover {
+    background: var(--color-background-secondary);
+  }
+
+  .quantity-display {
+    min-width: 20px;
+    text-align: center;
+  }
+
+  /* Update bundle progress to show total items including quantities */
+  .bundle-progress-text {
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+  }
+
+  .bundle-progress-text small {
+    color: #666;
+    font-size: 0.9em;
+  }
 {%- endstyle -%}
 
 <!-- Add Toastify CDN in the head of your document -->
@@ -773,7 +825,7 @@
       },
 
       get originalTotal() {
-        return this.selectedItems.reduce((sum, item) => sum + item.price, 0);
+        return this.selectedItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
       },
 
       get finalPrice() {
@@ -794,15 +846,41 @@
           return;
         }
 
-        this.selectedItems.push(product);
+        // Add unique instance ID to distinguish multiple instances of same product
+        const bundleItem = {
+          ...product,
+          instanceId: `${product.id}_${Date.now()}`, // Unique identifier for this instance
+          quantity: 1
+        };
+
+        this.selectedItems.push(bundleItem);
         localStorage.setItem('currentBundle', JSON.stringify(this.selectedItems));
         this.showNotification('Item added to bundle', 'success');
       },
 
-      removeFromBundle(productId) {
-        this.selectedItems = this.selectedItems.filter(item => item.id !== productId);
+      removeFromBundle(instanceId) {
+        // Remove by instanceId instead of product.id
+        this.selectedItems = this.selectedItems.filter(item => item.instanceId !== instanceId);
         localStorage.setItem('currentBundle', JSON.stringify(this.selectedItems));
         this.showNotification('Item removed from bundle', 'success');
+      },
+
+      updateQuantity(instanceId, change) {
+        const item = this.selectedItems.find(item => item.instanceId === instanceId);
+        if (!item) return;
+
+        const newQuantity = item.quantity + change;
+        if (newQuantity < 1) return;
+
+        // Calculate how many slots this change would use
+        const currentTotalItems = this.selectedItems.reduce((sum, i) => sum + i.quantity, 0);
+        if (currentTotalItems + change > this.bundleSize) {
+          this.showNotification(`Cannot exceed bundle size of ${this.bundleSize}`, 'error');
+          return;
+        }
+
+        item.quantity = newQuantity;
+        localStorage.setItem('currentBundle', JSON.stringify(this.selectedItems));
       },
 
       async addBundleToCart() {
@@ -817,7 +895,7 @@
           const bundleId = new Date().getTime();
           const items = this.selectedItems.map(item => ({
             id: parseInt(item.variant_id),
-            quantity: 1,
+            quantity: item.quantity,
             properties: {
               '_bundle_id': bundleId,
               '_bundle_discount': this.discountPercentage + '%',
@@ -1080,12 +1158,25 @@
     </div>
     
     <!-- Selected items -->
-    <template x-for="item in selectedItems" :key="item.variant_id">
+    <template x-for="item in selectedItems" :key="item.instanceId">
       <div class="bundle-item">
         <h4 class="bundle-item-title" x-text="item.title"></h4>
-        <span class="bundle-item-price" x-text="formatMoney(item.price)"></span>
+        <div class="bundle-item-details">
+          <span class="bundle-item-price" x-text="formatMoney(item.price * item.quantity)"></span>
+          
+          <!-- Add quantity controls -->
+          <div class="quantity-controls">
+            <button class="quantity-btn" 
+                    @click="updateQuantity(item.instanceId, -1)"
+                    :disabled="item.quantity <= 1">-</button>
+            <span class="quantity-display" x-text="item.quantity"></span>
+            <button class="quantity-btn" 
+                    @click="updateQuantity(item.instanceId, 1)"
+                    :disabled="selectedItems.reduce((sum, i) => sum + i.quantity, 0) >= bundleSize">+</button>
+          </div>
+        </div>
         <button class="bundle-item-remove"
-                @click="removeFromBundle(item.id)">
+                @click="removeFromBundle(item.instanceId)">
           Remove
         </button>
       </div>
