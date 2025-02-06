@@ -896,23 +896,42 @@
 
       async updateCartDrawer() {
         try {
+          // First update the cart data
           const response = await fetch('/cart.js');
           const cart = await response.json();
           
-          // Update cart count
+          // Update cart count and total as before
           const cartCountElements = document.querySelectorAll('[data-cart-count]');
           cartCountElements.forEach(element => {
             element.textContent = cart.item_count;
             element.setAttribute('data-cart-count', cart.item_count);
           });
 
-          // Update cart total
           const cartTotalElements = document.querySelectorAll('[data-cart-total]');
           cartTotalElements.forEach(element => {
             const formattedTotal = this.formatMoney(cart.total_price);
             element.textContent = formattedTotal;
             element.setAttribute('data-cart-total', cart.total_price);
           });
+
+          // Get all line items and their quantities
+          const updates = {};
+          cart.items.forEach(item => {
+            updates[item.variant_id] = item.quantity;
+          });
+
+          // Call the cart update endpoint
+          const updateResponse = await fetch('/cart/update.js', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ updates })
+          });
+
+          if (!updateResponse.ok) {
+            throw new Error('Failed to update cart');
+          }
 
           // If there's a cart drawer items container, update its contents
           const cartDrawerItems = document.querySelector('[data-cart-drawer-items]');
@@ -931,8 +950,16 @@
               cartDrawerItems.innerHTML = newItems.innerHTML;
             }
           }
+
+          // Trigger any cart update events your theme might be listening for
+          document.dispatchEvent(new CustomEvent('cart:updated', {
+            bubbles: true,
+            detail: { cart: cart }
+          }));
+
         } catch (error) {
           console.error('Error updating cart drawer:', error);
+          this.showNotification('Error updating cart. Please refresh the page.', 'error');
         }
       },
 
