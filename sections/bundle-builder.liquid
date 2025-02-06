@@ -1041,7 +1041,7 @@
           <select class="variant-dropdown"
                   x-model="selectedVariant"
                   @change="
-                    const variant = $event.target.selectedOptions[1].dataset;
+                    const variant = $event.target.selectedOptions[0].dataset;
                     selectedVariant = {
                       id: variant.id,
                       price: parseFloat(variant.price),
