@@ -1037,7 +1037,9 @@
           <h3 class="h4">{{ product.title }}</h3>
           <p class="price" x-text="selectedVariant ? formatMoney(selectedVariant.price) : formatMoney({{ product.price }})"></p>
           
-          <!-- Variant Dropdown -->
+          <!-- Add this line to display selected variant -->
+          <div class="selected-variant" x-text="selectedVariant ? selectedVariant.title : 'Select Option'"></div>
+          
           <select class="variant-dropdown"
                   x-model="selectedVariant"
                   @change="
