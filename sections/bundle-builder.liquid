@@ -816,6 +816,13 @@
         this.loading = true;
 
         try {
+          // Wait for Liquid Ajax Cart to be ready
+          if (typeof window.cart === 'undefined') {
+            await new Promise(resolve => {
+              document.addEventListener('liquid-ajax-cart:loaded', resolve, { once: true });
+            });
+          }
+
           const bundleId = new Date().getTime();
           const items = this.selectedItems.map(item => ({
             id: parseInt(item.variant_id),
@@ -828,7 +835,7 @@
             }
           }));
 
-          // Use the correct cart.add method
+          // Now cart should be defined
           await window.cart.add({
             items: items,
             sections: ['cart-drawer', 'cart-icon-bubble']
