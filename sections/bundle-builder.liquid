@@ -12,6 +12,10 @@
 </script>
 
 {%- style -%}
+  :root {
+    --color-success: #4CAF50;  /* You can adjust this green color */
+  }
+
   .bundle-builder {
     padding: 2rem;
     max-width: 1200px;
@@ -436,8 +440,7 @@
     left: 0;
     top: 0;
     height: 100%;
-    background: linear-gradient(90deg, #000000, #333333);
-    transition: width 0.3s ease;
+    transition: all 0.3s ease;
     border-radius: 4px;
   }
 
@@ -966,7 +969,10 @@
       
       <div class="bundle-progress-bar">
         <div class="bundle-progress-fill"
-             :style="'width: ' + (selectedItems.length / bundleSize * 100) + '%'">
+             :style="{
+               width: (selectedItems.length / bundleSize * 100) + '%',
+               background: selectedItems.length === bundleSize ? 'var(--color-success, #4CAF50)' : 'linear-gradient(90deg, #000000, #333333)'
+             }">
         </div>
       </div>
       
