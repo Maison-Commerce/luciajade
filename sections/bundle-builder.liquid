@@ -725,7 +725,7 @@
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 
-<script>
+<script></script>
   document.addEventListener('alpine:init', () => {
     Alpine.data('bundleBuilder', (bundleSize, discountPercentage) => ({
       bundleSize: bundleSize,
@@ -1064,6 +1064,17 @@
                selectedVariant: null,
                variantImage: '{{ product.featured_image | img_url: '300x300', crop: 'center' }}'
              }"
+             x-init="
+               $nextTick(() => {
+                 const savedVariants = JSON.parse(localStorage.getItem('currentBundleVariants') || '{}');
+                 if (savedVariants['{{ product.id }}']) {
+                   selectedVariant = savedVariants['{{ product.id }}'].variant;
+                   variantImage = savedVariants['{{ product.id }}'].image;
+                   // Set the dropdown value
+                   $refs.variantSelect.value = selectedVariant.id;
+                 }
+               })
+             "
              x-show="selectedType === 'all' || selectedType === '{{ product.type | escape }}'"
              :class="{ 'selected': isProductSelected('{{ product.id }}') }">
           
@@ -1078,6 +1089,7 @@
           
         
           <select class="variant-dropdown"
+                  x-ref="variantSelect"
                   :value="selectedVariant ? selectedVariant.id : ''"
                   @change="
                     const variant = $event.target.selectedOptions[0].dataset;
@@ -1087,9 +1099,9 @@
                       title: variant.title
                     };
                     variantImage = variant.image;
-                    $root.saveToLocalStorage();  // Save when variant changes
+                    $root.saveToLocalStorage();
                   ">
-            <option value="" disabled x-text="selectedVariant ? 'Change Option' : 'Select Option'">Select Option</option>
+            <option value="" disabled>Select Option</option>
             {% for variant in product.variants %}
               {% assign option_text = variant.title | split: ' / ' | first %}
               <option value="{{ variant.id }}"
