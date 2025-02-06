@@ -725,7 +725,7 @@
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 
-<script></script>
+<script>
   document.addEventListener('alpine:init', () => {
     Alpine.data('bundleBuilder', (bundleSize, discountPercentage) => ({
       bundleSize: bundleSize,
@@ -1064,22 +1064,6 @@
                selectedVariant: null,
                variantImage: '{{ product.featured_image | img_url: '300x300', crop: 'center' }}'
              }"
-             x-init="
-               $nextTick(() => {
-                 const savedBundle = JSON.parse(localStorage.getItem('currentBundle') || '[]');
-                 const savedProduct = savedBundle.find(item => item.id === '{{ product.id }}');
-                 
-                 if (savedProduct) {
-                   selectedVariant = {
-                     id: savedProduct.variant_id,
-                     price: savedProduct.price,
-                     title: savedProduct.variant_title
-                   };
-                   variantImage = savedProduct.image;
-                   $refs.variantSelect.value = savedProduct.variant_id;
-                 }
-               })
-             "
              x-show="selectedType === 'all' || selectedType === '{{ product.type | escape }}'"
              :class="{ 'selected': isProductSelected('{{ product.id }}') }">
           
@@ -1092,8 +1076,8 @@
           <h3 class="h4">{{ product.title }}</h3>
           <p class="price" x-text="selectedVariant ? formatMoney(selectedVariant.price) : formatMoney({{ product.price }})"></p>
           
+        
           <select class="variant-dropdown"
-                  x-ref="variantSelect"
                   :value="selectedVariant ? selectedVariant.id : ''"
                   @change="
                     const variant = $event.target.selectedOptions[0].dataset;
@@ -1103,26 +1087,8 @@
                       title: variant.title
                     };
                     variantImage = variant.image;
-                    
-                    // If product is in bundle, update its data
-                    if (isProductSelected('{{ product.id }}')) {
-                      const updatedItems = $root.selectedItems.map(item => {
-                        if (item.id === '{{ product.id }}') {
-                          return {
-                            ...item,
-                            variant_id: selectedVariant.id,
-                            price: selectedVariant.price,
-                            variant_title: selectedVariant.title,
-                            image: variantImage
-                          };
-                        }
-                        return item;
-                      });
-                      $root.selectedItems = updatedItems;
-                      localStorage.setItem('currentBundle', JSON.stringify(updatedItems));
-                    }
                   ">
-            <option value="" disabled>Select Option</option>
+            <option value="" disabled x-text="selectedVariant ? 'Change Option' : 'Select Option'">Select Option</option>
             {% for variant in product.variants %}
               {% assign option_text = variant.title | split: ' / ' | first %}
               <option value="{{ variant.id }}"
