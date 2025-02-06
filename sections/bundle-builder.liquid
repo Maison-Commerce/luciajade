@@ -158,9 +158,6 @@
     background-repeat: no-repeat;
     background-position: right 1rem center;
     background-size: 1.25rem;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
   }
 
   .variant-dropdown:focus {
@@ -766,13 +763,6 @@
     .bundle-type-filter::-webkit-scrollbar {
       display: none; /* Chrome, Safari, Opera */
     }
-
-    /* Add specific styles for option text */
-    .variant-dropdown option {
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
   }
 
   /* Add smooth loading transition */
@@ -1033,15 +1023,6 @@
           style: 'currency',
           currency: '{{ cart.currency.iso_code }}'
         }).format(cents / 100);
-      },
-
-      truncateText(text, isMobile = false) {
-        const limit = isMobile ? 10 : 18;
-        return text.length > limit ? text.substring(0, limit) + '...' : text;
-      },
-
-      isMobile() {
-        return window.innerWidth <= 768;
       }
     }));
   });
@@ -1179,7 +1160,7 @@
                         data-price="{{ variant.price }}"
                         data-title="{{ option_text }}"
                         data-image="{{ variant.featured_image | default: product.featured_image | img_url: '300x300', crop: 'center' }}">
-                  <span x-text="truncateText('{{ option_text | escape }}', isMobile())"></span>
+                  {{ option_text }}
                 </option>
               {% endfor %}
             </select>
@@ -1359,22 +1340,4 @@
     }
   ]
 }
-{% endschema %}
-
-<script>
-  // Add this after your Alpine.js initialization
-  document.addEventListener('DOMContentLoaded', function() {
-    let resizeTimer;
-    window.addEventListener('resize', function() {
-      clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(function() {
-        // Force Alpine to re-render the truncated text
-        document.querySelectorAll('[x-text]').forEach(el => {
-          if (el._x_dataStack) {
-            el._x_dataStack[0].updateText();
-          }
-        });
-      }, 250);
-    });
-  });
-</script> 
+{% endschema %} 
