@@ -1037,9 +1037,7 @@
           <h3 class="h4">{{ product.title }}</h3>
           <p class="price" x-text="selectedVariant ? formatMoney(selectedVariant.price) : formatMoney({{ product.price }})"></p>
           
-          <!-- Add this line to display selected variant -->
-          <div class="selected-variant" x-text="selectedVariant ? selectedVariant.title : 'Select Option'"></div>
-          
+        
           <select class="variant-dropdown"
                   x-model="selectedVariant"
                   @change="
@@ -1051,7 +1049,7 @@
                     };
                     variantImage = variant.image;
                   ">
-            <option value="" disabled x-text="selectedVariant ? 'Change Option' : 'Select Option'">Select Option</option>
+            <option value="" disabled x-text="selectedVariant ? selectedVariant.title : 'Select Option'">Select Option</option>
             {% for variant in product.variants %}
               {% assign option_text = variant.title | split: ' / ' | first %}
               <option value="{{ variant.id }}"
