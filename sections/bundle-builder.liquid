@@ -666,16 +666,31 @@
     background: var(--color-background);
     cursor: pointer;
     transition: all 0.3s ease;
+    position: relative;
   }
 
   .type-filter-button:hover {
     background: var(--color-background-secondary);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
 
   .type-filter-button.active {
     background: var(--color-button);
     color: var(--color-button-text);
     border-color: var(--color-button);
+  }
+
+  .type-filter-button.active::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 4px;
+    height: 4px;
+    background: var(--color-button);
+    border-radius: 50%;
   }
 
   /* Mobile Styles */
@@ -767,9 +782,8 @@
     }
 
     .type-filter-button {
-      padding: 0.5rem 0.75rem;
+      padding: 0.4rem 0.8rem;
       font-size: 0.85rem;
-      white-space: nowrap;
     }
 
     /* Make the scrolling smooth for the filter buttons */
@@ -1288,7 +1302,7 @@
                             image: variantImage
                           })"
                           :disabled="selectedItems.length >= bundleSize">
-                    <span x-text="selectedItems.length >= bundleSize ? 'Bundle is Full' : 'Add Another'"></span>
+                    <span x-text="selectedItems.length >= bundleSize ? 'Box is Full' : 'Add Another'"></span>
                   </button>
                   <button class="bundle-button bundle-button--remove"
                           @click="removeFromBundle('{{ product.id }}')">
