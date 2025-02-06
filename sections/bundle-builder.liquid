@@ -839,8 +839,35 @@
               throw new Error(errorData.description || 'Failed to add bundle to cart');
             }
 
-            // Force a cart refresh
-            await liquidAjaxcart.update();
+            // Wait a brief moment for the cart to update
+            await this.updateCartDrawer();
+
+            // Show success message
+            this.showNotification('Bundle added to cart!', 'success');
+
+            // Dispatch events in sequence
+            setTimeout(() => {
+              // First trigger cart refresh
+              document.dispatchEvent(new CustomEvent('cart:refresh'));
+              
+              // Then trigger cart drawer show
+              document.dispatchEvent(new CustomEvent('theme:cart-drawer:show', {
+                bubbles: true
+              }));
+
+              // Finally try to open cart drawer through other methods
+              const cartDrawer = document.querySelector('.drawer--cart');
+              if (cartDrawer) {
+                cartDrawer.setAttribute('open', '');
+                cartDrawer.classList.add('is-open');
+              }
+
+              const cartButton = document.querySelector('[data-cart-toggle]');
+              if (cartButton) {
+                cartButton.click();
+              }
+            }, 100); // Small delay to ensure cart is updated first
+
           } else {
             const response = await fetch('/cart/add.js', {
               method: 'POST',
@@ -861,31 +888,6 @@
           localStorage.removeItem('currentBundle');
           this.isViewOpen = false;
 
-          // Show success message
-          this.showNotification('Bundle added to cart!', 'success');
-
-          // Wait a brief moment for the cart to update
-          await this.updateCartDrawer();
-
-          // Dispatch the refresh event for the cart drawer
-          document.dispatchEvent(new CustomEvent('cart:refresh'));
-
-          // Try multiple methods to open cart drawer
-          document.dispatchEvent(new CustomEvent('theme:cart-drawer:show', {
-            bubbles: true
-          }));
-
-          const cartDrawer = document.querySelector('.drawer--cart');
-          if (cartDrawer) {
-            cartDrawer.setAttribute('open', '');
-            cartDrawer.classList.add('is-open');
-          }
-
-          const cartButton = document.querySelector('[data-cart-toggle]');
-          if (cartButton) {
-            cartButton.click();
-          }
-
         } catch (error) {
           console.error('Bundle addition error:', error);
           this.showNotification(
@@ -903,7 +905,7 @@
           const response = await fetch('/cart.js');
           const cart = await response.json();
           
-          // Update cart count and total as before
+          // Update cart count and total
           const cartCountElements = document.querySelectorAll('[data-cart-count]');
           cartCountElements.forEach(element => {
             element.textContent = cart.item_count;
@@ -923,20 +925,7 @@
             updates[item.variant_id] = item.quantity;
           });
 
-          // Call the cart update endpoint
-          const updateResponse = await fetch('/cart/update.js', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ updates })
-          });
-
-          if (!updateResponse.ok) {
-            throw new Error('Failed to update cart');
-          }
-
-          // If there's a cart drawer items container, update its contents
+          // Update cart contents
           const cartDrawerItems = document.querySelector('[data-cart-drawer-items]');
           if (cartDrawerItems) {
             // Fetch the cart drawer section HTML
@@ -947,14 +936,24 @@
             const parser = new DOMParser();
             const doc = parser.parseFromString(drawerHtml, 'text/html');
             
-            // Find the items container in the parsed HTML
+            // Find and update the items container
             const newItems = doc.querySelector('[data-cart-drawer-items]');
             if (newItems) {
               cartDrawerItems.innerHTML = newItems.innerHTML;
             }
+
+            // Force a re-render of the cart drawer
+            const cartDrawer = document.querySelector('.drawer--cart');
+            if (cartDrawer) {
+              cartDrawer.classList.remove('is-empty');
+              cartDrawer.classList.add('is-updating');
+              setTimeout(() => {
+                cartDrawer.classList.remove('is-updating');
+              }, 100);
+            }
           }
 
-          // Trigger any cart update events your theme might be listening for
+          // Trigger cart update events
           document.dispatchEvent(new CustomEvent('cart:updated', {
             bubbles: true,
             detail: { cart: cart }
