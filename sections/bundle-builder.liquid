@@ -31,6 +31,12 @@
     --bundle-mobile-text-size: {{ section.settings.mobile_text_size }}px;
     --bundle-mobile-button-radius: {{ section.settings.mobile_button_radius }}px;
     --bundle-mobile-button-background: {{ section.settings.mobile_button_background }};
+    --bundle-mobile-card-radius: {{ section.settings.mobile_card_radius }}px;
+    --bundle-mobile-input-radius: {{ section.settings.mobile_input_radius }}px;
+    --bundle-mobile-add-button-color: {{ section.settings.mobile_add_button_color }};
+    --bundle-mobile-secondary-button-color: {{ section.settings.mobile_secondary_button_color }};
+    --bundle-mobile-button-text-color: {{ section.settings.mobile_button_text_color }};
+    --bundle-mobile-secondary-button-text-color: {{ section.settings.mobile_secondary_button_text_color }};
   }
 
   .bundle-builder {
@@ -782,7 +788,7 @@
 
     .bundle-product-card {
       padding: 0;
-      border-radius: 10px;
+      border-radius: var(--bundle-mobile-card-radius);
     }
 
     h3.bundle-product-title {
@@ -803,17 +809,17 @@
     }
 
     .variant-dropdown {
-      padding: var(--bundle-mobile-input-size);
+      padding: var(--bundle-mobile-input-radius);
       font-size: 15px;
       margin-bottom: 0.5rem;
       background-position: right 0.5rem center;
-      background-size: var(--bundle-mobile-input-size);
+      background-size: var(--bundle-mobile-input-radius);
     }
 
     .bundle-button,
     .bundle-button--add-another,
     .bundle-button--remove {
-      padding: var(--bundle-mobile-button-size);
+      padding: var(--bundle-mobile-button-radius);
       font-size: 15px;
       letter-spacing: 0.01em;
     }
@@ -1683,14 +1689,32 @@
       "default": 18
     },
     {
-      "type": "range",
-      "id": "text_size",
-      "min": 12,
-      "max": 20,
-      "step": 1,
-      "unit": "px",
-      "label": "General Text Size",
-      "default": 14
+      "type": "header",
+      "content": "Desktop Colors"
+    },
+    {
+      "type": "color",
+      "id": "add_button_color",
+      "label": "Add to Bundle Button Color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "secondary_button_color",
+      "label": "Remove/Add Another Button Color",
+      "default": "#333333"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Add Button Text Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "secondary_button_text_color",
+      "label": "Remove/Add Another Button Text Color",
+      "default": "#ffffff"
     },
     {
       "type": "header",
@@ -1751,54 +1775,32 @@
       "default": 36
     },
     {
-      "type": "range",
-      "id": "mobile_text_size",
-      "min": 12,
-      "max": 32,
-      "step": 1,
-      "unit": "px",
-      "label": "Mobile General Text Size",
-      "default": 28
-    },
-    {
       "type": "header",
-      "content": "Colors"
+      "content": "Mobile Colors"
     },
     {
       "type": "color",
-      "id": "primary_color",
-      "label": "Primary Color",
+      "id": "mobile_add_button_color",
+      "label": "Mobile Add to Bundle Button Color",
       "default": "#000000"
     },
     {
       "type": "color",
-      "id": "secondary_color",
-      "label": "Secondary Color",
+      "id": "mobile_secondary_button_color",
+      "label": "Mobile Remove/Add Another Button Color",
       "default": "#333333"
     },
     {
       "type": "color",
-      "id": "text_color",
-      "label": "Text Color",
-      "default": "#212121"
-    },
-    {
-      "type": "color",
-      "id": "button_text_color",
-      "label": "Primary Button Text Color",
+      "id": "mobile_button_text_color",
+      "label": "Mobile Add Button Text Color",
       "default": "#ffffff"
     },
     {
       "type": "color",
-      "id": "button_text_color_secondary",
-      "label": "Secondary Button Text Color",
-      "default": "#000000"
-    },
-    {
-      "type": "color",
-      "id": "mobile_button_background",
-      "label": "Mobile Button Background",
-      "default": "#000000"
+      "id": "mobile_secondary_button_text_color",
+      "label": "Mobile Remove/Add Another Button Text Color",
+      "default": "#ffffff"
     },
     {
       "type": "header",
