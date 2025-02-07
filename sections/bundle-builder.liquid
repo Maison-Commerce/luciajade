@@ -12,6 +12,16 @@
 {%- style -%}
   :root {
     --color-success: #4CAF50;  /* You can adjust this green color */
+    --bundle-button-radius: {{ section.settings.button_radius }}px;
+    --bundle-card-radius: {{ section.settings.card_radius }}px;
+    --bundle-input-radius: {{ section.settings.input_radius }}px;
+    --bundle-card-shadow: {{ section.settings.card_shadow }}px;
+    --bundle-title-size: {{ section.settings.title_size }}px;
+    --bundle-price-size: {{ section.settings.price_size }}px;
+    --bundle-text-size: {{ section.settings.text_size }}px;
+    --bundle-primary-color: {{ section.settings.primary_color }};
+    --bundle-secondary-color: {{ section.settings.secondary_color }};
+    --bundle-text-color: {{ section.settings.text_color }};
   }
 
   .bundle-builder {
@@ -69,11 +79,11 @@
 
   .bundle-product-card {
     background: #ffffff;
-    border-radius: 16px;
+    border-radius: var(--bundle-card-radius);
     overflow: hidden;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
-    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    box-shadow: 0 var(--bundle-card-shadow) calc(var(--bundle-card-shadow) * 2) rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
     height: 100%;
@@ -138,9 +148,9 @@
   }
 
   .bundle-product-title {
-    font-size: 1rem;
+    font-size: var(--bundle-title-size);
     font-weight: 500;
-    color: #1f2937;
+    color: var(--bundle-text-color);
     margin: 0 0 0.5rem;
     line-height: 1.4;
     display: -webkit-box;
@@ -152,9 +162,9 @@
   }
 
   .bundle-product-price {
-    font-size: 1.125rem;
+    font-size: var(--bundle-price-size);
     font-weight: 600;
-    color: #111827;
+    color: var(--bundle-text-color);
     margin: 0 0 1rem;
     text-align: center;
     font-family: "DM Sans", sans-serif;
@@ -165,7 +175,7 @@
     width: 100%;
     padding: 0.75rem 1rem;
     border: 1px solid #e5e7eb;
-    border-radius: 8px;
+    border-radius: var(--bundle-input-radius);
     font-size: 0.875rem;
     color: #374151;
     background: #f9fafb;
@@ -199,11 +209,11 @@
   }
 
   .bundle-button {
-    background: linear-gradient(to right, #000000, #333333);
+    background: var(--bundle-primary-color);
     border: none;
-    color: #ffffff;
+    color: var(--bundle-text-color);
     padding: 0.875rem 1.5rem;
-    border-radius: 8px;
+    border-radius: var(--bundle-button-radius);
     font-weight: 500;
     font-size: 0.875rem;
     text-transform: uppercase;
@@ -214,7 +224,7 @@
   }
 
   .bundle-button:hover:not(:disabled) {
-    background: linear-gradient(to right, #333333, #000000);
+    background: var(--bundle-secondary-color);
     transform: translateY(-1px);
     box-shadow: 0 4px 6px rgba(0,0,0,0.15);
   }
@@ -1535,6 +1545,10 @@
   "name": "Bundle Builder",
   "settings": [
     {
+      "type": "header",
+      "content": "General Settings"
+    },
+    {
       "type": "text",
       "id": "title",
       "label": "Section Title",
@@ -1556,6 +1570,106 @@
       "type": "collection",
       "id": "bundle_collection",
       "label": "Bundle Products Collection"
+    },
+    {
+      "type": "header",
+      "content": "Design Settings"
+    },
+    {
+      "type": "range",
+      "id": "card_radius",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "label": "Card Border Radius",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "button_radius",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "label": "Button Border Radius",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "input_radius",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "label": "Input Border Radius",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "card_shadow",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Card Shadow Size",
+      "default": 4
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "min": 12,
+      "max": 28,
+      "step": 1,
+      "unit": "px",
+      "label": "Product Title Size",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "price_size",
+      "min": 12,
+      "max": 28,
+      "step": 1,
+      "unit": "px",
+      "label": "Price Size",
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "text_size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "General Text Size",
+      "default": 14
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "primary_color",
+      "label": "Primary Color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "secondary_color",
+      "label": "Secondary Color",
+      "default": "#333333"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#1f2937"
     }
   ],
   "presets": [
