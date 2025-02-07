@@ -1549,6 +1549,19 @@
       <h3>Your Box</h3>
       <button class="close-button" @click="toggleView()">Close</button>
     </div>
+
+      <div class="bundle-progress-text">
+        <span x-text="selectedItems.length"></span> / <span x-text="bundleSize"></span> items selected
+      </div>
+      
+      <div class="bundle-progress-bar">
+        <div class="bundle-progress-fill"
+             :style="{
+               width: (selectedItems.length / bundleSize * 100) + '%',
+               background: selectedItems.length === bundleSize ? 'var(--color-success, #4CAF50)' : 'linear-gradient(90deg, #000000, #333333)'
+             }">
+        </div>
+      </div>
     
     <!-- Empty state message -->
     <div class="bundle-view-empty" x-show="selectedItems.length === 0">
