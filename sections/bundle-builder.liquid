@@ -1325,6 +1325,54 @@
           style: 'currency',
           currency: '{{ cart.currency.iso_code }}'
         }).format(cents / 100);
+      },
+
+      // Новая функция для поиска изображения варианта
+      findVariantImage() {
+        const options = this.variantOptions;
+        const variants = {{ product.variants | json }};
+        const images = {{ product.images | json }};
+        const defaultImage = '{{ product.featured_image | img_url: '300x300', crop: 'center' }}';
+        
+        // 1. Поиск точного соответствия всех опций
+        const exactMatch = variants.find(v => 
+          Object.keys(options).every(key => 
+            v.options[key] === options[key]
+          )
+        );
+        
+        if (exactMatch && exactMatch.featured_image) {
+          return exactMatch.featured_image.src;
+        }
+        
+        // 2. Поиск частичного соответствия по приоритету
+        const optionKeys = Object.keys(options);
+        for (let i = 0; i < optionKeys.length; i++) {
+          const key = optionKeys[i];
+          const partialMatch = variants.find(v => 
+            v.options[key] === options[key]
+          );
+          
+          if (partialMatch && partialMatch.featured_image) {
+            return partialMatch.featured_image.src;
+          }
+        }
+        
+        // 3. Поиск изображения по метаданным
+        const optionValues = Object.values(options);
+        const metaMatch = images.find(img => {
+          const alt = img.alt?.toLowerCase() || '';
+          return optionValues.some(val => 
+            alt.includes(val.toLowerCase())
+          );
+        });
+        
+        if (metaMatch) {
+          return metaMatch.src;
+        }
+        
+        // 4. Возврат дефолтного изображения
+        return defaultImage;
       }
     }));
   });
@@ -1431,10 +1479,66 @@
                  price: {{ product.first_available_variant.price }},
                  title: '{{ product.first_available_variant.title | split: ' / ' | first | escape }}'
                },
-               variantImage: '{{ product.featured_image | img_url: '300x300', crop: 'center' }}'
+               variantImage: '{{ product.featured_image | img_url: '300x300', crop: 'center' }}',
+               variantOptions: {},
+               
+               // Новая функция для поиска изображения варианта
+               findVariantImage() {
+                 const options = this.variantOptions;
+                 const variants = {{ product.variants | json }};
+                 const images = {{ product.images | json }};
+                 const defaultImage = '{{ product.featured_image | img_url: '300x300', crop: 'center' }}';
+                 
+                 // 1. Поиск точного соответствия всех опций
+                 const exactMatch = variants.find(v => 
+                   Object.keys(options).every(key => 
+                     v.options[key] === options[key]
+                   )
+                 );
+                 
+                 if (exactMatch && exactMatch.featured_image) {
+                   return exactMatch.featured_image.src;
+                 }
+                 
+                 // 2. Поиск частичного соответствия по приоритету
+                 const optionKeys = Object.keys(options);
+                 for (let i = 0; i < optionKeys.length; i++) {
+                   const key = optionKeys[i];
+                   const partialMatch = variants.find(v => 
+                     v.options[key] === options[key]
+                   );
+                   
+                   if (partialMatch && partialMatch.featured_image) {
+                     return partialMatch.featured_image.src;
+                   }
+                 }
+                 
+                 // 3. Поиск изображения по метаданным
+                 const optionValues = Object.values(options);
+                 const metaMatch = images.find(img => {
+                   const alt = img.alt?.toLowerCase() || '';
+                   return optionValues.some(val => 
+                     alt.includes(val.toLowerCase())
+                   );
+                 });
+                 
+                 if (metaMatch) {
+                   return metaMatch.src;
+                 }
+                 
+                 // 4. Возврат дефолтного изображения
+                 return defaultImage;
+               }
              }"
              x-show="selectedType === 'all' || selectedType === '{{ product.type | escape }}'"
-             :class="{ 'selected': isProductSelected('{{ product.id }}') }">
+             :class="{ 'selected': isProductSelected('{{ product.id }}') }"
+             x-init="
+               // Инициализация опций при загрузке
+               {% for option in product.options_with_values %}
+                 variantOptions['{{ option.name }}'] = '{{ option.values.first }}';
+               {% endfor %}
+               variantImage = findVariantImage();
+             ">
           
           <div class="bundle-product-image-wrapper">
             <img :src="variantImage" 
@@ -1467,6 +1571,7 @@
                 {% for option in product.options_with_values %}
                   <select class="variant-dropdown"
                           @change="
+                            variantOptions['{{ option.name }}'] = $event.target.value;
                             const selectedOptions = Array.from($el.closest('.bundle-product-controls').querySelectorAll('.variant-dropdown')).map(select => select.value);
                             const variant = {{ product.variants | json }}.find(v => 
                               v.options.every((opt, index) => opt === selectedOptions[index])
@@ -1477,7 +1582,7 @@
                                 price: parseFloat(variant.price),
                                 title: variant.title
                               };
-                              variantImage = '{{ product.featured_image | img_url: '300x300', crop: 'center' }}';
+                              variantImage = findVariantImage();
                             }
                           ">
                     {% for value in option.values %}
