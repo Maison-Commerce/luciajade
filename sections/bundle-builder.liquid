@@ -23,6 +23,7 @@
   .bundle-builder__header {
     text-align: center;
     margin-bottom: 2rem;
+    position: relative;
   }
 
   .bundle-builder__content {
@@ -503,7 +504,7 @@
     max-width: 400px;
     text-align: center;
     position: sticky;
-    top: 20px;
+    top: 0;
     z-index: 100;
     background: var(--color-background);
     padding: 15px;
@@ -977,6 +978,22 @@
       padding: 3px 6px;
       font-size: 0.65rem;
       margin-bottom: 0.2rem;
+    }
+  }
+
+  @supports (position: sticky) {
+    .bundle-progress-container {
+      position: -webkit-sticky;
+      position: sticky;
+    }
+  }
+
+  @media screen and (max-width: 768px) {
+    .bundle-progress-container {
+      position: -webkit-sticky;
+      position: sticky;
+      top: 0;
+      margin: 15px auto;
     }
   }
 {%- endstyle -%}
