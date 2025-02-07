@@ -1137,40 +1137,6 @@
       font-size: 13px;
     }
   }
-
-  .variant-option-group {
-    margin-bottom: 0.5rem;
-    width: 100%;
-  }
-
-  .variant-option-group:last-child {
-    margin-bottom: 1rem;
-  }
-
-  .variant-option-group select {
-    width: 100%;
-    padding: 0.75rem 1rem;
-    border: 1px solid #6d6d6d;
-    border-radius: var(--bundle-input-radius);
-    font-size: 0.875rem;
-    color: #374151;
-    background: #f9fafb;
-    cursor: pointer;
-    appearance: none;
-    font-family: "DM Sans", sans-serif;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 1rem center;
-    background-size: 1.25rem;
-    padding-right: 2.5rem;
-  }
-
-  @media screen and (max-width: 768px) {
-    .variant-option-group select {
-      padding: 0.5rem 0.75rem;
-      font-size: 0.8125rem;
-    }
-  }
 {%- endstyle -%}
 
 <!-- Add Toastify CDN in the head of your document -->
@@ -1458,8 +1424,7 @@
                selectedVariant: {
                  id: '{{ product.first_available_variant.id }}',
                  price: {{ product.first_available_variant.price }},
-                 title: '{{ product.first_available_variant.title | escape }}',
-                 options: {{ product.first_available_variant.options | json }}
+                 title: '{{ product.first_available_variant.title | split: ' / ' | first | escape }}'
                },
                variantImage: '{{ product.featured_image | img_url: '300x300', crop: 'center' }}'
              }"
@@ -1493,41 +1458,35 @@
             </div>
             
             <div class="bundle-product-controls">
-              {% if product.has_only_default_variant %}
+              {% if product.variants.size > 1 %}
+                <select class="variant-dropdown"
+                        :value="selectedVariant.id"
+                        @change="
+                          const variant = $event.target.selectedOptions[0].dataset;
+                          selectedVariant = {
+                            id: variant.id,
+                            price: parseFloat(variant.price),
+                            title: variant.title
+                          };
+                          variantImage = variant.image;
+                        ">
+                  {% for variant in product.variants %}
+                    {% assign option_text = variant.title | split: ' / ' | first %}
+                    <option value="{{ variant.id }}"
+                            data-id="{{ variant.id }}"
+                            data-price="{{ variant.price }}"
+                            data-title="{{ option_text }}"
+                            data-image="{{ variant.featured_image | default: product.featured_image | img_url: '300x300', crop: 'center' }}">
+                      {{ option_text }}
+                    </option>
+                  {% endfor %}
+                </select>
+              {% else %}
                 {% assign single_variant = product.variants.first %}
                 {% assign variant_title = single_variant.title | split: ' / ' | first %}
                 {% unless variant_title == 'Default Title' %}
                   <div class="variant-single">{{ variant_title }}</div>
                 {% endunless %}
-              {% else %}
-                {% for option in product.options_with_values %}
-                  <div class="variant-option-group">
-                    <select class="variant-dropdown"
-                            @change="
-                              const variant = $event.target.selectedOptions[0].dataset;
-                              selectedVariant = {
-                                id: variant.id,
-                                price: parseFloat(variant.price),
-                                title: variant.title,
-                                options: JSON.parse(variant.options)
-                              };
-                              variantImage = variant.image;
-                            ">
-                      <option value="" disabled selected>Select {{ option.name }}</option>
-                      {% for value in option.values %}
-                        {% assign variant = product.variants | where: option.name, value | first %}
-                        <option value="{{ variant.id }}"
-                                data-id="{{ variant.id }}"
-                                data-price="{{ variant.price }}"
-                                data-title="{{ variant.title }}"
-                                data-image="{{ variant.featured_image | default: product.featured_image | img_url: '300x300', crop: 'center' }}"
-                                data-options='{{ variant.options | json }}'>
-                          {{ value }}
-                        </option>
-                      {% endfor %}
-                    </select>
-                  </div>
-                {% endfor %}
               {% endif %}
               
               <div class="bundle-button-group">
@@ -1621,9 +1580,7 @@
           <img class="bundle-item-image" :src="item.image" :alt="item.title">
           <div class="bundle-item-info">
             <h4 class="bundle-item-title" x-text="item.title"></h4>
-            <template x-for="(option, index) in item.options" :key="index">
-              <span class="bundle-item-variant" x-text="option"></span>
-            </template>
+            <span class="bundle-item-variant" x-text="item.variant_title"></span>
             <span class="bundle-item-price" x-text="formatMoney(item.price)"></span>
             <button class="bundle-item-remove"
                     @click="removeFromBundle(item.id)">
