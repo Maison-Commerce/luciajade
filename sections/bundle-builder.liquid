@@ -897,7 +897,6 @@
   .bundle-product-card {
     opacity: 0;
     animation: fadeIn 0.3s ease forwards;
-    border: 2px solid transparent;
   }
 
   @keyframes fadeIn {
@@ -1012,7 +1011,6 @@
       margin-top: 0.2rem;
       width: 100%;
     }
-    
 
     .bundle-button {
       padding: 12px 5px;
@@ -1819,6 +1817,16 @@
       "default": 4
     },
     {
+      "type": "range",
+      "id": "mobile_input_radius",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "label": "Mobile Input Border Radius",
+      "default": 4
+    },
+    {
       "type": "header",
       "content": "Mobile Typography"
     },
@@ -1913,7 +1921,6 @@
     {
       "type": "header",
       "content": "Notification Messages"
-      "label": "Refresh the page to make changes",
     },
     {
       "type": "text",
