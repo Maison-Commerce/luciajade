@@ -64,7 +64,7 @@
         "adding_to_cart_text": "Adding to Cart...",
         "box_full_notification": "🎁 Your bundle box is full! 🛑",
         "item_added_notification": "✨ Item added to your bundle! 🛍️",
-        "item_removed_notification": "❌ Item removed from bundleee",
+        "item_removed_notification": "❌ Item removed from bundle",
         "exceed_size_notification": "⚠️ Cannot exceed bundle size of {size} 🛑",
         "bundle_added_message": "🎉 Bundle added to cart! Taking you there... 🛒",
         "bundle_error_message": "😔 Oops! Something went wrong. Please try again.",
