@@ -229,9 +229,9 @@
   }
 
   .bundle-button {
-    background-color: var(--bundle-add-button-color);
-    color: var(--bundle-add-button-text);
-    border-radius: var(--bundle-button-radius);
+    background-color: {{ section.settings.add_button_color }};
+    color: {{ section.settings.add_button_text_color }};
+    border-radius: {{ section.settings.button_radius }}px;
     border: none;
     padding: 10px 20px;
     cursor: pointer;
@@ -257,9 +257,9 @@
 
   .bundle-button--add-another,
   .bundle-button--remove {
-    background-color: var(--bundle-secondary-button-color);
-    color: var(--bundle-secondary-button-text);
-    border-radius: var(--bundle-button-radius);
+    background-color: {{ section.settings.secondary_button_color }} !important;
+    color: {{ section.settings.secondary_button_text_color }} !important;
+    border-radius: {{ section.settings.button_radius }}px;
     border: none;
     padding: 10px 15px;
     cursor: pointer;
@@ -1713,19 +1713,19 @@
       "type": "color",
       "id": "secondary_button_color",
       "label": "Remove/Add Another Button Color",
-      "default": "#333333"
+      "default": "#212121"
     },
     {
       "type": "color",
       "id": "button_text_color",
       "label": "Add Button Text Color",
-      "default": "#ffffff"
+      "default": "#FFFFFF"
     },
     {
       "type": "color",
       "id": "secondary_button_text_color",
       "label": "Remove/Add Another Button Text Color",
-      "default": "#ffffff"
+      "default": "#FFFFFF"
     },
     {
       "type": "header",
