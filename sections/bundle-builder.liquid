@@ -1541,13 +1541,35 @@
     }
     
     document.querySelectorAll('.variant-dropdown').forEach(dropdown => {
-      Array.from(dropdown.options).forEach(option => {
-        const originalText = option.getAttribute('data-original-text') || option.text;
-        if (!option.getAttribute('data-original-text')) {
-          option.setAttribute('data-original-text', originalText);
+      // Store original selected text
+      const selectedOption = dropdown.options[dropdown.selectedIndex];
+      const originalSelectedText = selectedOption.getAttribute('data-original-text') || selectedOption.text;
+      
+      // Truncate only the selected text display
+      dropdown.options[dropdown.selectedIndex].text = originalSelectedText.length > maxLength 
+        ? originalSelectedText.substring(0, maxLength) + '...' 
+        : originalSelectedText;
+
+      // Restore full text for all options when dropdown is opened
+      dropdown.addEventListener('mousedown', function() {
+        Array.from(this.options).forEach(option => {
+          const originalText = option.getAttribute('data-original-text') || option.text;
+          option.text = originalText;
+        });
+      });
+
+      // Truncate selected option text when an option is selected
+      dropdown.addEventListener('change', function() {
+        const selectedOpt = this.options[this.selectedIndex];
+        const originalText = selectedOpt.getAttribute('data-original-text') || selectedOpt.text;
+        
+        // Store original text if not already stored
+        if (!selectedOpt.getAttribute('data-original-text')) {
+          selectedOpt.setAttribute('data-original-text', originalText);
         }
         
-        option.text = originalText.length > maxLength 
+        // Truncate the selected text
+        selectedOpt.text = originalText.length > maxLength 
           ? originalText.substring(0, maxLength) + '...' 
           : originalText;
       });
