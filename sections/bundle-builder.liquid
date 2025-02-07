@@ -37,6 +37,11 @@
     --bundle-mobile-remove-button-color: {{ section.settings.mobile_remove_button_color }};
     --bundle-mobile-button-text-color: {{ section.settings.mobile_button_text_color }};
     --bundle-mobile-remove-text-color: {{ section.settings.mobile_remove_text_color }};
+    /* Desktop button variables */
+    --bundle-add-button-color: {{ section.settings.add_button_color }};
+    --bundle-add-button-text: {{ section.settings.add_button_text_color }};
+    --bundle-secondary-button-color: {{ section.settings.secondary_button_color }};
+    --bundle-secondary-button-text: {{ section.settings.secondary_button_text_color }};
   }
 
   .bundle-builder {
@@ -224,51 +229,53 @@
   }
 
   .bundle-button {
-    background: var(--bundle-primary-color);
-    border: none;
-    color: var(--bundle-button-text-color);
-    padding: 0.875rem 1.5rem;
+    background-color: var(--bundle-add-button-color);
+    color: var(--bundle-add-button-text);
     border-radius: var(--bundle-button-radius);
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+    width: 100%;
     font-weight: 500;
-    font-size: 0.875rem;
-    text-transform: uppercase;
-    letter-spacing: 0.025em;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    font-family: "DM Sans", sans-serif;
   }
 
-  .bundle-button:hover:not(:disabled) {
-    background: var(--bundle-secondary-color);
-    transform: translateY(-1px);
-    box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+  .bundle-button:hover {
+    opacity: 0.9;
   }
 
   .bundle-button:disabled {
-    opacity: 0.5;
+    opacity: 0.6;
     cursor: not-allowed;
   }
 
   .bundle-button-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.75rem;
+    display: flex;
+    gap: 8px;
+    width: 100%;
   }
 
-  .bundle-button--add-another {
-    background: var(--bundle-primary-color);
-    color: var(--bundle-button-text-color);
-  }
-
+  .bundle-button--add-another,
   .bundle-button--remove {
-    background: transparent;
-    border: 1px solid var(--bundle-primary-color);
-    color: var(--bundle-button-text-color-secondary);
+    background-color: var(--bundle-secondary-button-color);
+    color: var(--bundle-secondary-button-text);
+    border-radius: var(--bundle-button-radius);
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+    flex: 1;
+    font-weight: 500;
   }
 
-  .bundle-button--remove:hover:not(:disabled) {
-    background: var(--bundle-primary-color);
-    color: var(--bundle-button-text-color);
+  .bundle-button--add-another:hover,
+  .bundle-button--remove:hover {
+    opacity: 0.9;
+  }
+
+  .bundle-button--add-another:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
   }
 
   .bundle-notifications {
