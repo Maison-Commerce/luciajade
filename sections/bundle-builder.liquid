@@ -1425,19 +1425,18 @@
       {% for product in collections[section.settings.bundle_collection].products %}
         <div class="bundle-product-card" 
              x-data="{ 
-               showVariants: false,
                selectedVariant: {
                  id: '{{ product.first_available_variant.id }}',
                  price: {{ product.first_available_variant.price }},
                  title: '{{ product.first_available_variant.title | split: ' / ' | first | escape }}'
                },
-               variantImage: '{{ product.featured_image | img_url: '300x300', crop: 'center' }}'
+               currentImage: '{{ product.featured_image | img_url: '300x300', crop: 'center' }}'
              }"
              x-show="selectedType === 'all' || selectedType === '{{ product.type | escape }}'"
              :class="{ 'selected': isProductSelected('{{ product.id }}') }">
           
           <div class="bundle-product-image-wrapper">
-            <img :src="variantImage" 
+            <img :src="currentImage" 
                  alt="{{ product.title }}"
                  loading="lazy"
                  width="300"
@@ -1463,42 +1462,35 @@
             </div>
             
             <div class="bundle-product-controls">
-              {% if product.variants.size > 1 %}
-                {% for option in product.options_with_values %}
-                  <select class="variant-dropdown"
-                          @change="
-                            const selectedOptions = Array.from($el.closest('.bundle-product-controls').querySelectorAll('.variant-dropdown')).map(select => select.value);
-                            const variant = {{ product.variants | json }}.find(v => 
-                              v.options.every((opt, index) => opt === selectedOptions[index])
-                            );
-                            if (variant) {
-                              selectedVariant = {
-                                id: variant.id.toString(),
-                                price: parseFloat(variant.price),
-                                title: variant.title
-                              };
-                              // Update the image if the variant has one
-                              const variantImages = {{ product.variants | json | map: 'featured_image' }};
-                              const variantIndex = {{ product.variants | json }}.findIndex(v => v.id === variant.id);
-                              if (variantImages[variantIndex]) {
-                                variantImage = variantImages[variantIndex].src;
-                              } else {
-                                variantImage = '{{ product.featured_image | img_url: '300x300', crop: 'center' }}';
-                              }
-                            }
-                          ">
-                    {% for value in option.values %}
-                      <option value="{{ value }}" {% if forloop.first %}selected{% endif %}>{{ value }}</option>
-                    {% endfor %}
-                  </select>
+              <select class="variant-dropdown"
+                      @change="
+                        const variantId = $event.target.value;
+                        const variant = {{ product.variants | json }}.find(v => v.id.toString() === variantId);
+                        if (variant) {
+                          selectedVariant = {
+                            id: variant.id.toString(),
+                            price: parseFloat(variant.price),
+                            title: variant.title
+                          };
+                          
+                          // Find the image for this variant
+                          {% assign images_by_variant = product.images | map: 'variant_ids' | zip: product.images %}
+                          const variantImages = {{ images_by_variant | json }};
+                          const variantImage = variantImages.find(([variants, _]) => variants && variants.includes(parseInt(variantId)));
+                          
+                          if (variantImage) {
+                            currentImage = {{ product.images | map: 'src' | map: img_url: '300x300', crop: 'center' | json }}[variantImages.indexOf(variantImage)];
+                          } else {
+                            currentImage = '{{ product.featured_image | img_url: '300x300', crop: 'center' }}';
+                          }
+                        }
+                      ">
+                {% for variant in product.variants %}
+                  <option value="{{ variant.id }}">
+                    {{ variant.title }}
+                  </option>
                 {% endfor %}
-              {% else %}
-                {% assign single_variant = product.variants.first %}
-                {% assign variant_title = single_variant.title | split: ' / ' | first %}
-                {% unless variant_title == 'Default Title' %}
-                  <div class="variant-single">{{ variant_title }}</div>
-                {% endunless %}
-              {% endif %}
+              </select>
               
               <div class="bundle-button-group">
                 <button class="bundle-button"
@@ -1509,7 +1501,7 @@
                           title: '{{ product.title | escape }}',
                           price: selectedVariant.price,
                           variant_title: selectedVariant.title,
-                          image: variantImage
+                          image: currentImage
                         })"
                         :disabled="selectedItems.length >= bundleSize">
                   <span x-text="selectedItems.length >= bundleSize ? '{{ section.settings.box_full_message }}' : '{{ section.settings.add_to_bundle_text }}'"></span>
@@ -1524,7 +1516,7 @@
                               title: '{{ product.title | escape }}',
                               price: selectedVariant.price,
                               variant_title: selectedVariant.title,
-                              image: variantImage
+                              image: currentImage
                             })"
                             :disabled="selectedItems.length >= bundleSize">
                       <span x-text="selectedItems.length >= bundleSize ? '{{ section.settings.box_full_message }}' : '{{ section.settings.add_another_text }}'"></span>
