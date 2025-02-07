@@ -569,32 +569,9 @@
   }
 
   .bundle-progress-text {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    font-size: 16px;
+    color: #666;
     margin-bottom: 15px;
-  }
-
-  .bundle-progress-view-button {
-    background: var(--bundle-primary-color, #000000);
-    color: var(--bundle-button-text-color, #ffffff);
-    border: none;
-    border-radius: var(--bundle-button-radius, 4px);
-    padding: 8px 16px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: opacity 0.3s ease;
-  }
-
-  .bundle-progress-view-button:hover {
-    opacity: 0.9;
-  }
-
-  @media screen and (max-width: 768px) {
-    .bundle-progress-view-button {
-      padding: 6px 12px;
-      font-size: 13px;
-    }
   }
 
   .bundle-progress-bar {
@@ -1327,12 +1304,6 @@
     <div class="bundle-progress-container">
       <div class="bundle-progress-text">
         <span x-text="selectedItems.length"></span> / <span x-text="bundleSize"></span> items selected
-        <!-- Add View Box button inline -->
-        <button class="bundle-progress-view-button"
-                @click="toggleView()"
-                x-show="!isViewOpen">
-          {{ section.settings.view_box_text }} (<span x-text="selectedItems.length"></span>)
-        </button>
       </div>
       
       <div class="bundle-progress-bar">
@@ -1513,6 +1484,13 @@
       {% endfor %}
     </div>
   </div>
+
+  <!-- View Box Button -->
+  <button class="bundle-view-button"
+          @click="toggleView()"
+          x-show="!isViewOpen">
+    {{ section.settings.view_box_text }} (<span x-text="selectedItems.length"></span>)
+  </button>
 
   <!-- Bundle View Sidebar -->
   <div class="bundle-view"
