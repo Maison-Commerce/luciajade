@@ -230,7 +230,7 @@
 
   .bundle-notifications {
     position: fixed;
-    bottom: 20px;
+    top: 70px;
     left: 20px;
     z-index: 1000;
   }
@@ -239,14 +239,14 @@
   @media screen and (max-width: 768px) {
     .bundle-notifications {
       bottom: auto;
-      top: 20px;
+      top: 70px;
     }
 
     /* Adjust Toastify positioning for mobile */
     .toastify {
       left: 20px !important;
       right: 20px !important;
-      top: 20px !important;
+      top: 70px !important;
       bottom: auto !important;
       max-width: calc(100% - 40px) !important;
       transform: translateX(0) !important;
@@ -1045,7 +1045,7 @@
 
       addToBundle(product) {
         if (this.selectedItems.length >= this.bundleSize) {
-          this.showNotification('✨ Your bundle box is full! ✨', 'error');
+          this.showNotification('🎁 Your bundle box is full! 🛑', 'error');
           return;
         }
 
@@ -1058,7 +1058,7 @@
 
         this.selectedItems.push(bundleItem);
         localStorage.setItem('currentBundle', JSON.stringify(this.selectedItems));
-        this.showNotification('�� Item added to your bundle!', 'success');
+        this.showNotification('✨ Item added to your bundle! 🛍️', 'success');
       },
 
       removeFromBundle(productId) {
@@ -1072,7 +1072,7 @@
           // Remove the item at the actual index
           this.selectedItems.splice(actualIndex, 1);
           localStorage.setItem('currentBundle', JSON.stringify(this.selectedItems));
-          this.showNotification('✖️ Item removed from bundle', 'success');
+          this.showNotification('❌ Item removed from bundle', 'success');
         }
       },
 
@@ -1086,7 +1086,7 @@
         // Calculate how many slots this change would use
         const currentTotalItems = this.selectedItems.reduce((sum, i) => sum + i.quantity, 0);
         if (currentTotalItems + change > this.bundleSize) {
-          this.showNotification(`⚠️ Cannot exceed bundle size of ${this.bundleSize}`, 'error');
+          this.showNotification(`⚠️ Cannot exceed bundle size of ${this.bundleSize} 🛑`, 'error');
           return;
         }
 
@@ -1096,7 +1096,7 @@
 
       async addBundleToCart() {
         if (this.selectedItems.length < this.bundleSize) {
-          this.showNotification(`⚠️ Please select ${this.bundleSize} items to complete your bundle`, 'error');
+          this.showNotification(`💝 Please select ${this.bundleSize} items to complete your bundle`, 'error');
           return;
         }
 
@@ -1145,7 +1145,7 @@
           this.isViewOpen = false;
 
           // Show success message
-          this.showNotification('🛍️ Bundle added to cart! Redirecting...', 'success');
+          this.showNotification('🎉 Bundle added to cart! Taking you there... 🛒', 'success');
 
           // Redirect to cart page
           window.location.href = '/cart';
@@ -1153,7 +1153,7 @@
         } catch (error) {
           console.error('Bundle addition error:', error);
           this.showNotification(
-            '❌ Oops! Something went wrong. Please try again.',
+            '😔 Oops! Something went wrong. Please try again.',
             'error'
           );
         } finally {
