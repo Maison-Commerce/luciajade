@@ -506,8 +506,6 @@
     text-align: center;
     position: sticky;
     top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
     z-index: 1000;
     background: var(--color-background);
     padding: 15px;
@@ -1206,6 +1204,48 @@
 <div class="bundle-builder" 
      x-data="bundleBuilder({{ section.settings.bundle_size }}, {{ section.settings.discount_percentage }})"
      x-init="init()">
+
+
+         <div class="bundle-progress-container">
+      <div class="bundle-progress-text">
+        <span x-text="selectedItems.length"></span> / <span x-text="bundleSize"></span> items selected
+      </div>
+      
+      <div class="bundle-progress-bar">
+        <div class="bundle-progress-fill"
+             :style="{
+               width: (selectedItems.length / bundleSize * 100) + '%',
+               background: selectedItems.length === bundleSize ? 'var(--color-success, #4CAF50)' : 'linear-gradient(90deg, #000000, #333333)'
+             }">
+        </div>
+      </div>
+      
+      <div class="bundle-progress-steps">
+        <template x-for="index in bundleSize" :key="index">
+          <div class="bundle-progress-step"
+               :class="{
+                 'active': selectedItems.length === index,
+                 'completed': selectedItems.length > index
+               }">
+          </div>
+        </template>
+      </div>
+      
+      <div class="bundle-progress-labels">
+        <div class="bundle-progress-label"
+             :class="{ 'active': selectedItems.length === 0 }">
+          Start
+        </div>
+        <div class="bundle-progress-label"
+             :class="{ 'active': selectedItems.length > 0 && selectedItems.length < bundleSize }">
+          Building
+        </div>
+        <div class="bundle-progress-label"
+             :class="{ 'active': selectedItems.length === bundleSize }">
+          Complete
+        </div>
+      </div>
+    </div>
   
   <div class="bundle-builder__header">
     <h2 class="h1">{{ section.settings.title }}</h2>
