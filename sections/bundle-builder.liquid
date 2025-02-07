@@ -1432,19 +1432,23 @@
                  title: '{{ product.first_available_variant.title | split: ' / ' | first | escape }}'
                },
                variantImage: '{{ product.featured_image | img_url: '300x300', crop: 'center' }}',
-               variantImages: {{ product.images | json }},
+               variantImages: [
+                 {% for image in product.images %}
+                   {
+                     id: {{ image.id | json }},
+                     src: {{ image.src | img_url: '300x300', crop: 'center' | json }},
+                     variant_ids: {{ image.variant_ids | json }}
+                   }{% unless forloop.last %},{% endunless %}
+                 {% endfor %}
+               ],
                updateVariantImage(variant) {
-                 // First try to find a variant-specific image
                  const variantImage = this.variantImages.find(img => 
                    img.variant_ids && img.variant_ids.includes(parseInt(variant.id))
                  );
                  
                  if (variantImage) {
-                   this.variantImage = variantImage.src.replace('.jpg', '_300x300_crop_center.jpg')
-                                         .replace('.jpeg', '_300x300_crop_center.jpeg')
-                                         .replace('.png', '_300x300_crop_center.png');
+                   this.variantImage = variantImage.src;
                  } else {
-                   // Fallback to product's featured image
                    this.variantImage = '{{ product.featured_image | img_url: '300x300', crop: 'center' }}';
                  }
                }
