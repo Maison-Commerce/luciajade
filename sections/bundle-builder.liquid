@@ -1431,7 +1431,23 @@
                  price: {{ product.first_available_variant.price }},
                  title: '{{ product.first_available_variant.title | split: ' / ' | first | escape }}'
                },
-               variantImage: '{{ product.featured_image | img_url: '300x300', crop: 'center' }}'
+               variantImage: '{{ product.featured_image | img_url: '300x300', crop: 'center' }}',
+               variantImages: {{ product.images | json }},
+               updateVariantImage(variant) {
+                 // First try to find a variant-specific image
+                 const variantImage = this.variantImages.find(img => 
+                   img.variant_ids && img.variant_ids.includes(parseInt(variant.id))
+                 );
+                 
+                 if (variantImage) {
+                   this.variantImage = variantImage.src.replace('.jpg', '_300x300_crop_center.jpg')
+                                         .replace('.jpeg', '_300x300_crop_center.jpeg')
+                                         .replace('.png', '_300x300_crop_center.png');
+                 } else {
+                   // Fallback to product's featured image
+                   this.variantImage = '{{ product.featured_image | img_url: '300x300', crop: 'center' }}';
+                 }
+               }
              }"
              x-show="selectedType === 'all' || selectedType === '{{ product.type | escape }}'"
              :class="{ 'selected': isProductSelected('{{ product.id }}') }">
@@ -1477,14 +1493,7 @@
                                 price: parseFloat(variant.price),
                                 title: variant.title
                               };
-                              // Update the image if the variant has one
-                              const variantImages = {{ product.variants | json | map: 'featured_image' }};
-                              const variantIndex = {{ product.variants | json }}.findIndex(v => v.id === variant.id);
-                              if (variantImages[variantIndex]) {
-                                variantImage = variantImages[variantIndex].src;
-                              } else {
-                                variantImage = '{{ product.featured_image | img_url: '300x300', crop: 'center' }}';
-                              }
+                              updateVariantImage(variant);
                             }
                           ">
                     {% for value in option.values %}
