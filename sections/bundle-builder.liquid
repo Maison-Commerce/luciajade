@@ -18,6 +18,7 @@
     padding: 2rem;
     max-width: 1200px;
     margin: 0 auto;
+    position: relative;
   }
 
   .bundle-builder__header {
@@ -503,13 +504,18 @@
     margin: 30px auto;
     max-width: 400px;
     text-align: center;
+    position: -webkit-sticky;
     position: sticky;
-    top: 0;
+    top: 20px;
     z-index: 100;
     background: var(--color-background);
     padding: 15px;
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    display: block;
+    overflow: visible;
+    transform: translate3d(0, 0, 0);
+    will-change: position, transform;
   }
 
   .bundle-progress-text {
