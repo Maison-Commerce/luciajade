@@ -1398,8 +1398,8 @@
             </div>
             
             <div class="bundle-product-controls">
-              <!-- Only show variant dropdown if product has more than one option -->
-              {% if product.options.size > 1 %}
+              <!-- Only show variant dropdown if product has more than one variant -->
+              {% if product.variants.size > 1 %}
                 <select class="variant-dropdown"
                         :value="selectedVariant.id"
                         @change="
