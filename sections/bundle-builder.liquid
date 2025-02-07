@@ -206,7 +206,12 @@
     background-repeat: no-repeat;
     background-position: right 1rem center;
     background-size: 1.25rem;
-    padding-right: 2.5rem; /* Make room for the dropdown arrow */
+    padding-right: 2.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .variant-dropdown:last-child {
+    margin-bottom: 1rem;
   }
 
   /* Add max-width for desktop dropdown text */
@@ -1459,38 +1464,31 @@
             
             <div class="bundle-product-controls">
               {% if product.variants.size > 1 %}
-                <select class="variant-dropdown"
-                        :value="selectedVariant.id"
-                        @change="
-                          const variant = $event.target.selectedOptions[0].dataset;
-                          selectedVariant = {
-                            id: variant.id,
-                            price: parseFloat(variant.price),
-                            title: variant.optionTitle
-                          };
-                          variantImage = variant.image;
-                        ">
-                  {% for variant in product.variants %}
-                    {% assign option_parts = variant.title | split: ' / ' %}
-                    {% assign formatted_options = '' %}
-                    {% for option in option_parts %}
-                      {% assign formatted_options = formatted_options | append: option %}
-                      {% unless forloop.last %}
-                        {% assign formatted_options = formatted_options | append: ' - ' %}
-                      {% endunless %}
+                {% for option in product.options_with_values %}
+                  <select class="variant-dropdown"
+                          @change="
+                            const selectedOptions = Array.from($el.closest('.bundle-product-controls').querySelectorAll('.variant-dropdown')).map(select => select.value);
+                            const variant = {{ product.variants | json }}.find(v => 
+                              v.options.every((opt, index) => opt === selectedOptions[index])
+                            );
+                            if (variant) {
+                              selectedVariant = {
+                                id: variant.id.toString(),
+                                price: parseFloat(variant.price),
+                                title: variant.title
+                              };
+                              variantImage = '{{ product.featured_image | img_url: '300x300', crop: 'center' }}';
+                            }
+                          ">
+                    <option value="">Select {{ option.name }}</option>
+                    {% for value in option.values %}
+                      <option value="{{ value }}">{{ value }}</option>
                     {% endfor %}
-                    <option value="{{ variant.id }}"
-                            data-id="{{ variant.id }}"
-                            data-price="{{ variant.price }}"
-                            data-option-title="{{ formatted_options }}"
-                            data-image="{{ variant.featured_image | default: product.featured_image | img_url: '300x300', crop: 'center' }}">
-                      {{ formatted_options }}
-                    </option>
-                  {% endfor %}
-                </select>
+                  </select>
+                {% endfor %}
               {% else %}
                 {% assign single_variant = product.variants.first %}
-                {% assign variant_title = single_variant.title %}
+                {% assign variant_title = single_variant.title | split: ' / ' | first %}
                 {% unless variant_title == 'Default Title' %}
                   <div class="variant-single">{{ variant_title }}</div>
                 {% endunless %}
