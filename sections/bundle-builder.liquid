@@ -1325,6 +1325,14 @@
           style: 'currency',
           currency: '{{ cart.currency.iso_code }}'
         }).format(cents / 100);
+      },
+
+      getCurrentVariant() {
+        const selections = Array.from(this.$el.querySelectorAll('.variant-dropdown')).map(select => select.value);
+        const variant = {{ product.variants | json }}.find(v => 
+          v.options.every((opt, index) => opt === selections[index])
+        );
+        return variant;
       }
     }));
   });
@@ -1429,9 +1437,16 @@
                selectedVariant: {
                  id: '{{ product.first_available_variant.id }}',
                  price: {{ product.first_available_variant.price }},
-                 title: '{{ product.first_available_variant.title | split: ' / ' | first | escape }}'
+                 title: '{{ product.first_available_variant.title | escape }}'
                },
-               variantImage: '{{ product.featured_image | img_url: '300x300', crop: 'center' }}'
+               variantImage: '{{ product.featured_image | img_url: '300x300', crop: 'center' }}',
+               getCurrentVariant() {
+                 const selections = Array.from(this.$el.querySelectorAll('.variant-dropdown')).map(select => select.value);
+                 const variant = {{ product.variants | json }}.find(v => 
+                   v.options.every((opt, index) => opt === selections[index])
+                 );
+                 return variant;
+               }
              }"
              x-show="selectedType === 'all' || selectedType === '{{ product.type | escape }}'"
              :class="{ 'selected': isProductSelected('{{ product.id }}') }">
@@ -1511,14 +1526,17 @@
               <div class="bundle-button-group">
                 <button class="bundle-button"
                         x-show="!isProductSelected('{{ product.id }}')"
-                        @click="addToBundle({
-                          id: '{{ product.id }}',
-                          variant_id: selectedVariant.id,
-                          title: '{{ product.title | escape }}',
-                          price: selectedVariant.price,
-                          variant_title: selectedVariant.title,
-                          image: variantImage
-                        })"
+                        @click="
+                          const currentVariant = getCurrentVariant();
+                          addToBundle({
+                            id: '{{ product.id }}',
+                            variant_id: currentVariant.id,
+                            title: '{{ product.title | escape }}',
+                            price: currentVariant.price,
+                            variant_title: currentVariant.options.join(' / '),
+                            image: variantImage
+                          })
+                        "
                         :disabled="selectedItems.length >= bundleSize">
                   <span x-text="selectedItems.length >= bundleSize ? '{{ section.settings.box_full_message }}' : '{{ section.settings.add_to_bundle_text }}'"></span>
                 </button>
@@ -1526,14 +1544,17 @@
                 <template x-if="isProductSelected('{{ product.id }}')">
                   <div class="bundle-button-row">
                     <button class="bundle-button bundle-button--add-another"
-                            @click="addToBundle({
-                              id: '{{ product.id }}',
-                              variant_id: selectedVariant.id,
-                              title: '{{ product.title | escape }}',
-                              price: selectedVariant.price,
-                              variant_title: selectedVariant.title,
-                              image: variantImage
-                            })"
+                            @click="
+                              const currentVariant = getCurrentVariant();
+                              addToBundle({
+                                id: '{{ product.id }}',
+                                variant_id: currentVariant.id,
+                                title: '{{ product.title | escape }}',
+                                price: currentVariant.price,
+                                variant_title: currentVariant.options.join(' / '),
+                                image: variantImage
+                              })
+                            "
                             :disabled="selectedItems.length >= bundleSize">
                       <span x-text="selectedItems.length >= bundleSize ? '{{ section.settings.box_full_message }}' : '{{ section.settings.add_another_text }}'"></span>
                     </button>
