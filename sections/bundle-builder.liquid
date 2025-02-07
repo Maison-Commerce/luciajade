@@ -1553,7 +1553,7 @@
 
       <div class="bundle-progress-text" x-text="
         bundleSize - selectedItems.length === 0 
-          ? 'Box is full! 📦' 
+          ? '{{ section.settings.box_full_message }} 📦' 
           : `Add ${bundleSize - selectedItems.length} more product${bundleSize - selectedItems.length > 1 ? 's' : ''} to fill your box 🎁`
       ">
       </div>
@@ -1998,6 +1998,12 @@
       "id": "empty_box_text",
       "label": "Empty Box Description",
       "default": "Add items to your bundle to get started!"
+    },
+    {
+      "type": "text",
+      "id": "box_full_message",
+      "label": "Box Full Message",
+      "default": "Box is full!"
     }
   ],
   "presets": [
