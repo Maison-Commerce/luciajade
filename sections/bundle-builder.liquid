@@ -504,7 +504,8 @@
     margin: 30px auto;
     max-width: 400px;
     text-align: center;
-    position: fixed;
+    position: -webkit-sticky;
+    position: sticky;
     top: 20px;
     left: 50%;
     transform: translateX(-50%);
@@ -517,6 +518,14 @@
     overflow: visible;
     will-change: transform;
     transition: all 0.3s ease;
+  }
+
+  /* Create a wrapper for the progress container */
+  .bundle-progress-wrapper {
+    position: relative;
+    height: auto;
+    margin: 30px 0;
+    width: 100%;
   }
 
   .bundle-progress-text {
@@ -1209,7 +1218,9 @@
   
   <div class="bundle-builder__header">
     <h2 class="h1">{{ section.settings.title }}</h2>
-    
+  </div>
+
+  <div class="bundle-progress-wrapper">
     <div class="bundle-progress-container">
       <div class="bundle-progress-text">
         <span x-text="selectedItems.length"></span> / <span x-text="bundleSize"></span> items selected
