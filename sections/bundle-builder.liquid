@@ -1464,28 +1464,27 @@
             
             <div class="bundle-product-controls">
               {% if product.variants.size > 1 %}
-                {% for option in product.options_with_values %}
-                  <select class="variant-dropdown"
-                          @change="
-                            const selectedOptions = Array.from($el.closest('.bundle-product-controls').querySelectorAll('.variant-dropdown')).map(select => select.value);
-                            const variant = {{ product.variants | json }}.find(v => 
-                              v.options.every((opt, index) => opt === selectedOptions[index])
-                            );
-                            if (variant) {
-                              selectedVariant = {
-                                id: variant.id.toString(),
-                                price: parseFloat(variant.price),
-                                title: variant.title
-                              };
-                              variantImage = '{{ product.featured_image | img_url: '300x300', crop: 'center' }}';
-                            }
-                          ">
-                    <option value="">Select {{ option.name }}</option>
-                    {% for value in option.values %}
-                      <option value="{{ value }}">{{ value }}</option>
-                    {% endfor %}
-                  </select>
-                {% endfor %}
+                <select class="variant-dropdown"
+                        @change="
+                          const selectedOptions = Array.from($el.closest('.bundle-product-controls').querySelectorAll('.variant-dropdown')).map(select => select.value);
+                          const variant = {{ product.variants | json }}.find(v => 
+                            v.options.every((opt, index) => opt === selectedOptions[index])
+                          );
+                          if (variant) {
+                            selectedVariant = {
+                              id: variant.id.toString(),
+                              price: parseFloat(variant.price),
+                              title: variant.title,
+                              options: variant.options
+                            };
+                            variantImage = '{{ product.featured_image | img_url: '300x300', crop: 'center' }}';
+                          }
+                        ">
+                  <option value="{{ option.values.first }}">{{ option.values.first }}</option>
+                  {% for value in option.values offset:1 %}
+                    <option value="{{ value }}">{{ value }}</option>
+                  {% endfor %}
+                </select>
               {% else %}
                 {% assign single_variant = product.variants.first %}
                 {% assign variant_title = single_variant.title | split: ' / ' | first %}
@@ -1585,7 +1584,11 @@
           <img class="bundle-item-image" :src="item.image" :alt="item.title">
           <div class="bundle-item-info">
             <h4 class="bundle-item-title" x-text="item.title"></h4>
-            <span class="bundle-item-variant" x-text="item.variant_title"></span>
+            <span class="bundle-item-variant">
+              <template x-if="item.variant_title && item.variant_title !== 'Default Title'">
+                <span x-text="item.variant_title.split(' / ').join(' - ')"></span>
+              </template>
+            </span>
             <span class="bundle-item-price" x-text="formatMoney(item.price)"></span>
             <button class="bundle-item-remove"
                     @click="removeFromBundle(item.id)">
