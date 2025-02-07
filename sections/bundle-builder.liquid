@@ -1083,6 +1083,19 @@
       color: var(--bundle-mobile-remove-text-color) !important;
     }
   }
+
+  .variant-single {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid #e5e7eb;
+    border-radius: var(--bundle-input-radius);
+    font-size: 0.875rem;
+    color: #374151;
+    background: #f9fafb;
+    text-align: center;
+    margin-bottom: 0.5rem;
+    font-family: "DM Sans", sans-serif;
+  }
 {%- endstyle -%}
 
 <!-- Add Toastify CDN in the head of your document -->
@@ -1398,7 +1411,6 @@
             </div>
             
             <div class="bundle-product-controls">
-              <!-- Only show variant dropdown if product has more than one variant -->
               {% if product.variants.size > 1 %}
                 <select class="variant-dropdown"
                         :value="selectedVariant.id"
@@ -1422,6 +1434,12 @@
                     </option>
                   {% endfor %}
                 </select>
+              {% else %}
+                {% assign single_variant = product.variants.first %}
+                {% assign variant_title = single_variant.title | split: ' / ' | first %}
+                {% unless variant_title == 'Default Title' %}
+                  <div class="variant-single">{{ variant_title }}</div>
+                {% endunless %}
               {% endif %}
               
               <div class="bundle-button-group">
