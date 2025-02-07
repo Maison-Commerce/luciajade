@@ -34,10 +34,8 @@
     --bundle-mobile-card-radius: {{ section.settings.mobile_card_radius }}px;
     --bundle-mobile-input-radius: {{ section.settings.mobile_input_radius }}px;
     --bundle-mobile-add-button-color: {{ section.settings.mobile_add_button_color }};
-    --bundle-mobile-secondary-button-color: {{ section.settings.mobile_secondary_button_color }};
+    --bundle-mobile-remove-button-color: {{ section.settings.mobile_remove_button_color }};
     --bundle-mobile-button-text-color: {{ section.settings.mobile_button_text_color }};
-    --bundle-mobile-secondary-button-text-color: {{ section.settings.mobile_secondary_button_text_color }};
-    --bundle-mobile-add-text-color: {{ section.settings.mobile_add_text_color }};
     --bundle-mobile-remove-text-color: {{ section.settings.mobile_remove_text_color }};
   }
 
@@ -1069,7 +1067,7 @@
   @media screen and (max-width: 768px) {
     .bundle-button {
       background-color: var(--bundle-mobile-add-button-color) !important;
-      color: var(--bundle-mobile-add-text-color) !important;
+      color: var(--bundle-mobile-button-text-color) !important;
     }
 
     .bundle-button--add-another,
@@ -1788,25 +1786,25 @@
       "type": "color",
       "id": "mobile_add_button_color",
       "label": "Mobile Add to Bundle Button Color",
-      "default": "#44AC52"
+      "default": "#000000"
     },
     {
       "type": "color",
       "id": "mobile_remove_button_color",
       "label": "Mobile Remove/Add Another Button Color",
-      "default": "#44AC52"
+      "default": "#000000"
     },
     {
       "type": "color",
-      "id": "mobile_add_text_color",
+      "id": "mobile_button_text_color",
       "label": "Mobile Add Button Text Color",
-      "default": "#212121"
+      "default": "#FFFFFF"
     },
     {
       "type": "color",
       "id": "mobile_remove_text_color",
       "label": "Mobile Remove/Add Another Button Text Color",
-      "default": "#000000"
+      "default": "#FFFFFF"
     },
     {
       "type": "header",
