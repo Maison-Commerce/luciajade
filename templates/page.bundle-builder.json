@@ -37,10 +37,21 @@
         "bundle_size": 7,
         "discount_percentage": 20,
         "bundle_collection": "all",
-        "background_color": "#ffffff",
+        "card_radius": 16,
+        "button_radius": 8,
+        "input_radius": 8,
+        "card_shadow": 4,
+        "title_size": 16,
+        "price_size": 16,
+        "text_size": 14,
+        "mobile_title_size": 12,
+        "mobile_price_size": 12,
+        "mobile_text_size": 28,
+        "primary_color": "#000000",
+        "secondary_color": "#333333",
         "text_color": "#000000",
-        "button_color": "#000000",
-        "button_text_color": "#ffffff"
+        "button_text_color": "#ffffff",
+        "button_text_color_secondary": "#000000"
       }
     },
     "section_multicolumn_eqFPgc": {
