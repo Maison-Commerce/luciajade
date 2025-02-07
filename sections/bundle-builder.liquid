@@ -898,6 +898,7 @@
     opacity: 0;
     animation: fadeIn 0.3s ease forwards;
     border: 2px solid transparent;
+    margin: 1px;
   }
 
   @keyframes fadeIn {
@@ -1015,7 +1016,7 @@
 
 
     .bundle-button {
-      padding: 12px 5px;
+      padding: 12.5px 5px;
       font-size: 15px;
       min-height: 24px;
     }
@@ -1551,7 +1552,12 @@
     </div>
 
       <div class="bundle-progress-text">
-        <span x-text="selectedItems.length"></span> / <span x-text="bundleSize"></span> items selected
+        <template x-if="bundleSize - selectedItems.length === 0">
+          Box is full! 📦
+        </template>
+        <template x-if="bundleSize - selectedItems.length > 0">
+          Add <span x-text="bundleSize - selectedItems.length"></span> more product<span x-if="bundleSize - selectedItems.length > 1">s</span> to fill your box 🎁
+        </template>
       </div>
       
       <div class="bundle-progress-bar">
@@ -1832,6 +1838,16 @@
       "default": 4
     },
     {
+      "type": "range",
+      "id": "mobile_input_radius",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "label": "Mobile Input Border Radius",
+      "default": 4
+    },
+    {
       "type": "header",
       "content": "Mobile Typography"
     },
@@ -1926,7 +1942,6 @@
     {
       "type": "header",
       "content": "Notification Messages"
-      "label": "Refresh the page to make changes",
     },
     {
       "type": "text",
