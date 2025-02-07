@@ -29,6 +29,8 @@
     --bundle-mobile-title-size: {{ section.settings.mobile_title_size }}px;
     --bundle-mobile-price-size: {{ section.settings.mobile_price_size }}px;
     --bundle-mobile-text-size: {{ section.settings.mobile_text_size }}px;
+    --bundle-mobile-button-radius: {{ section.settings.mobile_button_radius }}px;
+    --bundle-mobile-button-background: {{ section.settings.mobile_button_background }};
   }
 
   .bundle-builder {
@@ -1055,6 +1057,15 @@
     color: var(--color-button);
     text-decoration: underline;
   }
+
+  @media screen and (max-width: 768px) {
+    .bundle-button,
+    .bundle-button--add-another,
+    .bundle-button--remove {
+      border-radius: var(--bundle-mobile-button-radius);
+      background: var(--bundle-mobile-button-background);
+    }
+  }
 {%- endstyle -%}
 
 <!-- Add Toastify CDN in the head of your document -->
@@ -1156,7 +1167,7 @@
 
       async addBundleToCart() {
         if (this.selectedItems.length < this.bundleSize) {
-          this.showNotification(`💝 Please select ${this.bundleSize} items to complete your bundle`, 'error');
+          this.showNotification('{{ section.settings.bundle_incomplete_message }}', 'error');
           return;
         }
 
@@ -1205,17 +1216,14 @@
           this.isViewOpen = false;
 
           // Show success message
-          this.showNotification('🎉 Bundle added to cart! Taking you there... 🛒', 'success');
+          this.showNotification('{{ section.settings.bundle_added_message }}', 'success');
 
           // Redirect to cart page
           window.location.href = '/cart';
 
         } catch (error) {
           console.error('Bundle addition error:', error);
-          this.showNotification(
-            '😔 Oops! Something went wrong. Please try again.',
-            'error'
-          );
+          this.showNotification('{{ section.settings.bundle_error_message }}', 'error');
         } finally {
           this.loading = false;
         }
@@ -1412,7 +1420,7 @@
                           image: variantImage
                         })"
                         :disabled="selectedItems.length >= bundleSize">
-                  <span x-text="selectedItems.length >= bundleSize ? 'Box is Full' : 'Add to Bundle'"></span>
+                  <span x-text="selectedItems.length >= bundleSize ? '{{ section.settings.box_full_message }}' : '{{ section.settings.add_to_bundle_text }}'"></span>
                 </button>
                 
                 <template x-if="isProductSelected('{{ product.id }}')">
@@ -1427,11 +1435,11 @@
                               image: variantImage
                             })"
                             :disabled="selectedItems.length >= bundleSize">
-                      <span x-text="selectedItems.length >= bundleSize ? 'Box is Full' : 'Add Another'"></span>
+                      <span x-text="selectedItems.length >= bundleSize ? '{{ section.settings.box_full_message }}' : '{{ section.settings.add_another_text }}'"></span>
                     </button>
                     <button class="bundle-button bundle-button--remove"
                             @click="removeFromBundle('{{ product.id }}')">
-                      Remove
+                      {{ section.settings.remove_text }}
                     </button>
                   </div>
                 </template>
@@ -1447,7 +1455,7 @@
   <button class="bundle-view-button"
           @click="toggleView()"
           x-show="!isViewOpen">
-    View Box (<span x-text="selectedItems.length"></span>)
+    {{ section.settings.view_box_text }} (<span x-text="selectedItems.length"></span>)
   </button>
 
   <!-- Bundle View Sidebar -->
@@ -1464,8 +1472,8 @@
     
     <!-- Empty state message -->
     <div class="bundle-view-empty" x-show="selectedItems.length === 0">
-      <h4>Your bundle is empty</h4>
-      <p>Select items to create your custom bundle and save {{ section.settings.discount_percentage }}% on your purchase.</p>
+      <h4>{{ section.settings.empty_box_title }}</h4>
+      <p>{{ section.settings.empty_box_text }}</p>
     </div>
     
     <!-- Selected items -->
@@ -1479,7 +1487,7 @@
             <span class="bundle-item-price" x-text="formatMoney(item.price)"></span>
             <button class="bundle-item-remove"
                     @click="removeFromBundle(item.id)">
-              Remove
+              {{ section.settings.remove_text }}
             </button>
           </div>
         </div>
@@ -1511,8 +1519,8 @@
       <button class="add-bundle-to-cart"
               @click="addBundleToCart()"
               :disabled="selectedItems.length < bundleSize || loading">
-        <span x-show="!loading">Add Bundle to Cart</span>
-        <span x-show="loading">Adding to Cart...</span>
+        <span x-show="!loading">{{ section.settings.add_to_cart_text }}</span>
+        <span x-show="loading">{{ section.settings.adding_to_cart_text }}</span>
       </button>
     </div>
   </div>
@@ -1732,6 +1740,106 @@
       "type": "color",
       "id": "button_text_color_secondary",
       "label": "Secondary Button Text Color",
+      "default": "#000000"
+    },
+    {
+      "type": "header",
+      "content": "Button Text"
+    },
+    {
+      "type": "text",
+      "id": "add_to_bundle_text",
+      "label": "Add to Bundle Button Text",
+      "default": "Add to Bundle"
+    },
+    {
+      "type": "text",
+      "id": "add_another_text",
+      "label": "Add Another Button Text",
+      "default": "Add Another"
+    },
+    {
+      "type": "text",
+      "id": "remove_text",
+      "label": "Remove Button Text",
+      "default": "Remove"
+    },
+    {
+      "type": "text",
+      "id": "view_box_text",
+      "label": "View Box Button Text",
+      "default": "View Box"
+    },
+    {
+      "type": "text",
+      "id": "add_to_cart_text",
+      "label": "Add to Cart Button Text",
+      "default": "Add Bundle to Cart"
+    },
+    {
+      "type": "text",
+      "id": "adding_to_cart_text",
+      "label": "Adding to Cart Text",
+      "default": "Adding to Cart..."
+    },
+    {
+      "type": "header",
+      "content": "Messages"
+    },
+    {
+      "type": "text",
+      "id": "empty_box_title",
+      "label": "Empty Box Title",
+      "default": "Your bundle is empty"
+    },
+    {
+      "type": "text",
+      "id": "empty_box_text",
+      "label": "Empty Box Message",
+      "default": "Select items to create your custom bundle and save on your purchase."
+    },
+    {
+      "type": "text",
+      "id": "box_full_message",
+      "label": "Box Full Message",
+      "default": "Box is Full"
+    },
+    {
+      "type": "text",
+      "id": "bundle_added_message",
+      "label": "Bundle Added Message",
+      "default": "🎉 Bundle added to cart! Taking you there... 🛒"
+    },
+    {
+      "type": "text",
+      "id": "bundle_error_message",
+      "label": "Bundle Error Message",
+      "default": "😔 Oops! Something went wrong. Please try again."
+    },
+    {
+      "type": "text",
+      "id": "bundle_incomplete_message",
+      "label": "Bundle Incomplete Message",
+      "default": "💝 Please select all items to complete your bundle"
+    },
+    {
+      "type": "header",
+      "content": "Mobile Specific Settings"
+    },
+    {
+      "type": "range",
+      "id": "mobile_button_radius",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "label": "Mobile Button Border Radius",
+      "default": 4
+    },
+    {
+      "type": "color",
+      "id": "mobile_button_background",
+      "label": "Mobile Button Background",
       "default": "#000000"
     }
   ],
