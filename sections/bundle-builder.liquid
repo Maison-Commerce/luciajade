@@ -1398,7 +1398,9 @@
             </div>
             
             <div class="bundle-product-controls">
+              <!-- Only show variant dropdown if product has more than one variant -->
               <select class="variant-dropdown"
+                      x-show="{% raw %}{{ product.variants.size > 1 }}{% endraw %}"
                       :value="selectedVariant.id"
                       @change="
                         const variant = $event.target.selectedOptions[0].dataset;
