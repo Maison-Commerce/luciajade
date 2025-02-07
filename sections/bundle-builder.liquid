@@ -1551,13 +1551,11 @@
       <button class="close-button" @click="toggleView()">Close</button>
     </div>
 
-      <div class="bundle-progress-text">
-        <template x-if="bundleSize - selectedItems.length === 0">
-          Box is full! 📦
-        </template>
-        <template x-if="bundleSize - selectedItems.length > 0">
-          Add <span x-text="bundleSize - selectedItems.length"></span> more product<span x-if="bundleSize - selectedItems.length > 1">s</span> to fill your box 🎁
-        </template>
+      <div class="bundle-progress-text" x-text="
+        bundleSize - selectedItems.length === 0 
+          ? 'Box is full! 📦' 
+          : `Add ${bundleSize - selectedItems.length} more product${bundleSize - selectedItems.length > 1 ? 's' : ''} to fill your box 🎁`
+      ">
       </div>
       
       <div class="bundle-progress-bar">
