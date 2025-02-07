@@ -147,6 +147,7 @@
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
+    text-align: center;
   }
 
   .bundle-product-price {
@@ -154,6 +155,7 @@
     font-weight: 600;
     color: #111827;
     margin: 0 0 1rem;
+    text-align: center;
   }
 
   .variant-dropdown {
@@ -241,7 +243,7 @@
 
   .bundle-notifications {
     position: fixed;
-    top: 70px;
+    top: 80px;
     left: 20px;
     z-index: 1000;
   }
@@ -250,14 +252,14 @@
   @media screen and (max-width: 768px) {
     .bundle-notifications {
       bottom: auto;
-      top: 70px;
+      top: 80px;
     }
 
     /* Adjust Toastify positioning for mobile */
     .toastify {
       left: 20px !important;
       right: 20px !important;
-      top: 70px !important;
+      top: 80px !important;
       bottom: auto !important;
       max-width: calc(100% - 40px) !important;
       transform: translateX(0) !important;
@@ -1015,6 +1017,21 @@
     flex-direction: column;
     align-items: center;
   }
+
+  .bundle-product-title-link {
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.2s ease;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .bundle-product-title-link:hover {
+    color: var(--color-button);
+    text-decoration: underline;
+  }
 {%- endstyle -%}
 
 <!-- Add Toastify CDN in the head of your document -->
@@ -1325,7 +1342,14 @@
           
           <div class="bundle-product-content">
             <div class="bundle-product-info">
-              <h3 class="bundle-product-title">{{ product.title }}</h3>
+              <h3 class="bundle-product-title">
+                <a href="{{ product.url }}" 
+                   class="bundle-product-title-link" 
+                   target="_blank" 
+                   title="View {{ product.title }}">
+                  {{ product.title }}
+                </a>
+              </h3>
               <p class="bundle-product-price" x-text="formatMoney(selectedVariant.price)"></p>
             </div>
             
