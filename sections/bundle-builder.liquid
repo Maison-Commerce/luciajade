@@ -504,18 +504,19 @@
     margin: 30px auto;
     max-width: 400px;
     text-align: center;
-    position: -webkit-sticky;
-    position: sticky;
+    position: fixed;
     top: 20px;
-    z-index: 100;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
     background: var(--color-background);
     padding: 15px;
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     display: block;
     overflow: visible;
-    transform: translate3d(0, 0, 0);
-    will-change: position, transform;
+    will-change: transform;
+    transition: all 0.3s ease;
   }
 
   .bundle-progress-text {
@@ -987,19 +988,12 @@
     }
   }
 
-  @supports (position: sticky) {
-    .bundle-progress-container {
-      position: -webkit-sticky;
-      position: sticky;
-    }
-  }
 
   @media screen and (max-width: 768px) {
     .bundle-progress-container {
-      position: -webkit-sticky;
-      position: sticky;
-      top: 0;
-      margin: 15px auto;
+      width: calc(100% - 40px);
+      max-width: none;
+      top: 10px;
     }
   }
 {%- endstyle -%}
