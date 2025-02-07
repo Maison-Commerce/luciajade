@@ -1480,9 +1480,8 @@
                               variantImage = '{{ product.featured_image | img_url: '300x300', crop: 'center' }}';
                             }
                           ">
-                    <option value="">Select {{ option.name }}</option>
                     {% for value in option.values %}
-                      <option value="{{ value }}">{{ value }}</option>
+                      <option value="{{ value }}" {% if forloop.first %}selected{% endif %}>{{ value }}</option>
                     {% endfor %}
                   </select>
                 {% endfor %}
