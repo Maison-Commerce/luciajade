@@ -37,6 +37,8 @@
     --bundle-mobile-secondary-button-color: {{ section.settings.mobile_secondary_button_color }};
     --bundle-mobile-button-text-color: {{ section.settings.mobile_button_text_color }};
     --bundle-mobile-secondary-button-text-color: {{ section.settings.mobile_secondary_button_text_color }};
+    --bundle-mobile-add-text-color: {{ section.settings.mobile_add_text_color }};
+    --bundle-mobile-remove-text-color: {{ section.settings.mobile_remove_text_color }};
   }
 
   .bundle-builder {
@@ -256,18 +258,18 @@
   }
 
   .bundle-button--add-another {
-    background: var(--color-button);
+    background: var(--bundle-primary-color);
     color: var(--bundle-button-text-color);
   }
 
   .bundle-button--remove {
     background: transparent;
-    border: 1px solid var(--color-button);
+    border: 1px solid var(--bundle-primary-color);
     color: var(--bundle-button-text-color-secondary);
   }
 
   .bundle-button--remove:hover:not(:disabled) {
-    background: var(--color-button);
+    background: var(--bundle-primary-color);
     color: var(--bundle-button-text-color);
   }
 
@@ -942,18 +944,18 @@
   }
 
   .bundle-button--add-another {
-    background: var(--color-button);
+    background: var(--bundle-primary-color);
   }
 
   .bundle-button--remove {
     background: transparent;
-    border: 1px solid var(--color-button);
-    color: var(--color-button);
+    border: 1px solid var(--bundle-primary-color);
+    color: var(--bundle-button-text-color-secondary);
   }
 
   .bundle-button--remove:hover {
-    background: var(--color-button);
-    color: var(--color-button-text);
+    background: var(--bundle-primary-color);
+    color: var(--bundle-button-text-color);
   }
 
   /* Mobile Styles */
@@ -1065,11 +1067,15 @@
   }
 
   @media screen and (max-width: 768px) {
-    .bundle-button,
+    .bundle-button {
+      background-color: var(--bundle-mobile-add-button-color) !important;
+      color: var(--bundle-mobile-add-text-color) !important;
+    }
+
     .bundle-button--add-another,
     .bundle-button--remove {
-      border-radius: var(--bundle-mobile-button-radius);
-      background: var(--bundle-mobile-button-background);
+      background-color: var(--bundle-mobile-remove-button-color) !important;
+      color: var(--bundle-mobile-remove-text-color) !important;
     }
   }
 {%- endstyle -%}
@@ -1782,25 +1788,25 @@
       "type": "color",
       "id": "mobile_add_button_color",
       "label": "Mobile Add to Bundle Button Color",
-      "default": "#000000"
+      "default": "#44AC52"
     },
     {
       "type": "color",
-      "id": "mobile_secondary_button_color",
+      "id": "mobile_remove_button_color",
       "label": "Mobile Remove/Add Another Button Color",
-      "default": "#333333"
+      "default": "#44AC52"
     },
     {
       "type": "color",
-      "id": "mobile_button_text_color",
+      "id": "mobile_add_text_color",
       "label": "Mobile Add Button Text Color",
-      "default": "#ffffff"
+      "default": "#212121"
     },
     {
       "type": "color",
-      "id": "mobile_secondary_button_text_color",
+      "id": "mobile_remove_text_color",
       "label": "Mobile Remove/Add Another Button Text Color",
-      "default": "#ffffff"
+      "default": "#000000"
     },
     {
       "type": "header",
