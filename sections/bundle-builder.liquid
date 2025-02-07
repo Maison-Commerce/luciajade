@@ -74,6 +74,9 @@
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
   }
 
   .bundle-product-card:hover {
@@ -124,6 +127,14 @@
 
   .bundle-product-content {
     padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    justify-content: space-between;
+  }
+
+  .bundle-product-info {
+    margin-bottom: 1rem;
   }
 
   .bundle-product-title {
@@ -183,7 +194,9 @@
   }
 
   .bundle-button {
-    width: 100%;
+    background: linear-gradient(to right, #000000, #333333);
+    border: none;
+    color: #ffffff;
     padding: 0.875rem 1.5rem;
     border-radius: 8px;
     font-weight: 500;
@@ -191,14 +204,13 @@
     text-transform: uppercase;
     letter-spacing: 0.025em;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    background: var(--color-button);
-    color: var(--color-button-text);
-    border: 1px solid transparent;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   }
 
   .bundle-button:hover:not(:disabled) {
+    background: linear-gradient(to right, #333333, #000000);
     transform: translateY(-1px);
-    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.15);
   }
 
   .bundle-button:disabled {
@@ -1304,67 +1316,71 @@
           </div>
           
           <div class="bundle-product-content">
-            <h3 class="bundle-product-title">{{ product.title }}</h3>
-            <p class="bundle-product-price" x-text="formatMoney(selectedVariant.price)"></p>
+            <div class="bundle-product-info">
+              <h3 class="bundle-product-title">{{ product.title }}</h3>
+              <p class="bundle-product-price" x-text="formatMoney(selectedVariant.price)"></p>
+            </div>
             
-            <select class="variant-dropdown"
-                    :value="selectedVariant.id"
-                    @change="
-                      const variant = $event.target.selectedOptions[0].dataset;
-                      selectedVariant = {
-                        id: variant.id,
-                        price: parseFloat(variant.price),
-                        title: variant.title
-                      };
-                      variantImage = variant.image;
-                    ">
-              {% for variant in product.variants %}
-                {% assign option_text = variant.title | split: ' / ' | first %}
-                <option value="{{ variant.id }}"
-                        data-id="{{ variant.id }}"
-                        data-price="{{ variant.price }}"
-                        data-title="{{ option_text }}"
-                        data-image="{{ variant.featured_image | default: product.featured_image | img_url: '300x300', crop: 'center' }}">
-                  {{ option_text }}
-                </option>
-              {% endfor %}
-            </select>
-            
-            <div class="bundle-button-group">
-              <button class="bundle-button"
-                      x-show="!isProductSelected('{{ product.id }}')"
-                      @click="addToBundle({
-                        id: '{{ product.id }}',
-                        variant_id: selectedVariant.id,
-                        title: '{{ product.title | escape }}',
-                        price: selectedVariant.price,
-                        variant_title: selectedVariant.title,
-                        image: variantImage
-                      })"
-                      :disabled="selectedItems.length >= bundleSize">
-                <span x-text="selectedItems.length >= bundleSize ? 'Box is Full' : 'Add to Bundle'"></span>
-              </button>
+            <div class="bundle-product-controls">
+              <select class="variant-dropdown"
+                      :value="selectedVariant.id"
+                      @change="
+                        const variant = $event.target.selectedOptions[0].dataset;
+                        selectedVariant = {
+                          id: variant.id,
+                          price: parseFloat(variant.price),
+                          title: variant.title
+                        };
+                        variantImage = variant.image;
+                      ">
+                {% for variant in product.variants %}
+                  {% assign option_text = variant.title | split: ' / ' | first %}
+                  <option value="{{ variant.id }}"
+                          data-id="{{ variant.id }}"
+                          data-price="{{ variant.price }}"
+                          data-title="{{ option_text }}"
+                          data-image="{{ variant.featured_image | default: product.featured_image | img_url: '300x300', crop: 'center' }}">
+                    {{ option_text }}
+                  </option>
+                {% endfor %}
+              </select>
               
-              <template x-if="isProductSelected('{{ product.id }}')">
-                <div class="bundle-button-row">
-                  <button class="bundle-button bundle-button--add-another"
-                          @click="addToBundle({
-                            id: '{{ product.id }}',
-                            variant_id: selectedVariant.id,
-                            title: '{{ product.title | escape }}',
-                            price: selectedVariant.price,
-                            variant_title: selectedVariant.title,
-                            image: variantImage
-                          })"
-                          :disabled="selectedItems.length >= bundleSize">
-                    <span x-text="selectedItems.length >= bundleSize ? 'Box is Full' : 'Add Another'"></span>
-                  </button>
-                  <button class="bundle-button bundle-button--remove"
-                          @click="removeFromBundle('{{ product.id }}')">
-                    Remove
-                  </button>
-                </div>
-              </template>
+              <div class="bundle-button-group">
+                <button class="bundle-button"
+                        x-show="!isProductSelected('{{ product.id }}')"
+                        @click="addToBundle({
+                          id: '{{ product.id }}',
+                          variant_id: selectedVariant.id,
+                          title: '{{ product.title | escape }}',
+                          price: selectedVariant.price,
+                          variant_title: selectedVariant.title,
+                          image: variantImage
+                        })"
+                        :disabled="selectedItems.length >= bundleSize">
+                  <span x-text="selectedItems.length >= bundleSize ? 'Box is Full' : 'Add to Bundle'"></span>
+                </button>
+                
+                <template x-if="isProductSelected('{{ product.id }}')">
+                  <div class="bundle-button-row">
+                    <button class="bundle-button bundle-button--add-another"
+                            @click="addToBundle({
+                              id: '{{ product.id }}',
+                              variant_id: selectedVariant.id,
+                              title: '{{ product.title | escape }}',
+                              price: selectedVariant.price,
+                              variant_title: selectedVariant.title,
+                              image: variantImage
+                            })"
+                            :disabled="selectedItems.length >= bundleSize">
+                      <span x-text="selectedItems.length >= bundleSize ? 'Box is Full' : 'Add Another'"></span>
+                    </button>
+                    <button class="bundle-button bundle-button--remove"
+                            @click="removeFromBundle('{{ product.id }}')">
+                      Remove
+                    </button>
+                  </div>
+                </template>
+              </div>
             </div>
           </div>
         </div>
