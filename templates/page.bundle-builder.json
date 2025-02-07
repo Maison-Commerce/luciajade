@@ -11,6 +11,7 @@
   "sections": {
     "main": {
       "type": "main-page",
+      "disabled": true,
       "settings": {
         "subheading": "",
         "show_title": true,
@@ -112,6 +113,7 @@
         "icon_pc9egM",
         "icon_chJcDP"
       ],
+      "disabled": true,
       "settings": {
         "customclass": "",
         "title": "",
@@ -211,6 +213,7 @@
         "header_TaeeM9",
         "accordion_cGg84r"
       ],
+      "disabled": true,
       "settings": {
         "heading_font_size": "heading-small",
         "width": "wrapper",
