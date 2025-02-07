@@ -1137,27 +1137,6 @@
       font-size: 13px;
     }
   }
-
-  /* Add these new styles */
-  .variant-selectors {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    margin-bottom: 12px;
-    width: 100%;
-  }
-
-  .variant-option-group {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-  }
-
-  .option-label {
-    font-size: 0.85em;
-    color: var(--bundle-text-color);
-    opacity: 0.8;
-  }
 {%- endstyle -%}
 
 <!-- Add Toastify CDN in the head of your document -->
@@ -1441,31 +1420,13 @@
       {% for product in collections[section.settings.bundle_collection].products %}
         <div class="bundle-product-card" 
              x-data="{ 
-               options: {{ product.options_with_values | json }},
-               variants: {{ product.variants | json }},
-               selectedOptions: {},
-               selectedVariant: null,
-               variantImage: '{{ product.featured_image | img_url: '300x300', crop: 'center' }}',
-               
-               init() {
-                 // Initialize with first available variant's options
-                 this.options.forEach(option => {
-                   this.selectedOptions[option.name] = option.values[0];
-                 });
-                 this.updateSelectedVariant();
+               showVariants: false,
+               selectedVariant: {
+                 id: '{{ product.first_available_variant.id }}',
+                 price: {{ product.first_available_variant.price }},
+                 title: '{{ product.first_available_variant.title | split: ' / ' | first | escape }}'
                },
-               
-               updateSelectedVariant() {
-                 this.selectedVariant = this.variants.find(variant => 
-                   this.options.every((option, index) => 
-                     variant.options[index] === this.selectedOptions[option.name]
-                   )
-                 );
-                 
-                 if (this.selectedVariant?.featured_image) {
-                   this.variantImage = this.selectedVariant.featured_image.src;
-                 }
-               }
+               variantImage: '{{ product.featured_image | img_url: '300x300', crop: 'center' }}'
              }"
              x-show="selectedType === 'all' || selectedType === '{{ product.type | escape }}'"
              :class="{ 'selected': isProductSelected('{{ product.id }}') }">
@@ -1497,20 +1458,36 @@
             </div>
             
             <div class="bundle-product-controls">
-              <div class="variant-selectors">
-                <template x-for="option in options" :key="option.name">
-                  <div class="variant-option-group">
-                    <label class="option-label" x-text="option.name"></label>
-                    <select class="variant-dropdown"
-                            x-model="selectedOptions[option.name]"
-                            @change="updateSelectedVariant()">
-                      <template x-for="value in option.values" :key="value">
-                        <option x-text="value"></option>
-                      </template>
-                    </select>
-                  </div>
-                </template>
-              </div>
+              {% if product.variants.size > 1 %}
+                <select class="variant-dropdown"
+                        :value="selectedVariant.id"
+                        @change="
+                          const variant = $event.target.selectedOptions[0].dataset;
+                          selectedVariant = {
+                            id: variant.id,
+                            price: parseFloat(variant.price),
+                            title: variant.title
+                          };
+                          variantImage = variant.image;
+                        ">
+                  {% for variant in product.variants %}
+                    {% assign option_text = variant.title | split: ' / ' | first %}
+                    <option value="{{ variant.id }}"
+                            data-id="{{ variant.id }}"
+                            data-price="{{ variant.price }}"
+                            data-title="{{ option_text }}"
+                            data-image="{{ variant.featured_image | default: product.featured_image | img_url: '300x300', crop: 'center' }}">
+                      {{ option_text }}
+                    </option>
+                  {% endfor %}
+                </select>
+              {% else %}
+                {% assign single_variant = product.variants.first %}
+                {% assign variant_title = single_variant.title | split: ' / ' | first %}
+                {% unless variant_title == 'Default Title' %}
+                  <div class="variant-single">{{ variant_title }}</div>
+                {% endunless %}
+              {% endif %}
               
               <div class="bundle-button-group">
                 <button class="bundle-button"
@@ -1520,10 +1497,10 @@
                           variant_id: selectedVariant.id,
                           title: '{{ product.title | escape }}',
                           price: selectedVariant.price,
-                          variant_title: Object.values(selectedOptions).join(' / '),
+                          variant_title: selectedVariant.title,
                           image: variantImage
                         })"
-                        :disabled="!selectedVariant || selectedItems.length >= bundleSize">
+                        :disabled="selectedItems.length >= bundleSize">
                   <span x-text="selectedItems.length >= bundleSize ? '{{ section.settings.box_full_message }}' : '{{ section.settings.add_to_bundle_text }}'"></span>
                 </button>
                 
@@ -1535,7 +1512,7 @@
                               variant_id: selectedVariant.id,
                               title: '{{ product.title | escape }}',
                               price: selectedVariant.price,
-                              variant_title: Object.values(selectedOptions).join(' / '),
+                              variant_title: selectedVariant.title,
                               image: variantImage
                             })"
                             :disabled="selectedItems.length >= bundleSize">
