@@ -1477,7 +1477,13 @@
                                 price: parseFloat(variant.price),
                                 title: variant.title
                               };
-                              variantImage = '{{ product.featured_image | img_url: '300x300', crop: 'center' }}';
+                              // Update image based on variant
+                              const variantImages = {{ product.images | json }};
+                              const variantImageId = {{ product.variants | json }}.find(v => v.id.toString() === variant.id.toString())?.image_id;
+                              const variantImage = variantImages.find(img => img.id === variantImageId);
+                              if (variantImage) {
+                                variantImage = '{{ product.images[forloop.index0] | img_url: '300x300', crop: 'center' }}';
+                              }
                             }
                           ">
                     {% for value in option.values %}
