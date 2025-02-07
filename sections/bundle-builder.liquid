@@ -1467,19 +1467,27 @@
                 {% for option in product.options_with_values %}
                   <select class="variant-dropdown"
                           @change="
+                            // Get all select values from the current product card
                             const selectedOptions = Array.from($el.closest('.bundle-product-controls').querySelectorAll('.variant-dropdown')).map(select => select.value);
+                            
+                            // Find matching variant based on selected options
                             const variant = {{ product.variants | json }}.find(v => 
                               v.options.every((opt, index) => opt === selectedOptions[index])
                             );
+                            
                             if (variant) {
+                              // Update selected variant data
                               selectedVariant = {
                                 id: variant.id.toString(),
                                 price: parseFloat(variant.price),
                                 title: variant.title
                               };
-                              // Update the image if the variant has one
+
+                              // Get variant images array and find current variant index
                               const variantImages = {{ product.variants | json | map: 'featured_image' }};
                               const variantIndex = {{ product.variants | json }}.findIndex(v => v.id === variant.id);
+
+                              // Update image if variant has custom image, otherwise use product featured image
                               if (variantImages[variantIndex] && variantImages[variantIndex] !== null) {
                                 variantImage = variantImages[variantIndex].src;
                               } else {
