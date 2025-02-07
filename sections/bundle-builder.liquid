@@ -1340,6 +1340,12 @@
           Complete
         </div>
       </div>
+        <!-- View Box Button -->
+      <button class="bundle-view-button"
+              @click="toggleView()"
+              x-show="!isViewOpen">
+        {{ section.settings.view_box_text }} (<span x-text="selectedItems.length"></span>)
+      </button>
     </div>
   
   <div class="bundle-builder__header">
