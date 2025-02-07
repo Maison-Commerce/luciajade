@@ -1616,7 +1616,7 @@
     },
     {
       "type": "header",
-      "content": "Design Settings"
+      "content": "Desktop Design Settings"
     },
     {
       "type": "range",
@@ -1660,7 +1660,7 @@
     },
     {
       "type": "header",
-      "content": "Typography"
+      "content": "Desktop Typography"
     },
     {
       "type": "range",
@@ -1691,6 +1691,40 @@
       "unit": "px",
       "label": "General Text Size",
       "default": 14
+    },
+    {
+      "type": "header",
+      "content": "Mobile Design Settings"
+    },
+    {
+      "type": "range",
+      "id": "mobile_card_radius",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "label": "Mobile Card Border Radius",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "mobile_button_radius",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "label": "Mobile Button Border Radius",
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "mobile_input_radius",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "label": "Mobile Input Border Radius",
+      "default": 4
     },
     {
       "type": "header",
@@ -1761,6 +1795,12 @@
       "default": "#000000"
     },
     {
+      "type": "color",
+      "id": "mobile_button_background",
+      "label": "Mobile Button Background",
+      "default": "#000000"
+    },
+    {
       "type": "header",
       "content": "Button Text"
     },
@@ -1802,66 +1842,6 @@
     },
     {
       "type": "header",
-      "content": "Messages"
-    },
-    {
-      "type": "text",
-      "id": "empty_box_title",
-      "label": "Empty Box Title",
-      "default": "Your bundle is empty"
-    },
-    {
-      "type": "text",
-      "id": "empty_box_text",
-      "label": "Empty Box Message",
-      "default": "Select items to create your custom bundle and save on your purchase."
-    },
-    {
-      "type": "text",
-      "id": "box_full_message",
-      "label": "Box Full Message",
-      "default": "Box is Full"
-    },
-    {
-      "type": "text",
-      "id": "bundle_added_message",
-      "label": "Bundle Added Message",
-      "default": "🎉 Bundle added to cart! Taking you there... 🛒"
-    },
-    {
-      "type": "text",
-      "id": "bundle_error_message",
-      "label": "Bundle Error Message",
-      "default": "😔 Oops! Something went wrong. Please try again."
-    },
-    {
-      "type": "text",
-      "id": "bundle_incomplete_message",
-      "label": "Bundle Incomplete Message",
-      "default": "💝 Please select all items to complete your bundle"
-    },
-    {
-      "type": "header",
-      "content": "Mobile Specific Settings"
-    },
-    {
-      "type": "range",
-      "id": "mobile_button_radius",
-      "min": 0,
-      "max": 30,
-      "step": 1,
-      "unit": "px",
-      "label": "Mobile Button Border Radius",
-      "default": 4
-    },
-    {
-      "type": "color",
-      "id": "mobile_button_background",
-      "label": "Mobile Button Background",
-      "default": "#000000"
-    },
-    {
-      "type": "header",
       "content": "Notification Messages"
     },
     {
@@ -1887,6 +1867,24 @@
       "id": "exceed_size_notification",
       "label": "Exceed Size Notification",
       "default": "⚠️ Cannot exceed bundle size of {size} 🛑"
+    },
+    {
+      "type": "text",
+      "id": "bundle_added_message",
+      "label": "Bundle Added Message",
+      "default": "🎉 Bundle added to cart! Taking you there... 🛒"
+    },
+    {
+      "type": "text",
+      "id": "bundle_error_message",
+      "label": "Bundle Error Message",
+      "default": "😔 Oops! Something went wrong. Please try again."
+    },
+    {
+      "type": "text",
+      "id": "bundle_incomplete_message",
+      "label": "Bundle Incomplete Message",
+      "default": "💝 Please select all items to complete your bundle"
     }
   ],
   "presets": [
