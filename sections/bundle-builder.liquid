@@ -29,8 +29,6 @@
     --bundle-mobile-title-size: {{ section.settings.mobile_title_size }}px;
     --bundle-mobile-price-size: {{ section.settings.mobile_price_size }}px;
     --bundle-mobile-text-size: {{ section.settings.mobile_text_size }}px;
-    --bundle-mobile-input-size: calc({{ section.settings.text_size }}px * 2);
-    --bundle-mobile-button-size: calc({{ section.settings.text_size }}px * 2);
   }
 
   .bundle-builder {
@@ -804,15 +802,17 @@
 
     .variant-dropdown {
       padding: var(--bundle-mobile-input-size);
-      font-size: var(--bundle-mobile-input-size);
+      font-size: 15px;
       margin-bottom: 0.5rem;
       background-position: right 0.5rem center;
       background-size: var(--bundle-mobile-input-size);
     }
 
-    .bundle-button {
+    .bundle-button,
+    .bundle-button--add-another,
+    .bundle-button--remove {
       padding: var(--bundle-mobile-button-size);
-      font-size: var(--bundle-mobile-button-size);
+      font-size: 15px;
       letter-spacing: 0.01em;
     }
 
@@ -823,7 +823,6 @@
     .bundle-button--add-another,
     .bundle-button--remove {
       padding: 8px;
-      font-size: 0.7rem;
       min-height: 32px;
       display: flex;
       align-items: center;
