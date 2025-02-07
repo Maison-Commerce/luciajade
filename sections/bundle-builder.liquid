@@ -1116,34 +1116,30 @@
 
       addToBundle(product) {
         if (this.selectedItems.length >= this.bundleSize) {
-          this.showNotification('🎁 Your bundle box is full! 🛑', 'error');
+          this.showNotification('{{ section.settings.box_full_notification }}', 'error');
           return;
         }
 
-        // Add unique instance ID to distinguish multiple instances of same product
         const bundleItem = {
           ...product,
-          instanceId: `${product.id}_${Date.now()}`, // Unique identifier for this instance
+          instanceId: `${product.id}_${Date.now()}`,
           quantity: 1
         };
 
         this.selectedItems.push(bundleItem);
         localStorage.setItem('currentBundle', JSON.stringify(this.selectedItems));
-        this.showNotification('✨ Item added to your bundle! 🛍️', 'success');
+        this.showNotification('{{ section.settings.item_added_notification }}', 'success');
       },
 
       removeFromBundle(productId) {
-        // Find the last instance of this product in the array
         const lastIndex = [...this.selectedItems].reverse()
           .findIndex(item => item.id === productId);
         
         if (lastIndex !== -1) {
-          // Convert the reverse index to the actual index
           const actualIndex = this.selectedItems.length - 1 - lastIndex;
-          // Remove the item at the actual index
           this.selectedItems.splice(actualIndex, 1);
           localStorage.setItem('currentBundle', JSON.stringify(this.selectedItems));
-          this.showNotification('❌ Item removed from bundle', 'success');
+          this.showNotification('{{ section.settings.item_removed_notification }}', 'success');
         }
       },
 
@@ -1154,10 +1150,10 @@
         const newQuantity = item.quantity + change;
         if (newQuantity < 1) return;
 
-        // Calculate how many slots this change would use
         const currentTotalItems = this.selectedItems.reduce((sum, i) => sum + i.quantity, 0);
         if (currentTotalItems + change > this.bundleSize) {
-          this.showNotification(`⚠️ Cannot exceed bundle size of ${this.bundleSize} 🛑`, 'error');
+          const message = '{{ section.settings.exceed_size_notification }}'.replace('{size}', this.bundleSize);
+          this.showNotification(message, 'error');
           return;
         }
 
@@ -1863,6 +1859,34 @@
       "id": "mobile_button_background",
       "label": "Mobile Button Background",
       "default": "#000000"
+    },
+    {
+      "type": "header",
+      "content": "Notification Messages"
+    },
+    {
+      "type": "text",
+      "id": "box_full_notification",
+      "label": "Box Full Notification",
+      "default": "🎁 Your bundle box is full! 🛑"
+    },
+    {
+      "type": "text",
+      "id": "item_added_notification",
+      "label": "Item Added Notification",
+      "default": "✨ Item added to your bundle! 🛍️"
+    },
+    {
+      "type": "text",
+      "id": "item_removed_notification",
+      "label": "Item Removed Notification",
+      "default": "❌ Item removed from bundle"
+    },
+    {
+      "type": "text",
+      "id": "exceed_size_notification",
+      "label": "Exceed Size Notification",
+      "default": "⚠️ Cannot exceed bundle size of {size} 🛑"
     }
   ],
   "presets": [
