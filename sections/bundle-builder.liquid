@@ -1398,30 +1398,31 @@
             </div>
             
             <div class="bundle-product-controls">
-              <!-- Only show variant dropdown if product has more than one variant -->
-              <select class="variant-dropdown"
-                      x-show="{% raw %}{{ product.variants.size > 1 }}{% endraw %}"
-                      :value="selectedVariant.id"
-                      @change="
-                        const variant = $event.target.selectedOptions[0].dataset;
-                        selectedVariant = {
-                          id: variant.id,
-                          price: parseFloat(variant.price),
-                          title: variant.title
-                        };
-                        variantImage = variant.image;
-                      ">
-                {% for variant in product.variants %}
-                  {% assign option_text = variant.title | split: ' / ' | first %}
-                  <option value="{{ variant.id }}"
-                          data-id="{{ variant.id }}"
-                          data-price="{{ variant.price }}"
-                          data-title="{{ option_text }}"
-                          data-image="{{ variant.featured_image | default: product.featured_image | img_url: '300x300', crop: 'center' }}">
-                    {{ option_text }}
-                  </option>
-                {% endfor %}
-              </select>
+              <!-- Only show variant dropdown if product has more than one option -->
+              {% if product.options.size > 1 %}
+                <select class="variant-dropdown"
+                        :value="selectedVariant.id"
+                        @change="
+                          const variant = $event.target.selectedOptions[0].dataset;
+                          selectedVariant = {
+                            id: variant.id,
+                            price: parseFloat(variant.price),
+                            title: variant.title
+                          };
+                          variantImage = variant.image;
+                        ">
+                  {% for variant in product.variants %}
+                    {% assign option_text = variant.title | split: ' / ' | first %}
+                    <option value="{{ variant.id }}"
+                            data-id="{{ variant.id }}"
+                            data-price="{{ variant.price }}"
+                            data-title="{{ option_text }}"
+                            data-image="{{ variant.featured_image | default: product.featured_image | img_url: '300x300', crop: 'center' }}">
+                      {{ option_text }}
+                    </option>
+                  {% endfor %}
+                </select>
+              {% endif %}
               
               <div class="bundle-button-group">
                 <button class="bundle-button"
