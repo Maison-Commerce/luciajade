@@ -996,7 +996,7 @@
     }
 
     .bundle-button {
-      padding: 4px 6px;
+      padding: 12px 5px;
       font-size: 15px;
       min-height: 24px;
     }
@@ -1007,7 +1007,7 @@
 
     .bundle-button--add-another,
     .bundle-button--remove {
-      padding: 5px 10px !important;
+      padding: 5px 1px !important;
       font-size: 13px;
       min-height: 24px;
     }
@@ -1520,8 +1520,17 @@
 
 <script>
   function truncateVariantOptions() {
-    const isMobile = window.innerWidth <= 768;
-    const maxLength = isMobile ? 15 : 22;
+    const windowWidth = window.innerWidth;
+    let maxLength;
+    
+    // Set different maxLength based on screen size
+    if (windowWidth <= 465) {
+      maxLength = 10; // Extra small devices
+    } else if (windowWidth <= 768) {
+      maxLength = 15; // Mobile devices
+    } else {
+      maxLength = 22; // Larger devices
+    }
     
     document.querySelectorAll('.variant-dropdown').forEach(dropdown => {
       Array.from(dropdown.options).forEach(option => {
