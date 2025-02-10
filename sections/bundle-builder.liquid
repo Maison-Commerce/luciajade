@@ -1440,10 +1440,16 @@
       {% for product in collections[section.settings.bundle_collection].products %}
         <div class="bundle-product-card" 
              x-data="{ 
-               options: {},
+               product: {
+                 id: '{{ product.id }}',
+                 title: '{{ product.title | escape }}',
+                 options: {{ product.options_with_values | json }},
+                 variants: {{ product.variants | json }},
+                 featured_image: '{{ product.featured_image | img_url: '300x300', crop: 'center' }}'
+               },
                selectedVariant: null,
                variantImage: '{{ product.featured_image | img_url: '300x300', crop: 'center' }}',
-               variants: {{ product.variants | json }},
+               options: {},
                
                init() {
                  // Initialize options with default values
@@ -1456,7 +1462,7 @@
                },
                
                findMatchingVariant() {
-                 return this.variants.find(variant => {
+                 return this.product.variants.find(variant => {
                    // Create arrays of option values to compare
                    const variantOptions = variant.options.map(opt => opt.toString().toLowerCase());
                    const selectedOptions = Object.values(this.options).map(opt => opt.toString().toLowerCase());
@@ -1471,7 +1477,7 @@
                  if (variant) {
                    this.selectedVariant = variant;
                    // Use a fallback image if variant image is not available
-                   this.variantImage = variant.featured_image?.src || this.variantImage;
+                   this.variantImage = variant.featured_image?.src || this.product.featured_image;
                  }
                }
              }"
@@ -1481,7 +1487,7 @@
           
           <div class="bundle-product-image-wrapper">
             <img :src="variantImage" 
-                 alt="{{ product.title }}"
+                 :alt="product.title"
                  loading="lazy"
                  width="300"
                  height="300">
@@ -1495,31 +1501,29 @@
           <div class="bundle-product-content">
             <div class="bundle-product-info">
               <h3 class="bundle-product-title">
-                <a href="{{ product.url }}" class="bundle-product-title-link">
-                  {{ product.title }}
-                </a>
+                <a :href="'/products/' + product.handle" class="bundle-product-title-link" x-text="product.title"></a>
               </h3>
               <p class="bundle-product-price" x-text="formatMoney(selectedVariant?.price || {{ product.price }})"></p>
             </div>
             
             <div class="bundle-product-controls">
-              {% for option in product.options_with_values %}
+              <template x-for="(values, name) in options" :key="name">
                 <select class="variant-dropdown"
-                        x-model="options['{{ option.name }}']"
+                        x-model="options[name]"
                         @change="updateVariant()">
-                  {% for value in option.values %}
-                    <option value="{{ value }}">{{ option.name }}: {{ value }}</option>
-                  {% endfor %}
+                  <template x-for="value in values" :key="value">
+                    <option :value="value" x-text="`${name}: ${value}`"></option>
+                  </template>
                 </select>
-              {% endfor %}
+              </template>
               
               <div class="bundle-button-group">
                 <button class="bundle-button"
-                        x-show="!isProductSelected('{{ product.id }}')"
+                        x-show="!isProductSelected(product.id)"
                         @click="addToBundle({
-                          id: '{{ product.id }}',
+                          id: product.id,
                           variant_id: selectedVariant?.id,
-                          title: '{{ product.title | escape }}',
+                          title: product.title,
                           price: selectedVariant?.price,
                           variant_title: selectedVariant?.title,
                           image: variantImage,
@@ -1533,9 +1537,9 @@
                   <div class="bundle-button-row">
                     <button class="bundle-button--add-another"
                             @click="addToBundle({
-                              id: '{{ product.id }}',
+                              id: product.id,
                               variant_id: selectedVariant?.id,
-                              title: '{{ product.title | escape }}',
+                              title: product.title,
                               price: selectedVariant?.price,
                               variant_title: selectedVariant?.title,
                               image: variantImage,
