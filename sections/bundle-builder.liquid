@@ -1420,44 +1420,47 @@
       {% for product in collections[section.settings.bundle_collection].products %}
         <div class="bundle-product-card" 
              x-data="{ 
-               showVariants: false,
                options: {
                  {% for option in product.options_with_values %}
                  '{{ option.name }}': '{{ option.values[0] }}'
                  {% unless forloop.last %},{% endunless %}
                  {% endfor %}
                },
-               selectedVariant: {
-                 id: '{{ product.first_available_variant.id }}',
-                 price: {{ product.first_available_variant.price }},
-                 title: '{{ product.first_available_variant.title | escape }}'
-               },
+               selectedVariant: null,
                variantImage: '{{ product.featured_image | img_url: '300x300', crop: 'center' }}',
                
-               // Function to find matching variant based on selected options
+               init() {
+                 // Initialize the selected variant on load
+                 this.updateVariant();
+               },
+               
                findMatchingVariant() {
                  const variants = {{ product.variants | json }};
                  return variants.find(variant => {
-                   {% for option in product.options_with_values %}
-                   if (variant.options[{{ forloop.index0 }}] !== this.options['{{ option.name }}']) return false;
-                   {% endfor %}
-                   return true;
+                   return variant.options.every((optionValue, index) => {
+                     const optionName = {{ product.options | json }}[index];
+                     return optionValue === this.options[optionName];
+                   });
                  });
                },
                
-               // Update selected variant when options change
                updateVariant() {
                  const variant = this.findMatchingVariant();
                  if (variant) {
                    this.selectedVariant = {
                      id: variant.id,
                      price: variant.price,
-                     title: Object.values(this.options).join(' / ')
+                     title: variant.title,
+                     featured_image: variant.featured_image
                    };
-                   this.variantImage = variant.featured_image?.src || '{{ product.featured_image | img_url: '300x300', crop: 'center' }}';
+                   
+                   if (variant.featured_image) {
+                     this.variantImage = variant.featured_image.src;
+                   }
                  }
                }
              }"
+             x-init="init()"
              x-show="selectedType === 'all' || selectedType === '{{ product.type | escape }}'"
              :class="{ 'selected': isProductSelected('{{ product.id }}') }">
           
@@ -1503,14 +1506,14 @@
                         x-show="!isProductSelected('{{ product.id }}')"
                         @click="addToBundle({
                           id: '{{ product.id }}',
-                          variant_id: selectedVariant.id,
+                          variant_id: selectedVariant?.id,
                           title: '{{ product.title | escape }}',
-                          price: selectedVariant.price,
-                          variant_title: selectedVariant.title,
+                          price: selectedVariant?.price,
+                          variant_title: selectedVariant?.title,
                           image: variantImage,
                           options: options
                         })"
-                        :disabled="selectedItems.length >= bundleSize">
+                        :disabled="!selectedVariant || selectedItems.length >= bundleSize">
                   <span x-text="selectedItems.length >= bundleSize ? '{{ section.settings.box_full_message }}' : '{{ section.settings.add_to_bundle_text }}'"></span>
                 </button>
                 
