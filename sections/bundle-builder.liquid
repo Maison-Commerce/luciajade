@@ -1320,6 +1320,26 @@
           style: 'currency',
           currency: '{{ cart.currency.iso_code }}'
         }).format(cents / 100);
+      },
+
+      findMatchingVariant() {
+        return this.variants.find(variant => {
+          // Create arrays of option values to compare
+          const variantOptions = variant.options.map(opt => opt.toString().toLowerCase());
+          const selectedOptions = Object.values(this.options).map(opt => opt.toString().toLowerCase());
+          
+          // Compare arrays
+          return variantOptions.every((opt, index) => opt === selectedOptions[index]);
+        });
+      },
+
+      updateVariant() {
+        const variant = this.findMatchingVariant();
+        if (variant) {
+          this.selectedVariant = variant;
+          // Use a fallback image if variant image is not available
+          this.variantImage = variant.featured_image?.src || this.variantImage;
+        }
       }
     }));
   });
@@ -1437,9 +1457,12 @@
                
                findMatchingVariant() {
                  return this.variants.find(variant => {
-                   return {% for option in product.options %}
-                     variant.options[{{ forloop.index0 }}] === this.options['{{ option }}']{% unless forloop.last %} &&{% endunless %}
-                   {% endfor %};
+                   // Create arrays of option values to compare
+                   const variantOptions = variant.options.map(opt => opt.toString().toLowerCase());
+                   const selectedOptions = Object.values(this.options).map(opt => opt.toString().toLowerCase());
+                   
+                   // Compare arrays
+                   return variantOptions.every((opt, index) => opt === selectedOptions[index]);
                  });
                },
                
@@ -1447,7 +1470,8 @@
                  const variant = this.findMatchingVariant();
                  if (variant) {
                    this.selectedVariant = variant;
-                   this.variantImage = variant.featured_image?.src || '{{ product.featured_image | img_url: '300x300', crop: 'center' }}';
+                   // Use a fallback image if variant image is not available
+                   this.variantImage = variant.featured_image?.src || this.variantImage;
                  }
                }
              }"
