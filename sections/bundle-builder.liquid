@@ -1200,20 +1200,31 @@
 
         try {
           const bundleId = new Date().getTime();
-          const items = this.selectedItems.map(item => ({
-            id: parseInt(item.variant_id),
-            quantity: item.quantity,
-            properties: {
-              '_bundle_id': bundleId,
-              '_bundle_discount': this.discountPercentage + '%',
-              'Bundle': 'Jewelry Bundle Set',
-              '_original_price': item.price
-            }
-          }));
+          const items = this.selectedItems.map(item => {
+            // Calculate discounted price
+            const discountedPrice = Math.round(item.price * (1 - this.discountPercentage / 100));
+            
+            return {
+              id: parseInt(item.variant_id),
+              quantity: item.quantity,
+              price: discountedPrice, // Set the discounted price
+              properties: {
+                '_bundle_id': bundleId,
+                '_bundle_discount': this.discountPercentage + '%',
+                'Bundle': 'Jewelry Bundle Set',
+                '_original_price': item.price,
+                '_discounted_price': discountedPrice
+              }
+            };
+          });
 
           if (typeof window.liquidAjaxCart !== 'undefined') {
             const response = await window.liquidAjaxCart.add({
-              items: items
+              items: items,
+              properties: {
+                '_is_bundle': true,
+                '_bundle_discount': this.discountPercentage + '%'
+              }
             });
 
             if (!response.ok) {
@@ -1226,7 +1237,13 @@
               headers: {
                 'Content-Type': 'application/json'
               },
-              body: JSON.stringify({ items })
+              body: JSON.stringify({ 
+                items,
+                properties: {
+                  '_is_bundle': true,
+                  '_bundle_discount': this.discountPercentage + '%'
+                }
+              })
             });
 
             if (!response.ok) {
