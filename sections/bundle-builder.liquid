@@ -1420,40 +1420,34 @@
       {% for product in collections[section.settings.bundle_collection].products %}
         <div class="bundle-product-card" 
              x-data="{ 
-               productData: {
-                 options: {
-                   {% for option in product.options_with_values %}
-                   '{{ option.name }}': '{{ option.values[0] }}'
-                   {% unless forloop.last %},{% endunless %}
-                   {% endfor %}
-                 },
-                 selectedVariant: null,
-                 variantImage: '{{ product.featured_image | img_url: '300x300', crop: 'center' }}',
-                 variants: {{ product.variants | json }}
-               },
-
+               options: {},
+               selectedVariant: null,
+               variantImage: '{{ product.featured_image | img_url: '300x300', crop: 'center' }}',
+               variants: {{ product.variants | json }},
+               
                init() {
+                 // Initialize options with default values
+                 {% for option in product.options_with_values %}
+                 this.options['{{ option.name }}'] = '{{ option.values[0] }}';
+                 {% endfor %}
+                 
+                 // Initialize first variant
                  this.updateVariant();
                },
-
+               
                findMatchingVariant() {
-                 return this.productData.variants.find(variant => {
-                   return variant.options.every((optionValue, index) => {
-                     const optionName = {{ product.options | json }}[index];
-                     return optionValue === this.productData.options[optionName];
-                   });
+                 return this.variants.find(variant => {
+                   return {% for option in product.options %}
+                     variant.options[{{ forloop.index0 }}] === this.options['{{ option }}']{% unless forloop.last %} &&{% endunless %}
+                   {% endfor %};
                  });
                },
-
+               
                updateVariant() {
                  const variant = this.findMatchingVariant();
                  if (variant) {
-                   this.productData.selectedVariant = {
-                     id: variant.id,
-                     price: variant.price,
-                     title: variant.title
-                   };
-                   this.productData.variantImage = variant.featured_image?.src || '{{ product.featured_image | img_url: '300x300', crop: 'center' }}';
+                   this.selectedVariant = variant;
+                   this.variantImage = variant.featured_image?.src || '{{ product.featured_image | img_url: '300x300', crop: 'center' }}';
                  }
                }
              }"
@@ -1462,7 +1456,7 @@
              :class="{ 'selected': isProductSelected('{{ product.id }}') }">
           
           <div class="bundle-product-image-wrapper">
-            <img :src="productData.variantImage" 
+            <img :src="variantImage" 
                  alt="{{ product.title }}"
                  loading="lazy"
                  width="300"
@@ -1477,20 +1471,17 @@
           <div class="bundle-product-content">
             <div class="bundle-product-info">
               <h3 class="bundle-product-title">
-                <a href="{{ product.url }}" 
-                   class="bundle-product-title-link" 
-                   target="_blank" 
-                   title="View {{ product.title }}">
+                <a href="{{ product.url }}" class="bundle-product-title-link">
                   {{ product.title }}
                 </a>
               </h3>
-              <p class="bundle-product-price" x-text="formatMoney(productData.selectedVariant?.price || {{ product.price }})"></p>
+              <p class="bundle-product-price" x-text="formatMoney(selectedVariant?.price || {{ product.price }})"></p>
             </div>
             
             <div class="bundle-product-controls">
               {% for option in product.options_with_values %}
                 <select class="variant-dropdown"
-                        x-model="productData.options['{{ option.name }}']"
+                        x-model="options['{{ option.name }}']"
                         @change="updateVariant()">
                   {% for value in option.values %}
                     <option value="{{ value }}">{{ option.name }}: {{ value }}</option>
@@ -1503,33 +1494,33 @@
                         x-show="!isProductSelected('{{ product.id }}')"
                         @click="addToBundle({
                           id: '{{ product.id }}',
-                          variant_id: productData.selectedVariant?.id,
+                          variant_id: selectedVariant?.id,
                           title: '{{ product.title | escape }}',
-                          price: productData.selectedVariant?.price,
-                          variant_title: productData.selectedVariant?.title,
-                          image: productData.variantImage,
-                          options: productData.options
+                          price: selectedVariant?.price,
+                          variant_title: selectedVariant?.title,
+                          image: variantImage,
+                          options: options
                         })"
-                        :disabled="!productData.selectedVariant || selectedItems.length >= bundleSize">
+                        :disabled="!selectedVariant || selectedItems.length >= bundleSize">
                   <span x-text="selectedItems.length >= bundleSize ? '{{ section.settings.box_full_message }}' : '{{ section.settings.add_to_bundle_text }}'"></span>
                 </button>
                 
                 <template x-if="isProductSelected('{{ product.id }}')">
                   <div class="bundle-button-row">
-                    <button class="bundle-button bundle-button--add-another"
+                    <button class="bundle-button--add-another"
                             @click="addToBundle({
                               id: '{{ product.id }}',
-                              variant_id: productData.selectedVariant.id,
+                              variant_id: selectedVariant?.id,
                               title: '{{ product.title | escape }}',
-                              price: productData.selectedVariant.price,
-                              variant_title: productData.selectedVariant.title,
-                              image: productData.variantImage,
-                              options: productData.options
+                              price: selectedVariant?.price,
+                              variant_title: selectedVariant?.title,
+                              image: variantImage,
+                              options: options
                             })"
                             :disabled="selectedItems.length >= bundleSize">
                       <span x-text="selectedItems.length >= bundleSize ? '{{ section.settings.box_full_message }}' : '{{ section.settings.add_another_text }}'"></span>
                     </button>
-                    <button class="bundle-button bundle-button--remove"
+                    <button class="bundle-button--remove"
                             @click="removeFromBundle('{{ product.id }}')">
                       {{ section.settings.remove_text }}
                     </button>
