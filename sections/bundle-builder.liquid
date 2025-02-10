@@ -1470,16 +1470,16 @@
                           };
                           variantImage = variant.image;
                         ">
-                  {% assign unique_options = product.variants | map: 'title' | uniq %}
-                  {% for option_title in unique_options %}
-                    {% assign variant = product.variants | where: "title", option_title | first %}
-                    {% assign option_text = variant.title | split: ' / ' | first %}
+                  {% for variant in product.variants %}
+                    {% assign option_parts = variant.title | split: ' / ' %}
                     <option value="{{ variant.id }}"
                             data-id="{{ variant.id }}"
                             data-price="{{ variant.price }}"
-                            data-title="{{ option_text }}"
+                            data-title="{{ variant.title }}"
                             data-image="{{ variant.featured_image | default: product.featured_image | img_url: '300x300', crop: 'center' }}">
-                      {{ option_text }}
+                      {% for part in option_parts %}
+                        {{ part }}{% unless forloop.last %} / {% endunless %}
+                      {% endfor %}
                     </option>
                   {% endfor %}
                 </select>
