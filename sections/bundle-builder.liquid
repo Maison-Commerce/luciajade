@@ -1200,32 +1200,52 @@
 
         try {
           const bundleId = new Date().getTime();
-          const items = this.selectedItems.map(item => {
-            // Calculate discounted price
-            const discountedPrice = Math.round(item.price * (1 - this.discountPercentage / 100));
+          
+          // First, calculate the total bundle price
+          const totalBundlePrice = this.selectedItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+          const discountedBundlePrice = Math.round(totalBundlePrice * (1 - this.discountPercentage / 100));
+          const discountPerItem = Math.floor((totalBundlePrice - discountedBundlePrice) / this.selectedItems.length);
+
+          const items = this.selectedItems.map((item, index) => {
+            // Calculate individual item discount
+            // For the last item, apply any remaining discount to avoid rounding issues
+            const isLastItem = index === this.selectedItems.length - 1;
+            const itemDiscount = isLastItem 
+              ? (totalBundlePrice - discountedBundlePrice) - (discountPerItem * (this.selectedItems.length - 1))
+              : discountPerItem;
             
+            const discountedPrice = Math.round(item.price - itemDiscount);
+
             return {
               id: parseInt(item.variant_id),
               quantity: item.quantity,
-              price: discountedPrice, // Set the discounted price
               properties: {
                 '_bundle_id': bundleId,
                 '_bundle_discount': this.discountPercentage + '%',
                 'Bundle': 'Jewelry Bundle Set',
                 '_original_price': item.price,
-                '_discounted_price': discountedPrice
+                '_discounted_price': discountedPrice,
+                '_bundle_total': totalBundlePrice,
+                '_bundle_discounted_total': discountedBundlePrice
               }
             };
           });
 
+          // Create a cart draft to apply the bundle discount
+          const cartDraft = {
+            items: items,
+            note: 'Bundle Discount Applied: ' + this.discountPercentage + '%',
+            attributes: {
+              '_is_bundle': true,
+              '_bundle_discount': this.discountPercentage + '%',
+              '_bundle_id': bundleId,
+              '_bundle_original_total': totalBundlePrice,
+              '_bundle_discounted_total': discountedBundlePrice
+            }
+          };
+
           if (typeof window.liquidAjaxCart !== 'undefined') {
-            const response = await window.liquidAjaxCart.add({
-              items: items,
-              properties: {
-                '_is_bundle': true,
-                '_bundle_discount': this.discountPercentage + '%'
-              }
-            });
+            const response = await window.liquidAjaxCart.add(cartDraft);
 
             if (!response.ok) {
               const errorData = await response.json();
@@ -1237,13 +1257,7 @@
               headers: {
                 'Content-Type': 'application/json'
               },
-              body: JSON.stringify({ 
-                items,
-                properties: {
-                  '_is_bundle': true,
-                  '_bundle_discount': this.discountPercentage + '%'
-                }
-              })
+              body: JSON.stringify(cartDraft)
             });
 
             if (!response.ok) {
@@ -1251,6 +1265,21 @@
               throw new Error(errorData.description || 'Failed to add bundle to cart');
             }
           }
+
+          // Update cart attributes to reflect bundle discount
+          await fetch('/cart/update.js', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              attributes: {
+                '_bundle_discount_amount': (totalBundlePrice - discountedBundlePrice).toString(),
+                '_bundle_original_price': totalBundlePrice.toString(),
+                '_bundle_final_price': discountedBundlePrice.toString()
+              }
+            })
+          });
 
           // Clear the bundle
           this.selectedItems = [];

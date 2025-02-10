@@ -63,6 +63,26 @@
   </div>
 {%- endunless -%}
 
+{%- if cart.attributes._is_bundle -%}
+  {%- liquid
+    assign bundle_original_price = cart.attributes._bundle_original_price | times: 1
+    assign bundle_final_price = cart.attributes._bundle_final_price | times: 1
+    assign bundle_savings = bundle_original_price | minus: bundle_final_price
+  -%}
+  
+  <div class="cart__total__discount">
+    <div class="cart__total">
+      <div>
+        {%- render 'icon-tags' -%}
+        <span>Bundle Discount ({{ cart.attributes._bundle_discount }})</span>
+      </div>
+      <span>
+        -{{ bundle_savings | money }}
+      </span>
+    </div>
+  </div>
+{%- endif -%}
+
 <div class="cart__total">
   <span class="cart__total__label">{{- 'cart.general.subtotal' | t -}}</span>
 
