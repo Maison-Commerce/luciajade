@@ -4,6 +4,13 @@
   assign original_subtotal = cart.original_total_price | plus: 0
   assign currency_code_enable = settings.currency_code_enable
 
+  if cart.attributes._is_bundle
+    assign bundle_original_price = cart.attributes._bundle_original_price | times: 1
+    assign bundle_final_price = cart.attributes._bundle_final_price | times: 1
+    assign subtotal = bundle_final_price
+    assign original_subtotal = bundle_original_price
+  endif
+
   if currency_code_enable
     assign original_subtotal_formatted = original_subtotal | money_with_currency
   else
