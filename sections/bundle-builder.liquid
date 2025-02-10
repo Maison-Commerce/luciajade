@@ -1573,7 +1573,7 @@
         <span>Original Total:</span>
         <span x-text="formatMoney(originalTotal)"></span>
       </p>
-      {% if section.settings.discount_percentage != blank and section.settings.discount_percentage != "-" %}
+      {% if section.settings.discount_percentage != blank or section.settings.discount_percentage != "-" %}
       <p>
         <span>Bundle Discount:</span>
         <span x-text="discountPercentage + '%'"></span>
