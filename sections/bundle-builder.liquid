@@ -806,102 +806,48 @@
     }
 
     .bundle-product-card {
-      padding: 0;
-      border-radius: var(--bundle-mobile-card-radius);
-    }
-
-    h3.bundle-product-title {
-      font-size: var(--bundle-mobile-title-size);
-      margin: 0.5rem 0;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
+      padding: 0.5rem;
     }
 
     .bundle-product-content {
-      padding: 0.75rem;
+      padding: 0.75rem 0.5rem;
+    }
+
+    .bundle-product-title {
+      font-size: 0.9rem;
+      line-height: 1.2;
+      margin-bottom: 0.25rem;
     }
 
     .bundle-product-price {
-      font-size: var(--bundle-mobile-price-size);
-      margin: 0.25rem 0 0.5rem;
-    }
-
-    .variant-dropdown {
-      padding: var(--bundle-mobile-input-radius);
-      font-size: 15px;
+      font-size: 0.9rem;
       margin-bottom: 0.5rem;
+    }
+
+    .variant-selects .variant-dropdown {
+      min-width: 100%;
+      font-size: 0.8rem;
+      padding: 0.5rem;
+      height: 35px;
+      padding-right: 1.5rem; /* Space for dropdown arrow */
       background-position: right 0.5rem center;
-      background-size: var(--bundle-mobile-input-radius);
+      background-size: 0.8rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
-    .bundle-button,
-    .bundle-button--add-another,
-    .bundle-button--remove {
-      padding: var(--bundle-mobile-button-radius);
-      font-size: 15px;
-      letter-spacing: 0.01em;
-    }
-
-    .bundle-button-row {
-      gap: 6px;
-    }
-
-    .bundle-button--add-another,
-    .bundle-button--remove {
-      padding: 8px;
-      min-height: 32px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    /* Adjust image wrapper for mobile */
-    .bundle-product-image-wrapper {
-      padding-top: 100%;
-    }
-
-    /* Adjust badge size for mobile */
-    .bundle-product-badge {
-      width: 20px;
-      height: 20px;
-      top: 8px;
-      right: 8px;
-    }
-
-    .bundle-product-badge svg {
-      width: 16px;
-      height: 16px;
-    }
-
-    /* Add some breathing room between sections */
-    .bundle-builder {
-      padding: 1rem;
-    }
-
-    /* Improve type filter buttons on mobile */
-    .bundle-type-filter {
-      gap: 0.5rem;
-      margin: 1rem 0;
-      padding: 0 0.5rem;
-    }
-
-    .type-filter-button {
-      padding: 0.4rem 0.8rem;
+    .bundle-button {
+      padding: 0.5rem;
       font-size: 0.85rem;
+      min-height: 35px;
     }
 
-    /* Make the scrolling smooth for the filter buttons */
-    .bundle-type-filter {
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none; /* Firefox */
-      -ms-overflow-style: none; /* IE and Edge */
-      padding-bottom: 0.5rem;
-    }
-
-    .bundle-type-filter::-webkit-scrollbar {
-      display: none; /* Chrome, Safari, Opera */
+    /* Adjust grid layout for mobile */
+    .bundle-builder__products {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.5rem;
+      padding: 0 0.25rem;
     }
   }
 
