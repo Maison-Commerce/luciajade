@@ -3,28 +3,6 @@
   assign cart_discount_size = cart.cart_level_discount_applications.size
   assign original_subtotal = cart.original_total_price | plus: 0
   assign currency_code_enable = settings.currency_code_enable
-  assign is_bundle = false
-  
-  # Check if all items in cart are from the same bundle
-  if cart.attributes._bundle_id
-    assign bundle_id = cart.attributes._bundle_id
-    assign all_items_from_bundle = true
-    
-    for item in cart.items
-      unless item.properties._bundle_id == bundle_id
-        assign all_items_from_bundle = false
-        break
-      endunless
-    endfor
-
-    if all_items_from_bundle
-      assign is_bundle = true
-      assign bundle_original_price = cart.attributes._bundle_original_price | times: 1
-      assign bundle_final_price = cart.attributes._bundle_final_price | times: 1
-      assign subtotal = bundle_final_price
-      assign original_subtotal = bundle_original_price
-    endif
-  endif
 
   if currency_code_enable
     assign original_subtotal_formatted = original_subtotal | money_with_currency
@@ -85,24 +63,6 @@
   </div>
 {%- endunless -%}
 
-{%- if is_bundle -%}
-  {%- liquid
-    assign bundle_savings = bundle_original_price | minus: bundle_final_price
-  -%}
-  
-  <div class="cart__total__discount">
-    <div class="cart__total">
-      <div>
-        {%- render 'icon-tags' -%}
-        <span>Bundle Discount ({{ cart.attributes._bundle_discount }})</span>
-      </div>
-      <span>
-        -{{ bundle_savings | money }}
-      </span>
-    </div>
-  </div>
-{%- endif -%}
-
 <div class="cart__total">
   <span class="cart__total__label">{{- 'cart.general.subtotal' | t -}}</span>
 
@@ -110,11 +70,7 @@
     {%- if subtotal == 0 -%}
       {{ 'general.money.free' | t }}
     {%- else -%}
-      {%- if currency_code_enable -%}
-        {{- subtotal | money_with_currency -}}
-      {%- else -%}
-        {{- subtotal | money -}}
-      {%- endif -%}
+      {{- subtotal | money_with_currency -}}
     {%- endif -%}
   </span>
 
