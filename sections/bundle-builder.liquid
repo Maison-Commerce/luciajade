@@ -1420,43 +1420,40 @@
       {% for product in collections[section.settings.bundle_collection].products %}
         <div class="bundle-product-card" 
              x-data="{ 
-               options: {
-                 {% for option in product.options_with_values %}
-                 '{{ option.name }}': '{{ option.values[0] }}'
-                 {% unless forloop.last %},{% endunless %}
-                 {% endfor %}
+               productData: {
+                 options: {
+                   {% for option in product.options_with_values %}
+                   '{{ option.name }}': '{{ option.values[0] }}'
+                   {% unless forloop.last %},{% endunless %}
+                   {% endfor %}
+                 },
+                 selectedVariant: null,
+                 variantImage: '{{ product.featured_image | img_url: '300x300', crop: 'center' }}',
+                 variants: {{ product.variants | json }}
                },
-               selectedVariant: null,
-               variantImage: '{{ product.featured_image | img_url: '300x300', crop: 'center' }}',
-               
+
                init() {
-                 // Initialize the selected variant on load
                  this.updateVariant();
                },
-               
+
                findMatchingVariant() {
-                 const variants = {{ product.variants | json }};
-                 return variants.find(variant => {
+                 return this.productData.variants.find(variant => {
                    return variant.options.every((optionValue, index) => {
                      const optionName = {{ product.options | json }}[index];
-                     return optionValue === this.options[optionName];
+                     return optionValue === this.productData.options[optionName];
                    });
                  });
                },
-               
+
                updateVariant() {
                  const variant = this.findMatchingVariant();
                  if (variant) {
-                   this.selectedVariant = {
+                   this.productData.selectedVariant = {
                      id: variant.id,
                      price: variant.price,
-                     title: variant.title,
-                     featured_image: variant.featured_image
+                     title: variant.title
                    };
-                   
-                   if (variant.featured_image) {
-                     this.variantImage = variant.featured_image.src;
-                   }
+                   this.productData.variantImage = variant.featured_image?.src || '{{ product.featured_image | img_url: '300x300', crop: 'center' }}';
                  }
                }
              }"
@@ -1465,7 +1462,7 @@
              :class="{ 'selected': isProductSelected('{{ product.id }}') }">
           
           <div class="bundle-product-image-wrapper">
-            <img :src="variantImage" 
+            <img :src="productData.variantImage" 
                  alt="{{ product.title }}"
                  loading="lazy"
                  width="300"
@@ -1487,13 +1484,13 @@
                   {{ product.title }}
                 </a>
               </h3>
-              <p class="bundle-product-price" x-text="formatMoney(selectedVariant.price)"></p>
+              <p class="bundle-product-price" x-text="formatMoney(productData.selectedVariant?.price || {{ product.price }})"></p>
             </div>
             
             <div class="bundle-product-controls">
               {% for option in product.options_with_values %}
                 <select class="variant-dropdown"
-                        x-model="options['{{ option.name }}']"
+                        x-model="productData.options['{{ option.name }}']"
                         @change="updateVariant()">
                   {% for value in option.values %}
                     <option value="{{ value }}">{{ option.name }}: {{ value }}</option>
@@ -1506,14 +1503,14 @@
                         x-show="!isProductSelected('{{ product.id }}')"
                         @click="addToBundle({
                           id: '{{ product.id }}',
-                          variant_id: selectedVariant?.id,
+                          variant_id: productData.selectedVariant?.id,
                           title: '{{ product.title | escape }}',
-                          price: selectedVariant?.price,
-                          variant_title: selectedVariant?.title,
-                          image: variantImage,
-                          options: options
+                          price: productData.selectedVariant?.price,
+                          variant_title: productData.selectedVariant?.title,
+                          image: productData.variantImage,
+                          options: productData.options
                         })"
-                        :disabled="!selectedVariant || selectedItems.length >= bundleSize">
+                        :disabled="!productData.selectedVariant || selectedItems.length >= bundleSize">
                   <span x-text="selectedItems.length >= bundleSize ? '{{ section.settings.box_full_message }}' : '{{ section.settings.add_to_bundle_text }}'"></span>
                 </button>
                 
@@ -1522,12 +1519,12 @@
                     <button class="bundle-button bundle-button--add-another"
                             @click="addToBundle({
                               id: '{{ product.id }}',
-                              variant_id: selectedVariant.id,
+                              variant_id: productData.selectedVariant.id,
                               title: '{{ product.title | escape }}',
-                              price: selectedVariant.price,
-                              variant_title: selectedVariant.title,
-                              image: variantImage,
-                              options: options
+                              price: productData.selectedVariant.price,
+                              variant_title: productData.selectedVariant.title,
+                              image: productData.variantImage,
+                              options: productData.options
                             })"
                             :disabled="selectedItems.length >= bundleSize">
                       <span x-text="selectedItems.length >= bundleSize ? '{{ section.settings.box_full_message }}' : '{{ section.settings.add_another_text }}'"></span>
