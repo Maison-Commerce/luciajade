@@ -5,19 +5,24 @@
   assign currency_code_enable = settings.currency_code_enable
   assign is_bundle = false
   
-  # Check if all items in cart are from the same bundle
+  # Check if all items in cart are from the same bundle and match the bundle size
   if cart.attributes._bundle_id
     assign bundle_id = cart.attributes._bundle_id
+    assign bundle_size = cart.attributes._bundle_size | times: 1
+    assign bundle_items_count = 0
     assign all_items_from_bundle = true
     
     for item in cart.items
-      unless item.properties._bundle_id == bundle_id
+      if item.properties._bundle_id == bundle_id
+        assign bundle_items_count = bundle_items_count | plus: item.quantity
+      else
         assign all_items_from_bundle = false
         break
       endunless
     endfor
 
-    if all_items_from_bundle
+    # Only apply discount if all items are from bundle and quantity matches
+    if all_items_from_bundle and bundle_items_count == bundle_size
       assign is_bundle = true
       assign bundle_original_price = cart.attributes._bundle_original_price | times: 1
       assign bundle_final_price = cart.attributes._bundle_final_price | times: 1

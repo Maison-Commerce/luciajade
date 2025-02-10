@@ -1239,8 +1239,9 @@
               '_is_bundle': true,
               '_bundle_discount': this.discountPercentage + '%',
               '_bundle_id': bundleId,
-              '_bundle_original_total': totalBundlePrice,
-              '_bundle_discounted_total': discountedBundlePrice
+              '_bundle_size': this.bundleSize,
+              '_bundle_original_price': totalBundlePrice.toString(),
+              '_bundle_final_price': discountedBundlePrice.toString()
             }
           };
 
