@@ -35,7 +35,7 @@
       "settings": {
         "title": "Create Your Custom Bundle",
         "bundle_size": 7,
-        "discount_percentage": 20,
+        "discount_percentage": 0,
         "bundle_collection": "all",
         "card_radius": 0,
         "button_radius": 0,
@@ -70,7 +70,8 @@
         "bundle_error_message": "😔 Oops! Something went wrong. Please try again.",
         "bundle_incomplete_message": "💝 Please select all items to complete your bundle",
         "empty_box_title": "Your Box is Empty",
-        "empty_box_text": "Add items to your bundle to get started!"
+        "empty_box_text": "Add items to your bundle to get started!",
+        "box_full_message": "Box is full!"
       }
     },
     "section_multicolumn_eqFPgc": {
