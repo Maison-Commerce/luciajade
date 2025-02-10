@@ -1447,11 +1447,14 @@
                                 variantImage = matchingVariant.image;
                               }
                             ">
-                      <option value="">Select {{ option.name }}</option>
-                      {% for value in option.values %}
-                        <option value="{{ value | escape }}">{{ value }}</option>
-                      {% endfor %}
-                    </select>
+                          {% assign first_value = option.values | first %}
+                          {% for value in option.values %}
+                            <option value="{{ value | escape }}" 
+                                    {% if forloop.first %}selected="selected"{% endif %}>
+                              {{ value }}
+                            </option>
+                          {% endfor %}
+                        </select>
                   {% endfor %}
                 </div>
               {% else %}
