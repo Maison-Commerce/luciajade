@@ -4,7 +4,8 @@
   assign original_subtotal = cart.original_total_price | plus: 0
   assign currency_code_enable = settings.currency_code_enable
 
-  if cart.attributes._is_bundle
+  # Only apply bundle discount if products were added from bundle box
+  if cart.attributes._is_bundle and cart.attributes._bundle_id
     assign bundle_original_price = cart.attributes._bundle_original_price | times: 1
     assign bundle_final_price = cart.attributes._bundle_final_price | times: 1
     assign subtotal = bundle_final_price
@@ -70,7 +71,7 @@
   </div>
 {%- endunless -%}
 
-{%- if cart.attributes._is_bundle -%}
+{%- if cart.attributes._is_bundle and cart.attributes._bundle_id -%}
   {%- liquid
     assign bundle_original_price = cart.attributes._bundle_original_price | times: 1
     assign bundle_final_price = cart.attributes._bundle_final_price | times: 1
