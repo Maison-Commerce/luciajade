@@ -1470,7 +1470,9 @@
                           };
                           variantImage = variant.image;
                         ">
-                  {% for variant in product.variants %}
+                  {% assign unique_options = product.variants | map: 'title' | uniq %}
+                  {% for option_title in unique_options %}
+                    {% assign variant = product.variants | where: "title", option_title | first %}
                     {% assign option_text = variant.title | split: ' / ' | first %}
                     <option value="{{ variant.id }}"
                             data-id="{{ variant.id }}"
