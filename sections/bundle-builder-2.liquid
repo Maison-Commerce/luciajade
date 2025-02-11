@@ -1,0 +1,290 @@
+{% schema %}
+{
+  "name": "Bundle Builder 2.0",
+  "settings": [
+    {
+      "type": "number",
+      "id": "max_items",
+      "label": "Maximum Items in Bundle",
+      "default": 7
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Build Your Bundle"
+    },
+    {
+      "type": "color",
+      "id": "primary_color",
+      "label": "Primary Color",
+      "default": "#4F46E5"
+    },
+    {
+      "type": "color",
+      "id": "success_color",
+      "label": "Success Color",
+      "default": "#22C55E"
+    },
+    {
+      "type": "select",
+      "id": "grid_desktop",
+      "label": "Products per row (Desktop)",
+      "options": [
+        { "value": "2", "label": "2" },
+        { "value": "3", "label": "3" },
+        { "value": "4", "label": "4" }
+      ],
+      "default": "4"
+    },
+    {
+      "type": "select",
+      "id": "grid_mobile",
+      "label": "Products per row (Mobile)",
+      "options": [
+        { "value": "1", "label": "1" },
+        { "value": "2", "label": "2" }
+      ],
+      "default": "2"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Bundle Builder 2.0",
+      "category": "Product"
+    }
+  ]
+}
+{% endschema %}
+
+<style>
+.bundle-primary-color {
+  background-color: {{ section.settings.primary_color }};
+}
+.bundle-success-color {
+  background-color: {{ section.settings.success_color }};
+}
+</style>
+
+<div x-data="jewelryApp({{ section.settings.max_items }})" x-init="fetchProducts" class="bundle-builder">
+  <!-- Progress Bar -->
+  <div class="fixed top-0 left-0 right-0 bg-primary/10 p-4 z-50">
+    <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
+      <div class="flex-1">
+        <div class="h-2 bg-white rounded-full overflow-hidden">
+          <div class="h-full transition-all duration-300"
+               :class="items.length === maxItems ? 'bundle-success-color' : 'bundle-primary-color'"
+               :style="`width: ${(items.length / maxItems) * 100}%`"></div>
+        </div>
+        <p class="text-sm mt-2" x-text="items.length === maxItems ? 'Yay! You\'ve selected all your pieces!' : `You've selected ${items.length} out of your ${maxItems} jewelry pieces.`"></p>
+      </div>
+      <button @click="showBox = true" class="px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+        View Box
+      </button>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <main class="container mx-auto px-4 pb-24 mt-24">
+    <h1 class="text-3xl font-bold text-center mb-12">{{ section.settings.heading }}</h1>
+
+    <!-- Category Tabs -->
+    <div class="mb-8">
+      <div class="inline-flex h-10 items-center justify-center rounded-md bg-muted p-1 text-muted-foreground">
+        <template x-for="category in ['All', ...new Set(products.map(p => p.product_type))]" :key="category">
+          <button class="inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
+                  :class="activeCategory === category ? 'bg-background text-foreground shadow-sm' : ''"
+                  @click="activeCategory = category"
+                  x-text="category"></button>
+        </template>
+      </div>
+    </div>
+
+    <!-- Product Grid -->
+    <div class="grid grid-cols-{{ section.settings.grid_mobile }} md:grid-cols-{{ section.settings.grid_desktop }} gap-4 sm:gap-6 md:gap-8">
+      <template x-for="product in filteredProducts" :key="product.id">
+        <div class="flex flex-col">
+          <div class="relative aspect-square mb-2 sm:mb-4">
+            <img :src="product.images[0]?.src || '/placeholder.svg'" :alt="product.title" class="w-full h-full object-cover rounded-lg">
+          </div>
+          <h3 class="font-medium mb-1 sm:mb-2 text-sm sm:text-base" x-text="product.title"></h3>
+          
+          <!-- Variant Selectors -->
+          <template x-if="product.variants.length > 1">
+            <div class="flex flex-col gap-2 mb-2 sm:mb-4">
+              <template x-if="getVariantOptions(product.variants).materials.length > 1">
+                <select x-model="selectedVariants[product.id].material" @change="updateSelectedVariant(product)" class="w-full text-xs sm:text-sm border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                  <option value="">Select material</option>
+                  <template x-for="material in getVariantOptions(product.variants).materials" :key="material">
+                    <option :value="material" x-text="material"></option>
+                  </template>
+                </select>
+              </template>
+              <template x-if="getVariantOptions(product.variants).letters.length > 1">
+                <select x-model="selectedVariants[product.id].letter" @change="updateSelectedVariant(product)" class="w-full text-xs sm:text-sm border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                  <option value="">Select letter</option>
+                  <template x-for="letter in getVariantOptions(product.variants).letters" :key="letter">
+                    <option :value="letter" x-text="letter"></option>
+                  </template>
+                </select>
+              </template>
+            </div>
+          </template>
+
+          <button class="mt-auto text-xs sm:text-sm px-4 py-2 bundle-primary-color text-white rounded-md hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                  :class="{'bg-gray-400 hover:bg-gray-400': isBoxFull || isVariantInBox(getSelectedVariant(product))}"
+                  :disabled="isBoxFull || isVariantInBox(getSelectedVariant(product))"
+                  @click="addToBox(product)"
+                  x-text="isVariantInBox(getSelectedVariant(product)) ? 'ADDED' : isBoxFull ? 'Box Full' : 'Add to Box'"></button>
+        </div>
+      </template>
+    </div>
+  </main>
+
+  <!-- Box View (Modal) -->
+  <div x-show="showBox" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-white p-6 rounded-lg w-full max-w-lg max-h-[90vh] overflow-y-auto">
+      <h2 class="text-2xl font-bold mb-4">Your Box</h2>
+      <p class="mb-4" x-text="`Items (${items.length}/${maxItems})`"></p>
+      <template x-for="item in items" :key="item.id">
+        <div class="flex items-center gap-4 p-4 bg-gray-100 rounded-lg mb-4">
+          <img :src="item.image || '/placeholder.svg'" :alt="item.name" class="w-16 h-16 object-cover rounded-md">
+          <div class="flex-1">
+            <h4 class="font-medium" x-text="item.name"></h4>
+            <p class="text-sm text-gray-600" x-text="item.variant.title"></p>
+          </div>
+          <div class="flex items-center gap-4">
+            <span x-text="`x${item.quantity}`"></span>
+            <button @click="removeItem(item.id)" class="text-red-600 hover:text-red-800">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </template>
+      <div class="border-t pt-4 mt-4">
+        <button @click="addToCart" class="w-full px-4 py-2 bundle-primary-color text-white rounded-md hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" :disabled="items.length !== maxItems">
+          Add to cart
+        </button>
+      </div>
+      <button @click="showBox = false" class="mt-4 w-full px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
+        Close
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+function jewelryApp(maxItems) {
+  return {
+    products: [],
+    items: [],
+    maxItems: maxItems,
+    activeCategory: 'All',
+    showBox: false,
+    selectedVariants: {},
+
+    async fetchProducts() {
+      try {
+        const response = await axios.get('https://www.kloudyjewelry.com/products.json');
+        this.products = response.data.products;
+        this.initializeSelectedVariants();
+      } catch (error) {
+        console.error('Failed to fetch products:', error);
+      }
+    },
+
+    initializeSelectedVariants() {
+      this.products.forEach(product => {
+        this.selectedVariants[product.id] = {
+          material: product.variants[0]?.option1 || '',
+          letter: product.variants[0]?.option2 || ''
+        };
+      });
+    },
+
+    get filteredProducts() {
+      return this.activeCategory === 'All'
+        ? this.products
+        : this.products.filter(p => p.product_type === this.activeCategory);
+    },
+
+    get isBoxFull() {
+      return this.items.length >= this.maxItems;
+    },
+
+    getVariantOptions(variants) {
+      const materials = new Set();
+      const letters = new Set();
+
+      variants.forEach(variant => {
+        if (variant.option1) materials.add(variant.option1);
+        if (variant.option2) letters.add(variant.option2);
+      });
+
+      return {
+        materials: Array.from(materials),
+        letters: Array.from(letters)
+      };
+    },
+
+    updateSelectedVariant(product) {
+      const selectedMaterial = this.selectedVariants[product.id].material;
+      const selectedLetter = this.selectedVariants[product.id].letter;
+      
+      const newVariant = product.variants.find(v => 
+        v.option1 === selectedMaterial && 
+        (selectedLetter ? v.option2 === selectedLetter : true)
+      );
+
+      if (newVariant) {
+        this.selectedVariants[product.id] = {
+          material: newVariant.option1 || '',
+          letter: newVariant.option2 || ''
+        };
+      }
+    },
+
+    getSelectedVariant(product) {
+      const selected = this.selectedVariants[product.id];
+      return product.variants.find(v => 
+        v.option1 === selected.material && 
+        v.option2 === selected.letter
+      ) || product.variants[0];
+    },
+
+    isVariantInBox(variant) {
+      return this.items.some(item => item.id === variant.id);
+    },
+
+    addToBox(product) {
+      if (this.isBoxFull) return;
+
+      const selectedVariant = this.getSelectedVariant(product);
+      if (selectedVariant && !this.isVariantInBox(selectedVariant)) {
+        this.items.push({
+          id: selectedVariant.id,
+          name: product.title,
+          image: product.images[0]?.src || '/placeholder.svg',
+          variant: selectedVariant,
+          quantity: 1
+        });
+      }
+    },
+
+    removeItem(itemId) {
+      this.items = this.items.filter(item => item.id !== itemId);
+    },
+
+    addToCart() {
+      if (this.items.length === this.maxItems) {
+        console.log('Adding to cart:', this.items);
+        // Implement actual cart addition logic here
+        alert('Items added to cart!');
+        this.showBox = false;
+      }
+    }
+  }
+}
+</script> 
