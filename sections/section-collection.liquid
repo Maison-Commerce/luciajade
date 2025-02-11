@@ -112,6 +112,25 @@
           </div>
         {%- endif -%}
 
+        {%- if link_text != blank -%}
+          {%- assign animation_order = animation_order | plus: 1 -%}
+          <div class="grid__heading-actions"
+            data-aos="hero"
+            data-aos-anchor="{{ animation_anchor }}"
+            data-aos-order="{{ animation_order }}">
+            <a class="btn {{ button_style }} {{ section.settings.button_size }} {{ section.settings.button_type }}"
+              href="{% if section.settings.link_url != blank %}{{ section.settings.link_url }}{% else %}{{ featured_collection.url }}{% endif %}">
+              <span>{{ link_text | escape }}</span>
+
+              {%- if section.settings.show_arrow -%}
+                {%- render 'icon-arrow-right' -%}
+              {%- endif -%}
+            </a>
+          </div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
     <div class="grid__items-holder">
       <div class="grid-outer">
         {%- capture product_items -%}
@@ -155,25 +174,6 @@
         {%- endif -%}
       </div>
     </div>
-
-                {%- if link_text != blank -%}
-          {%- assign animation_order = animation_order | plus: 1 -%}
-          <div class="grid__heading-actions"
-            data-aos="hero"
-            data-aos-anchor="{{ animation_anchor }}"
-            data-aos-order="{{ animation_order }}">
-            <a class="btn {{ button_style }} {{ section.settings.button_size }} {{ section.settings.button_type }}"
-              href="{% if section.settings.link_url != blank %}{{ section.settings.link_url }}{% else %}{{ featured_collection.url }}{% endif %}">
-              <span>{{ link_text | escape }}</span>
-
-              {%- if section.settings.show_arrow -%}
-                {%- render 'icon-arrow-right' -%}
-              {%- endif -%}
-            </a>
-          </div>
-        {%- endif -%}
-      </div>
-    {%- endif -%} 
   </div>
 </section>
 

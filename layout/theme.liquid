@@ -17,9 +17,6 @@
       {% sections 'group-header' %}
     </div>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
     {% sections 'group-overlay' %}
 
     <!-- CONTENT -->
@@ -46,30 +43,6 @@
       {%- render 'icon-arrow-up' -%}
     </button>
   {%- endif -%}
-
-  <script>
-  // Select all gift options
-  const giftOptions = document.querySelectorAll('.gift-option');
-  // Get the hidden input field inside the form
-  const giftIdInput = document.querySelector('input[name="gift-id"]');
-
-  // Add click event listeners to all gift options
-  giftOptions.forEach((option) => {
-    option.addEventListener('click', () => {
-      // Get the data-variant-id of the clicked gift option
-      const giftId = option.getAttribute('data-variant-id');
-
-      // Update the hidden input field with the new gift ID
-      if (giftIdInput) {
-        giftIdInput.value = giftId;
-      }
-
-      // Optional: Add an "active" class for visual feedback
-      giftOptions.forEach((opt) => opt.classList.remove('active'));
-      option.classList.add('active');
-    });
-  });
-</script>
 
   {%- comment -%}
     In order to use your custom javascript file at assets/custom.js

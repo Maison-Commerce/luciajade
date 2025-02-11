@@ -70,7 +70,7 @@
       </div>
     {%- endif -%}
 
-    <div class="kopstorm--countdown brick__section {{ layout }} {{ desktop_height }} {{ mobile_height }}">
+    <div class="brick__section {{ layout }} {{ desktop_height }} {{ mobile_height }}">
 
       {%- if section.blocks.size > 0 -%}
         <div class="brick__block">
@@ -130,38 +130,7 @@
                     {%- endif -%}
 
                   {%- when 'buttons' -%}
-                  
-
-                {%- endcase -%}
-              {%- endfor -%}
-            </div>
-          </div>
-        </div>
-      {%- endif -%}
-
-      <div class="brick__block{% unless text_align == 'text-center' %} text-right{% endunless %} {{ text_align_mobile }}">
-        {%- render 'countdown-timer',
-          end_date: section.settings.end_date,
-          end_time: section.settings.end_time,
-          period: section.settings.period,
-          digits_font_size: section.settings.digits_font_size,
-          text_font_size: section.settings.text_font_size,
-          end_message: section.settings.end_message,
-          hide_on_complete: section.settings.hide_on_complete,
-          animation_order: animation_order,
-          animation_anchor: animation_anchor,
-          boxed: boxed
-        -%}
-      </div>
-
-                        <div class="brick__block{% unless text_align == 'text-center' %} text-right{% endunless %} {{ text_align_mobile }}">
-
-
-          {%- for block in section.blocks -%}
-
-                {%- case block.type -%}
-                           {%- when 'buttons' -%}
-          {%- liquid
+                    {%- liquid
                       assign button_style = block.settings.button_style
                       if button_style == 'btn--text' and block.settings.show_arrow
                         assign button_style = button_style | append: ' btn--text-no-underline'
@@ -199,14 +168,27 @@
                         </div>
                       {%- endif -%}
                     {%- endif -%}
-                  
 
                 {%- endcase -%}
               {%- endfor -%}
+            </div>
+          </div>
+        </div>
+      {%- endif -%}
 
-
-
-        
+      <div class="brick__block{% unless text_align == 'text-center' %} text-right{% endunless %} {{ text_align_mobile }}">
+        {%- render 'countdown-timer',
+          end_date: section.settings.end_date,
+          end_time: section.settings.end_time,
+          period: section.settings.period,
+          digits_font_size: section.settings.digits_font_size,
+          text_font_size: section.settings.text_font_size,
+          end_message: section.settings.end_message,
+          hide_on_complete: section.settings.hide_on_complete,
+          animation_order: animation_order,
+          animation_anchor: animation_anchor,
+          boxed: boxed
+        -%}
       </div>
     </div>
   </div>

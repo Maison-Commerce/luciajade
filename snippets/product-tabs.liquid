@@ -98,7 +98,6 @@
     assign accordion_text = block.settings.text
     assign accordion_open = block.settings.default_open
     assign accordion_content = accordion_text
-     assign icon = block.settings.icon
 
     if show_description
       assign accordion_content = product_description_content | append: accordion_text
@@ -110,12 +109,7 @@
       <div class="product-accordion">
         <details class="accordion" data-collapsible{% if accordion_open %} open="true"{% endif %} {{ block.shopify_attributes }}>
           <summary class="accordion__title" data-collapsible-trigger>
-            <div class="accordion-wrap">
-            <img src="{{ icon | img_url: "500x500" }}">
-            <p>
             {{ accordion_heading }}
-            </p>
-            </div>
 
             {%- render 'icon-plus' -%}
             {%- render 'icon-minus' -%}

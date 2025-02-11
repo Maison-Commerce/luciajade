@@ -83,14 +83,12 @@
               {%- case block_type -%}
                 {%- when 'linklist' -%}
                   <details class="footer__block footer__block--menu{% if enable_accordion %} accordion{% endif %}" style="{{ block_style }}" {{ block.shopify_attributes }} data-collapsible desktop="false" mobile="{{ enable_accordion }}">
-                    <summary class="{% if title != blank %}h3 footer__block__title {{ block.settings.heading_font_size }}{% if enable_accor1dion %} accordion__title{% endif %}{% else %}hidden{% endif %}" data-collapsible-trigger>
-                    <h3>
+                    <summary class="{% if title != blank %}h3 footer__block__title {{ block.settings.heading_font_size }}{% if enable_accordion %} accordion__title{% endif %}{% else %}hidden{% endif %}" data-collapsible-trigger>
                       {%- if title != blank -%}
                         {{ title | escape }}
                       {%- else -%}
                         &nbsp;
                       {%- endif -%}
-                                          </h3>
 
                       {%- render 'icon-plus' -%}
                       {%- render 'icon-minus' -%}
@@ -113,13 +111,11 @@
                   {%- if page == blank or page.empty? -%}
                     <details class="footer__block footer__block--page{% if enable_accordion %} accordion{% endif %}" style="{{ block_style }}" {{ block.shopify_attributes }} data-collapsible desktop="false" mobile="{{ enable_accordion }}">
                       <summary class="h3 footer__block__title {{ block.settings.heading_font_size }}{% if enable_accordion %} accordion__title{% endif %}" data-collapsible-trigger>
-                       <h3>
                         {%- if title != blank -%}
                           {{ title }}
                         {%- else -%}
                           {{ shop.name }}
                         {%- endif -%}
-                         </h3>
 
                         {%- render 'icon-plus' -%}
                         {%- render 'icon-minus' -%}
@@ -211,7 +207,7 @@
                   <div class="footer__block footer__block--newsletter" style="{{ block_style }}" {{ block.shopify_attributes }}>
                     <div class="footer__newsletter__wrapper">
                       {%- if title != blank -%}
-                        <h3 class="footer__block__title {{ block.settings.heading_font_size }}">{{ title }}</h3>
+                        <h2 class="footer__block__title {{ block.settings.heading_font_size }}">{{ title }}</h2>
                       {%- endif -%}
 
                       {%- if text != blank -%}
@@ -319,12 +315,6 @@
       "type": "linklist",
       "name": "Link list",
       "settings": [
-        {
-  "type": "checkbox",
-  "id": "logo",
-  "label": "Show logo",
-  "default": false
-},
         {
           "type": "link_list",
           "id": "linklist",

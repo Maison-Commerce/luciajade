@@ -1,17 +1,12 @@
 <!-- /sections/section-double.liquid -->
 
-{%- render 'section-double' class: section.settings.class -%}
+{%- render 'section-double' -%}
 
 {% schema %}
 {
   "name": "Image with text",
   "class": "section-overlay-header",
   "settings": [
-            {
-          "type": "text",
-          "id": "class",
-          "label": "Custom class"
-        },
     {
       "type": "header",
       "content": "Content"
@@ -395,14 +390,6 @@
         }
       ]
     },
-     {
-      "type": "usps",
-      "name": "USPS",
-      "settings": [
-      
-      ]
-    },
-
     {
       "name": "Accordion",
       "type": "accordion",

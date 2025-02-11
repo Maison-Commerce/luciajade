@@ -286,18 +286,6 @@
                         <small class="radio__legend__value" data-option-value>{{ current_value }}</small>
                       {%- endif -%}
                     </span>
-
-
-  {%- if product.has_only_default_variant -%}
-    {{ size_chart }}
-  {%- endif -%}
-
-  {%- if show_size_link_separated and size_chart_link != blank -%}
-    <div class="radio__fieldset radio__fieldset--single">
-      {{- size_chart_link -}}
-    </div>
-  {%- endif -%}
-                    
                   </legend>
 
                   <div class="radio__buttons" data-variant-buttons>
@@ -480,6 +468,16 @@
       </noscript>
     {%- endunless -%}
   {%- endcapture -%}
+
+  {%- if product.has_only_default_variant -%}
+    {{ size_chart }}
+  {%- endif -%}
+
+  {%- if show_size_link_separated and size_chart_link != blank -%}
+    <div class="radio__fieldset radio__fieldset--single">
+      {{- size_chart_link -}}
+    </div>
+  {%- endif -%}
 
   {{- form_fields -}}
 

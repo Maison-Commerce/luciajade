@@ -21,6 +21,7 @@
         </nav>
       {%- endif -%}
     {%- when 'breadcrumb' -%}
+      {% render 'breadcrumbs' breadcrumbs_modifier: 'breadcrumbs--no-padding product__breadcrumbs' %}
   {%- endcase -%}
 
   <div class="product__title__wrapper" {{ block.shopify_attributes }}>

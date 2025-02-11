@@ -136,7 +136,7 @@
 <section id="BrickSection--{{ section.id }}"
   data-section-id="{{ section.id }}"
   data-section-type="double"
-  class="{{ class }} index-image-text section-padding {{ section.settings.text_alignment }} {{ color_scheme }}"
+  class="index-image-text section-padding {{ section.settings.text_alignment }} {{ color_scheme }}"
   style="{{ style }}">
   {%- if section.blocks.size > 0 -%}
     {%- if enable_slider -%}
@@ -323,29 +323,6 @@
                         </a>
                       </div>
                     {%- endif -%}
-
-                    {% when "usps" %}
-                        <div  data-aos="hero"
-                        data-aos-anchor="{{ animation_anchor }}"
-                        data-aos-order="{{ animation_order }}"
-                        {{ block.shopify_attributes }} class="usps">
-                        <div class="usp">
-                        <img src="https://cdn.shopify.com/s/files/1/0610/5897/3792/files/SVG_3.svg?v=1737854826">
-                        <p>Early Access Benefits</p>
-                        </div>
-                        <div class="usp">
-                        <img src="https://cdn.shopify.com/s/files/1/0610/5897/3792/files/SVG_4.svg?v=1737854826">
-                        <p>Complimentary Gift Box</p>
-                        </div>
-                        <div class="usp">
-                        <img src="https://cdn.shopify.com/s/files/1/0610/5897/3792/files/SVG_5.svg?v=1737854825">
-                        <p>Limited Time Only</p>
-                        </div>
-                        <div class="usp">
-                        <img src="https://cdn.shopify.com/s/files/1/0610/5897/3792/files/SVG_6.svg?v=1737854826">
-                        <p>Exclusive Designs</p>
-                        </div>
-                        </div>
 
                   {%- when 'heading' -%}
                     {%- if block.settings.title != blank -%}

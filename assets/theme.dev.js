@@ -4764,7 +4764,7 @@
       }
 
       setHeight(contentHeight) {
-        this.style.setProperty('--height', `$120px`);
+        this.style.setProperty('--height', `${contentHeight}px`);
       }
 
       toggleActions() {
@@ -8781,7 +8781,6 @@
       optionPosition: '[data-option-position]',
       installment: '[data-product-form-installment]',
       inputId: 'input[name="id"]',
-      inputIdGift: 'input[name="idgift"]',
     };
 
     const classes$6 = {

@@ -24,7 +24,7 @@
     </div>
   {%- else -%}
     <div class="product__block{% if block.type == 'tab_richtext' %} product__block--tabs{% elsif block.type == 'accordion' %} product__block--accordion{% if block.settings.padding_bottom == 0 %} product__block--accordion-clear{% endif %}{% endif %} tabs-wrapper block-padding" {{ block_style }}>
-      {%- render 'product-tabs', icon: block.settings.icon, product: product, block: block -%}
+      {%- render 'product-tabs', product: product, block: block -%}
     </div>
   {%- endif -%}
 {%- endif -%}

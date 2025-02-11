@@ -15,7 +15,6 @@
   assign animation_anchor = unique | prepend: '#'
   assign heading = section.settings.title
   assign description = section.settings.description
-  assign subheading = section.settings.subheading
   assign color_scheme = 'color-' | append: section.settings.color_scheme
   assign blocks_size = section.blocks.size
 
@@ -110,7 +109,7 @@
 {%- endstyle -%}
 
 <div id="{{ unique }}"
-  class="{{ section.settings.customclass }} section-columns section-padding {{ color_scheme }}"
+  class="section-columns section-padding {{ color_scheme }}"
   data-section-id="{{ section.id }}"
   data-section-type="columns">
   <div class="{{ section.settings.width }}">
@@ -133,13 +132,6 @@
           >
             {{- heading -}}
           </{{ heading_tag }}>
-
-          <p class="grid__heading {{ section.settings.heading_font_size }}"
-            data-aos="hero"
-            data-aos-anchor="{{ animation_anchor }}"
-            data-aos-order="{{ animation_order }}">
-            {{ section.settings.subheading }}
-            </p>
         {%- endif -%}
 
         {%- if description -%}

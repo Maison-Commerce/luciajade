@@ -12,8 +12,6 @@
 
   <!-- ======================= Broadcast Theme V6.0.2 ========================= -->
 
-<link rel="stylesheet" href="https://use.typekit.net/fqm2wfj.css">
-
   {% if settings.favicon %}
     <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
   {% endif %}
@@ -608,7 +606,6 @@
   {%- endunless -%}
 
   {{ 'theme.css' | asset_url | stylesheet_tag }}
-  {{ 'kopstorm.css' | asset_url | stylesheet_tag }}
 
   {%- if settings.swatches_type != 'disabled' or settings.show_siblings -%}
     {{ 'swatches.css' | asset_url | stylesheet_tag }}
