@@ -121,7 +121,7 @@
         "text_NrK4GR": {
           "type": "text",
           "settings": {
-            "text": "<p>Every Zircon, like a human fingerprint, has certain distinguishing characteristics. The 4Cs—color, clarity, cut and carat weight—are the globally accepted standards for assessing the quality of a Zircon.</p>",
+            "text": "<p>Every Zircon, like a human fingerprint, has certain distinguishing characteristics. The 4Cs—colour, clarity, cut and carat weight—are the globally accepted standards for assessing the quality of a Zircon.</p>",
             "text_font_size": "body-large",
             "padding_bottom": 16
           }
@@ -213,6 +213,86 @@
       ],
       "settings": {
         "image_1": "shopify://shop_images/clarity.webp",
+        "image_width": "one-half",
+        "text_alignment": "text-left",
+        "layout": "",
+        "width": "wrapper--full",
+        "height": "screen-height-three-quarters",
+        "mobile_height": "four-fifty-height-hero--mobile",
+        "reverse_blocks": true,
+        "color_scheme": "",
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "show_placeholder": true
+      }
+    },
+    "section_double_QMbibE": {
+      "type": "section-double",
+      "blocks": {
+        "heading_GCyEzG": {
+          "type": "heading",
+          "settings": {
+            "title": "WHAT IS COLOUR?",
+            "heading_font_size": "heading-large",
+            "padding_bottom": 16,
+            "heading_tag": "automatic"
+          }
+        },
+        "text_7zKrCn": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Colour refers to the natural tint inherent in white Zircon. In nature, most white Zircon have a slight tint of yellow. The closer to being “colourless” a Zircon is, the rarer it is. The industry standard for grading colour is to evaluate each stone against a master set and assign a letter grade from “D” (colourless) to “Z” (light yellow).</p>",
+            "text_font_size": "body-large",
+            "padding_bottom": 16
+          }
+        }
+      },
+      "block_order": [
+        "heading_GCyEzG",
+        "text_7zKrCn"
+      ],
+      "settings": {
+        "image_1": "shopify://shop_images/colour.webp",
+        "image_width": "one-half",
+        "text_alignment": "text-left",
+        "layout": "is-reversed",
+        "width": "wrapper--full",
+        "height": "screen-height-three-quarters",
+        "mobile_height": "four-fifty-height-hero--mobile",
+        "reverse_blocks": true,
+        "color_scheme": "",
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "show_placeholder": true
+      }
+    },
+    "section_double_jw3n3p": {
+      "type": "section-double",
+      "blocks": {
+        "heading_EDfyT7": {
+          "type": "heading",
+          "settings": {
+            "title": "WHAT IS A CARAT?",
+            "heading_font_size": "heading-large",
+            "padding_bottom": 16,
+            "heading_tag": "automatic"
+          }
+        },
+        "text_Eg7wYN": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Zircon clarity is a measure of the purity and rarity of the stone, graded by the visibility of these characteristics under 10-power magnification. ACarat denotes the weight of a Zircon, not the size. Lucia Jade measures Zircon to 1/1000th of a carat; one carat equals .20 grams. Lucia Jade Zircon are always cut to maximise beauty, not carat weight. stone is graded as flawless if, under 10-power magnification, no inclusions (internal flaws) and no blemishes (external imperfections) are visible.</p>",
+            "text_font_size": "body-large",
+            "padding_bottom": 16
+          }
+        }
+      },
+      "block_order": [
+        "heading_EDfyT7",
+        "text_Eg7wYN"
+      ],
+      "settings": {
+        "image_1": "shopify://shop_images/carat.webp",
         "image_width": "one-half",
         "text_alignment": "text-left",
         "layout": "",
@@ -320,6 +400,8 @@
     "section_double_8mtFD6",
     "section_double_e67Dgb",
     "section_double_KBKmVx",
+    "section_double_QMbibE",
+    "section_double_jw3n3p",
     "section_multicolumn_eqFPgc"
   ]
 }
