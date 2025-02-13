@@ -1203,64 +1203,20 @@
 
         try {
           const bundleId = new Date().getTime();
-          
-          // Calculate adjusted prices for fixed price bundles
-          let adjustedItems;
-          if (this.useFixedPrice && this.selectedItems.length === this.bundleSize) {
-            const fixedPriceInCents = this.fixedBundlePrice * 100;
-            const totalOriginalPrice = this.originalTotal;
-            
-            // Calculate price distribution ratio
-            const priceRatio = fixedPriceInCents / totalOriginalPrice;
-            
-            // Adjust each item's price proportionally
-            adjustedItems = this.selectedItems.map((item, index, array) => {
-              const isLastItem = index === array.length - 1;
-              let adjustedPrice;
-              
-              if (isLastItem) {
-                // For the last item, use remaining amount to avoid rounding issues
-                const otherItemsTotal = array.slice(0, -1).reduce((sum, i) => 
-                  sum + Math.round(i.price * priceRatio), 0);
-                adjustedPrice = fixedPriceInCents - otherItemsTotal;
-              } else {
-                // For other items, calculate proportional price
-                adjustedPrice = Math.round(item.price * priceRatio);
-              }
-
-              return {
-                id: parseInt(item.variant_id),
-                quantity: item.quantity,
-                price: adjustedPrice / 100, // Convert back to dollars for display
-                properties: {
-                  '_bundle_id': bundleId,
-                  '_bundle_type': 'fixed_price',
-                  '_bundle_value': this.fixedBundlePrice,
-                  'Bundle': 'Jewelry Bundle Set',
-                  '_original_price': item.price / 100,
-                  '_bundle_size': this.bundleSize
-                }
-              };
-            });
-          } else {
-            // Regular percentage discount
-            adjustedItems = this.selectedItems.map(item => ({
-              id: parseInt(item.variant_id),
-              quantity: item.quantity,
-              properties: {
-                '_bundle_id': bundleId,
-                '_bundle_type': 'percentage',
-                '_bundle_value': this.discountPercentage + '%',
-                'Bundle': 'Jewelry Bundle Set',
-                '_original_price': item.price / 100,
-                '_bundle_size': this.bundleSize
-              }
-            }));
-          }
+          const items = this.selectedItems.map(item => ({
+            id: parseInt(item.variant_id),
+            quantity: item.quantity,
+            properties: {
+              '_bundle_id': bundleId,
+              '_bundle_discount': this.discountPercentage + '%',
+              'Bundle': 'Jewelry Bundle Set',
+              '_original_price': item.price
+            }
+          }));
 
           if (typeof window.liquidAjaxCart !== 'undefined') {
             const response = await window.liquidAjaxCart.add({
-              items: adjustedItems
+              items: items
             });
 
             if (!response.ok) {
@@ -1273,7 +1229,7 @@
               headers: {
                 'Content-Type': 'application/json'
               },
-              body: JSON.stringify({ items: adjustedItems })
+              body: JSON.stringify({ items })
             });
 
             if (!response.ok) {
