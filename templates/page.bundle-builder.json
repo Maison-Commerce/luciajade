@@ -36,7 +36,7 @@
         "title": "Create Your Custom Bundle",
         "bundle_size": 7,
         "discount_percentage": 0,
-        "bundle_collection": "all",
+        "bundle_collection": "best-sellers",
         "card_radius": 0,
         "button_radius": 0,
         "input_radius": 0,
@@ -146,9 +146,7 @@
       ],
       "disabled": true,
       "settings": {
-        "customclass": "",
         "title": "",
-        "subheading": "Keep your piece beautiful for generations with these essential care guidelines",
         "heading_font_size": "heading-medium",
         "description": "",
         "align_heading": "text-center",
