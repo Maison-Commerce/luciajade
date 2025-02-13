@@ -55,7 +55,7 @@
     "badge_bg_color": "#f4ff7e",
     "badge_text_color": "#212121",
     "show_sold_out_badge": true,
-    "show_automatic_new_badge": true,
+    "show_automatic_new_badge": false,
     "badge_new_date_limit": 20,
     "form_style": "classic",
     "show_labels": true,
