@@ -27,6 +27,42 @@
             "padding_bottom": 16
           }
         },
+        "icon_1": {
+          "type": "icon",
+          "settings": {
+            "icon_name": "icon-trophy",
+            "icon_size": 20,
+            "icon_color": "",
+            "text": "<p>Lifetime Color Warranty</p>",
+            "text_font_size": "body-medium",
+            "width": "full",
+            "padding_bottom": 16
+          }
+        },
+        "icon_nYrnEm": {
+          "type": "icon",
+          "settings": {
+            "icon_name": "icon-recycle",
+            "icon_size": 20,
+            "icon_color": "",
+            "text": "<p>Hassle-Free 30 Day Returns</p>",
+            "text_font_size": "body-medium",
+            "width": "full",
+            "padding_bottom": 16
+          }
+        },
+        "icon_2": {
+          "type": "icon",
+          "settings": {
+            "icon_name": "icon-truck",
+            "icon_size": 20,
+            "icon_color": "",
+            "text": "<p>Free worldwide shipping over $35</p>",
+            "text_font_size": "body-medium",
+            "width": "full",
+            "padding_bottom": 16
+          }
+        },
         "variants": {
           "type": "variants",
           "settings": {
@@ -81,30 +117,6 @@
             "padding_bottom": 16
           }
         },
-        "icon_1": {
-          "type": "icon",
-          "settings": {
-            "icon_name": "icon-recycle",
-            "icon_size": 20,
-            "icon_color": "",
-            "text": "<p>Hassle-Free 30 Day Returns</p>",
-            "text_font_size": "body-medium",
-            "width": "full",
-            "padding_bottom": 16
-          }
-        },
-        "icon_2": {
-          "type": "icon",
-          "settings": {
-            "icon_name": "icon-truck",
-            "icon_size": 20,
-            "icon_color": "",
-            "text": "<p>Free worldwide shipping over $35</p>",
-            "text_font_size": "body-medium",
-            "width": "full",
-            "padding_bottom": 16
-          }
-        },
         "accordion_HxqWxJ": {
           "type": "accordion",
           "settings": {
@@ -120,13 +132,14 @@
       "block_order": [
         "title",
         "price",
+        "icon_1",
+        "icon_nYrnEm",
+        "icon_2",
         "variants",
         "buttons",
         "code_FrqFYd",
         "tabs",
         "divider_1",
-        "icon_1",
-        "icon_2",
         "accordion_HxqWxJ"
       ],
       "settings": {
@@ -197,6 +210,7 @@
         "custom-1",
         "custom-0"
       ],
+      "disabled": true,
       "settings": {
         "borders": false,
         "gutters": false,
@@ -245,6 +259,7 @@
         "about-1",
         "about-2"
       ],
+      "disabled": true,
       "settings": {
         "default_open": false,
         "title": "About us",
@@ -259,86 +274,21 @@
         "padding_bottom": 30
       }
     },
-    "imgtxt": {
-      "type": "section-custom-content",
-      "blocks": {
-        "imgtxt-0": {
-          "type": "text",
-          "settings": {
-            "subheading": "Introducing",
-            "title": "Another feature",
-            "heading_font_size": "heading-large",
-            "text": "<p>Use this section to create unique side-by-side layouts with various content blocks. Pair text with images, newsletter blocks, products, videos, testimonials and more.</p>",
-            "text_font_size": "body-medium",
-            "button_text": "",
-            "button_url": "",
-            "button_type": "btn--primary",
-            "button_size": "",
-            "button_style": "btn--solid",
-            "show_arrow": false,
-            "show_social_links": false,
-            "text_columns": 1,
-            "align_text": "text-left",
-            "bg_color": "#f7f7f7",
-            "color": "",
-            "heading_tag": "automatic"
-          }
-        },
-        "imgtxt-1": {
-          "type": "image",
-          "settings": {
-            "title": "",
-            "heading_font_size": "heading-large",
-            "text": "",
-            "text_font_size": "body-medium",
-            "flex_align": "align--middle-center",
-            "show_text_background": false,
-            "bg_color": "",
-            "color": "",
-            "overlay_opacity": 0,
-            "overlay_color": "",
-            "show_overlay_text": false,
-            "link_text": "",
-            "link": "",
-            "button_type": "btn--primary",
-            "button_size": "",
-            "button_style": "btn--solid",
-            "show_arrow": false,
-            "heading_tag": "automatic"
-          }
-        }
-      },
-      "block_order": [
-        "imgtxt-0",
-        "imgtxt-1"
-      ],
-      "settings": {
-        "borders": false,
-        "gutters": false,
-        "width": "wrapper--full-padded",
-        "height": "screen-height-one-half",
-        "mobile_height": "screen-height-one-half--mobile",
-        "reverse_blocks": false,
-        "color_scheme": "",
-        "padding_top": 0,
-        "padding_bottom": 0
-      }
-    },
     "related": {
       "type": "related",
       "blocks": {
         "related": {
           "type": "related",
           "settings": {
-            "product_recommendations_heading": "Related products",
-            "limit": 4
+            "product_recommendations_heading": "Customers also bought",
+            "limit": 6
           }
         },
         "recent": {
           "type": "recent",
           "settings": {
             "product_recently_heading": "Recently viewed",
-            "product_recently_limit": 4
+            "product_recently_limit": 6
           }
         }
       },
@@ -350,8 +300,8 @@
         "enable_tabs": true,
         "heading_alignment": "text-center",
         "heading_font_size": "heading-small",
-        "layout_mobile": "slider",
-        "color_scheme": "",
+        "layout_mobile": "2",
+        "color_scheme": "scheme-1",
         "padding_top": 30,
         "padding_bottom": 0
       }
@@ -361,7 +311,6 @@
     "main",
     "custom",
     "about",
-    "imgtxt",
     "related"
   ]
 }
