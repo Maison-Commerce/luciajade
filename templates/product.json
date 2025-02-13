@@ -323,11 +323,28 @@
             "text_font_size": "body-medium",
             "heading_tag": "automatic"
           }
+        },
+        "icon_zPzDmf": {
+          "type": "icon",
+          "settings": {
+            "column_width": 25,
+            "icon_name": "icon-award",
+            "icon_size": 50,
+            "icon_alignment": "icon--top",
+            "icon_color": "",
+            "image": "shopify://shop_images/Materials_d3feed5e-c6c0-405c-9c46-fc7860f215dd.png",
+            "title": "Timeless Design",
+            "heading_font_size": "heading-small",
+            "text": "<p>Made to elevate any look, from casual days to special occasions.</p>",
+            "text_font_size": "body-medium",
+            "heading_tag": "automatic"
+          }
         }
       },
       "block_order": [
         "icon_rdYMRd",
-        "icon_mzHx7E"
+        "icon_mzHx7E",
+        "icon_zPzDmf"
       ],
       "settings": {
         "title": "",
