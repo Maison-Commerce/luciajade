@@ -71,7 +71,8 @@
         "bundle_incomplete_message": "💝 Please select all items to complete your bundle",
         "empty_box_title": "Your Box is Empty",
         "empty_box_text": "Add items to your bundle to get started!",
-        "box_full_message": "Box is full!"
+        "box_full_message": "Box is full!",
+        "comparison_product": "bundle-products"
       }
     },
     "section_multicolumn_eqFPgc": {
