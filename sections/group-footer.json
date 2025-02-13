@@ -11,6 +11,16 @@
   "type": "footer",
   "name": "Footer",
   "sections": {
+    "kopstorm_tabs_8ckQEM": {
+      "type": "kopstorm-tabs",
+      "settings": {
+        "show_announcement": true,
+        "padding-top-desktop": 50,
+        "padding-bottom-desktop": 50,
+        "padding-top-mobile": 50,
+        "padding-bottom-mobile": 50
+      }
+    },
     "footer": {
       "type": "footer",
       "blocks": {
@@ -95,6 +105,7 @@
     }
   },
   "order": [
+    "kopstorm_tabs_8ckQEM",
     "footer",
     "supporting-menu"
   ]
