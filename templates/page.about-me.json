@@ -51,6 +51,7 @@
     },
     "main": {
       "type": "main-page",
+      "disabled": true,
       "settings": {
         "subheading": "",
         "show_title": false,
@@ -65,81 +66,56 @@
         "heading_tag": "automatic"
       }
     },
-    "section_timeline_gP4zr9": {
-      "type": "section-timeline",
+    "section_double_HUKWxX": {
+      "type": "section-double",
       "blocks": {
-        "timeline_VN9WUG": {
-          "type": "timeline",
+        "heading_xwnUBB": {
+          "type": "heading",
           "settings": {
-            "subheading": "2010",
-            "title": "My Journey",
+            "title": "ABOUT US",
             "heading_font_size": "heading-large",
-            "text": "<p>My journey with jewelry began in a small, sunlit studio. There, surrounded by the stunning landscapes of the Southwest, I discovered my passion for transforming raw materials into wearable art. It’s a magical process, taking a simple piece of silver, adding a touch of gold, carefully selecting the perfect stone, and watching as it all comes together into something truly special. Each piece is crafted with precision and love, reflecting the natural beauty and spirit of the place I call home.</p><p>Over the years, my studio has seen countless designs come to life. No two pieces are ever exactly the same, and that’s what makes them so special. I believe that jewelry should be an expression of individuality, and it brings me immense joy to create custom pieces that are accessible to everyone.</p>",
-            "text_font_size": "body-medium",
-            "button_text": "Learn more",
-            "button_url": "",
-            "button_type": "btn--primary",
-            "button_size": "",
-            "button_style": "btn--solid",
-            "show_arrow": false,
+            "padding_bottom": 16,
             "heading_tag": "automatic"
           }
         },
-        "timeline_WK7Key": {
-          "type": "timeline",
+        "text_MEdTN9": {
+          "type": "text",
           "settings": {
-            "subheading": "2015",
-            "title": "Introduced our flagship product",
-            "heading_font_size": "heading-large",
-            "text": "<p>Our journey to success was defined by our flagship product. It shaped us into the industry leader we are today.</p>",
-            "text_font_size": "body-medium",
-            "button_text": "Learn more",
-            "button_url": "",
-            "button_type": "btn--primary",
-            "button_size": "",
-            "button_style": "btn--solid",
-            "show_arrow": false,
-            "heading_tag": "automatic"
+            "text": "<p>Founded on the belief that luxury jewelry should be accessible to everyone, our Lucia Jade jewelry specialises in timeless silver and gold pieces to compliment your collection.<br/><br/>We've cut out all the middle men - distributors, retailers, resellers and unfair industry norms - allowing us to bring you the highest quality pieces at seriously affordable, fair prices.</p><p>At Lucia Jade it's important to find affordable jewelry you'll return to time and time again. You'll find classic lines echoed in all of our pieces, from delicate necklaces to statement earrings. Also, with our bespoke and personalised options, our jewelry allows you to make the ultimate gift to a loved one, or yourself.</p><p>Lucia Jade zircons are brighter and more vibrant because our partnered jewelers craft them that way. The combination of Lucia Jade's exacting standards and unparalleled craftsmanship produces the most beautiful zircons in the world. Only the most expertly crafted zircons earn the right to be presented by Lucia Jade.</p>",
+            "text_font_size": "body-x-large",
+            "padding_bottom": 16
           }
         },
-        "timeline_8dyAce": {
-          "type": "timeline",
+        "buttons_X9K6QN": {
+          "type": "buttons",
           "settings": {
-            "subheading": "2020",
-            "title": "Launched our partner program",
-            "heading_font_size": "heading-large",
-            "text": "<p>You're what makes us great. With the exciting launch of our partner program you have the power to earn free products!</p>",
-            "text_font_size": "body-medium",
             "button_text": "Learn more",
             "button_url": "",
             "button_type": "btn--primary",
             "button_size": "",
             "button_style": "btn--solid",
             "show_arrow": false,
-            "heading_tag": "automatic"
+            "padding_bottom": 16
           }
         }
       },
       "block_order": [
-        "timeline_VN9WUG",
-        "timeline_WK7Key",
-        "timeline_8dyAce"
+        "heading_xwnUBB",
+        "text_MEdTN9",
+        "buttons_X9K6QN"
       ],
-      "disabled": true,
       "settings": {
-        "show_images": true,
-        "title": "Timeline",
-        "heading_font_size": "heading-large",
-        "text": "<p>Visually narrate your company's history and achievements. By offering a dynamic representation of events over time, it educates, captivates, and builds trust among customers.</p>",
-        "text_font_size": "body-medium",
+        "image_width": "one-half",
         "text_alignment": "text-left",
+        "layout": "is-reversed",
         "width": "wrapper--full",
-        "mobile_height": "screen-height-one-third--mobile",
+        "height": "screen-height-three-quarters",
+        "mobile_height": "screen-height-one-half--mobile",
+        "reverse_blocks": false,
         "color_scheme": "",
-        "dot_background": "",
-        "padding_top": 32,
-        "padding_bottom": 32,
-        "heading_tag": "automatic"
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "show_placeholder": true
       }
     },
     "section_multicolumn_eqFPgc": {
@@ -212,6 +188,7 @@
         "icon_pc9egM",
         "icon_chJcDP"
       ],
+      "disabled": true,
       "settings": {
         "title": "",
         "heading_font_size": "heading-medium",
@@ -226,103 +203,12 @@
         "padding_bottom": 50,
         "heading_tag": "automatic"
       }
-    },
-    "section_sidebar_FFdyeB": {
-      "type": "section-sidebar",
-      "blocks": {
-        "header_GfLd38": {
-          "type": "header",
-          "settings": {
-            "title": "Frequently Asked Questions"
-          }
-        },
-        "accordion_nAacDB": {
-          "type": "accordion",
-          "settings": {
-            "title": "How can i reach you?",
-            "content": "<p>I'm always here to help! Whether you have a question or just want to chat about my jewelry, I'm available every day of the week.</p><p><strong>My hours:</strong></p><ul><li>Mon - Fri: 9:00 AM - 5:00 PM</li><li>Sat - Sun: 10:00 AM - 3:00 PM</li></ul><p>I'll do my best to get back to you within 48 hours but always strive to respond as quickly as I can.</p><p>Email me at: <a href=\"mailto:info@helens-gems.com\" title=\"mailto:info@helens-gems.com\">info@annies-gems.com</a></p>"
-          }
-        },
-        "accordion_mdWUYt": {
-          "type": "accordion",
-          "settings": {
-            "title": "How long do i have to return my order?",
-            "content": "<p>I want you to love your pieces as much as I loved making it. You can return your order within 30 days of receiving it.</p>"
-          }
-        },
-        "accordion_EJEejy": {
-          "type": "accordion",
-          "settings": {
-            "title": "How is your jewelry made?",
-            "content": "<p>Yes. My jewelry is crafted with high-quality materials and is designed to last.</p><p>On top of that, my stainless steel pieces are 100% waterproof and will never tarnish or lose their color, even with frequent water contact.</p>"
-          }
-        },
-        "accordion_YXxJxe": {
-          "type": "accordion",
-          "settings": {
-            "title": "Is your jewelry durable? Will it tarnish?",
-            "content": "<p>Yes. My jewelry is crafted with high-quality materials and is designed to last.</p><p>On top of that, my stainless steel pieces are 100% waterproof and will never tarnish or lose their color, even with frequent water contact.</p>"
-          }
-        },
-        "header_WTneYP": {
-          "type": "header",
-          "settings": {
-            "title": "Payments"
-          }
-        },
-        "accordion_R76hKU": {
-          "type": "accordion",
-          "settings": {
-            "title": "Which payment methods do you accept?",
-            "content": "<p>I've made it simple and secure. My store takes American Express, Mastercard, Visa, Apple Pay, Google Pay, Shop Pay, PayPal, and Afterpay.</p>"
-          }
-        },
-        "text_dY7Nkz": {
-          "type": "text",
-          "settings": {
-            "text": "<p>Still have questions? We're happy to help! Please email us at info@annies-gems.com and we will get back to you within 24 hours.</p>"
-          }
-        },
-        "header_TaeeM9": {
-          "type": "header",
-          "settings": {
-            "title": "Shipping"
-          }
-        },
-        "accordion_cGg84r": {
-          "type": "accordion",
-          "settings": {
-            "title": "Do you offer free shipping?",
-            "content": "<p>Yes, I’m happy to offer FREE shipping across the country! Once your jewelry is on its way, I’ll send you a tracking number so you can follow its journey from my hands to yours.</p>"
-          }
-        }
-      },
-      "block_order": [
-        "header_GfLd38",
-        "accordion_nAacDB",
-        "accordion_mdWUYt",
-        "accordion_EJEejy",
-        "accordion_YXxJxe",
-        "header_WTneYP",
-        "accordion_R76hKU",
-        "text_dY7Nkz",
-        "header_TaeeM9",
-        "accordion_cGg84r"
-      ],
-      "settings": {
-        "heading_font_size": "heading-small",
-        "width": "wrapper",
-        "color_scheme": "",
-        "padding_top": 75,
-        "padding_bottom": 75
-      }
     }
   },
   "order": [
     "section_hero_QCkQki",
     "main",
-    "section_timeline_gP4zr9",
-    "section_multicolumn_eqFPgc",
-    "section_sidebar_FFdyeB"
+    "section_double_HUKWxX",
+    "section_multicolumn_eqFPgc"
   ]
 }
