@@ -50,8 +50,8 @@
           "type": "question",
           "settings": {
             "default_open": false,
-            "title": "Frequently asked question",
-            "content": "<p>Share details about your shipping policies, item returns, or customer service.</p>",
+            "title": "How to track my order?",
+            "content": "<p>We'll send you a tracking link as soon as your order is processed (1-2 business days), you can also view your order status here:</p><p><a href=\"/apps/parcelpanel\" title=\"/apps/parcelpanel\">TRACK MY ORDER</a></p>",
             "show_icon": false,
             "icon_name": "icon-award",
             "icon_size": 20,
