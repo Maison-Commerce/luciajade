@@ -80,6 +80,18 @@
     "ss_testimonial_12_GfQbpi": {
       "type": "ss-testimonial-12",
       "blocks": {
+        "slide_hUmaKx": {
+          "type": "slide",
+          "settings": {
+            "media_style": "image",
+            "image": "shopify://shop_images/review-5.webp",
+            "video_url": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
+            "controls": false,
+            "stars_count": 5,
+            "text": "<p>\"Yay! My order came in this morning, I took advantage of the custom bundle builder deal a few days ago and love love love the beautiful jewellery, thank you!\"</p>",
+            "author": "<p><strong>Macinda E.</strong></p>"
+          }
+        },
         "slide_MjTmbj": {
           "type": "slide",
           "settings": {
@@ -130,6 +142,7 @@
         }
       },
       "block_order": [
+        "slide_hUmaKx",
         "slide_MjTmbj",
         "slide_9WQWyn",
         "slide_LcKXCt",
