@@ -1109,7 +1109,6 @@
     Alpine.data('bundleBuilder', (bundleSize, discountPercentage) => ({
       bundleSize: bundleSize,
       discountPercentage: discountPercentage,
-      comparisonPrice: {{ section.settings.comparison_product.price | default: 0 }},
       selectedItems: [],
       selectedType: 'all',
       notification: {
@@ -1136,11 +1135,11 @@
       },
 
       get finalPrice() {
-        return this.comparisonPrice;
+        return this.originalTotal * (1 - this.discountPercentage / 100);
       },
 
       get savings() {
-        return this.originalTotal - this.comparisonPrice;
+        return this.originalTotal - this.finalPrice;
       },
 
       isProductSelected(productId) {
@@ -1577,19 +1576,17 @@
         <span>Original Total:</span>
         <span x-text="formatMoney(originalTotal)"></span>
       </p>
-      {% if section.settings.discount_percentage != 0%}
       <p>
-        <span>Bundle Discount:</span>
-        <span x-text="discountPercentage + '%'"></span>
+        <span>Final Price:</span>
+        <span x-text="formatMoney({{ section.settings.comparison_product.price }})"></span>
       </p>
-      {% endif %}
       <p>
         <span>You Save:</span>
         <span class="savings" x-text="formatMoney(savings)"></span>
       </p>
       <p class="final-price">
         <span>Final Price:</span>
-        <span x-text="formatMoney(finalPrice)"></span>
+        <span class="savings" x-text="formatMoney(originalTotal - {{ section.settings.comparison_product.price }})"></span>
       </p>
     </div>
 
@@ -1988,14 +1985,9 @@
       "default": "Box is full!"
     },
     {
-      "type": "header",
-      "content": "General Settings"
-    },
-    {
       "type": "product",
       "id": "comparison_product",
-      "label": "Comparison Product",
-      "info": "Select a product to compare bundle savings against"
+      "label": "Comparison Product"
     }
   ],
   "presets": [
