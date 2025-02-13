@@ -62,8 +62,8 @@
           "type": "question",
           "settings": {
             "default_open": false,
-            "title": "Frequently asked question",
-            "content": "<p>Share details about your shipping policies, item returns, or customer service.</p>",
+            "title": "How does the lifetime color guarantee work?",
+            "content": "<p>Our jewelry is crafted with <strong>high-quality materials </strong>designed to last.</p><p>We offer <strong>lifetime warranty </strong>for all products to back that up, covering all defects and color defects (excluding lost items).</p><p>If you ever have an issue, just contact us at help@lucia-jade.com and we'll send you <strong>a brand new replacement. No questions asked.</strong></p>",
             "show_icon": false,
             "icon_name": "icon-award",
             "icon_size": 20,
