@@ -92,21 +92,22 @@
             "author": "<p><strong>Lauren S.</strong></p>"
           }
         },
-        "slide_hVUDtN": {
+        "slide_9WQWyn": {
           "type": "slide",
           "settings": {
             "media_style": "image",
+            "image": "shopify://shop_images/review-2.jpg",
             "video_url": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
             "controls": false,
             "stars_count": 5,
-            "text": "<p>Our kids bring them everywhere, specially when doing puzzles and drawings</p>",
-            "author": "<p><strong>@theworldisyours</strong></p>"
+            "text": "<p>\"Literally the perfect 24/7 earrings. They are now my go to. Super cute and comfy, just the right size, and easy to sleep in.\"</p>",
+            "author": "<p><strong>Alice M.</strong></p>"
           }
         }
       },
       "block_order": [
         "slide_MjTmbj",
-        "slide_hVUDtN"
+        "slide_9WQWyn"
       ],
       "settings": {
         "heading": "<h2>Loved By 100,000+ Customers Worldwide</h2>",
