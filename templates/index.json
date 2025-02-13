@@ -1,1 +1,251 @@
-{"sections":{"hero":{"type":"section-hero","blocks":{"text_LJ4aKy":{"type":"text","settings":{"text":"<p>Premium Waterproof Jewelry<\/p>","text_font_size":"body-medium"}},"heading":{"type":"heading","settings":{"title":"ANY 5 PIECES FOR $59.99","heading_font_size":"heading-x-large","heading_tag":"automatic"}},"text":{"type":"text","settings":{"text":"<p>Build Your Own Bundle<\/p>","text_font_size":"body-medium"}},"button-1":{"type":"button","settings":{"link_text":"SHOP NOW","link":"shopify:\/\/collections\/all","button_type":"btn--primary","button_size":"btn--large","button_style":"btn--solid","show_arrow":false}},"button-2":{"type":"button","settings":{"link_text":"Shop sale","link":"shopify:\/\/collections\/sale","button_type":"btn--secondary","button_size":"btn--large","button_style":"btn--solid","show_arrow":false}}},"block_order":["text_LJ4aKy","heading","text","button-1","button-2"],"settings":{"image_1":"shopify:\/\/shop_images\/LJ-003.jpg","link":"","width":"wrapper--full","height":"sixty-fifty-height-hero","flex_align_desktop":"align--bottom-center-desktop","mobile_height":"five-fifty-height-hero--mobile","flex_align_mobile":"align--bottom-center-mobile","color_scheme":"scheme-2","show_text_background":false,"overlay_opacity":25,"show_overlay_text":false,"padding_top":0,"padding_bottom":0,"show_placeholder":true}},"section_press_logos_8mx9wp":{"type":"section-press-logos","blocks":{"logo_item_header_fNeGeH":{"type":"logo-item-header","settings":{"logo":"shopify:\/\/shop_images\/logo-001.svg","logo_width":100,"link":"","text":"Include a brief quote from a brand that loves your products","heading_font_size":"heading-small"}},"logo_item_header_CeBUDA":{"type":"logo-item-header","settings":{"logo":"shopify:\/\/shop_images\/logo-003.svg","logo_width":100,"link":"","text":"Include a brief quote from a brand that loves your products","heading_font_size":"heading-small"}},"logo_item_header_iaVHH4":{"type":"logo-item-header","settings":{"logo":"shopify:\/\/shop_images\/logo-002.svg","logo_width":100,"link":"","text":"Include a brief quote from a brand that loves your products","heading_font_size":"heading-small"}},"logo_item_header_BB7AKN":{"type":"logo-item-header","settings":{"logo":"shopify:\/\/shop_images\/logo-004.svg","logo_width":100,"link":"","text":"Include a brief quote from a brand that loves your products","heading_font_size":"heading-small"}}},"block_order":["logo_item_header_fNeGeH","logo_item_header_CeBUDA","logo_item_header_iaVHH4","logo_item_header_BB7AKN"],"settings":{"enable_heading_slider":false,"logo_opacity":60,"title":"As seen in","color_scheme":"","padding_top":50,"padding_bottom":50}},"section_collections_list_mHmnHa":{"type":"section-collections-list","blocks":{"collection_yzNJdf":{"type":"collection","settings":{"collection":"bundle-collection","title":""}},"collection_jPRHUL":{"type":"collection","settings":{"collection":"bundle-collection","title":""}},"collection_gyUFiW":{"type":"collection","settings":{"collection":"bundle-collection","title":""}},"collection_BcfBDt":{"type":"collection","settings":{"collection":"bundle-collection","title":""}},"collection_HJ9hTD":{"type":"collection","settings":{"collection":"bundle-collection","title":""}},"collection_wzDA7E":{"type":"collection","settings":{"collection":"bundle-collection","title":""}}},"block_order":["collection_yzNJdf","collection_jPRHUL","collection_gyUFiW","collection_BcfBDt","collection_HJ9hTD","collection_wzDA7E"],"settings":{"title":"Collection list","heading_font_size":"heading-medium","description":"","text_font_size":"body-medium","button_text":"","button_url":"shopify:\/\/collections","button_type":"btn--primary","button_size":"","button_style":"btn--solid","show_arrow":false,"aspect_ratio":1,"layout":"grid","grid":6,"layout_mobile":"2","color_scheme":"scheme-4128de9a-8ed8-4e17-9393-3af4800cd057","padding_top":32,"padding_bottom":32,"heading_tag":"automatic"}},"section_collection_wcVV3J":{"type":"section-collection","settings":{"featured_collection":"bundle-collection","heading":"Best Sellers","heading_font_size":"heading-medium","description":"","text_font_size":"body-medium","layout":"inline","link_text":"Shop All","link_url":"","button_type":"btn--primary","button_size":"","button_style":"btn--solid","show_arrow":false,"layout_desktop":"slider","grid":6,"rows":1,"width":"wrapper","layout_mobile":"slider","color_scheme":"scheme-4128de9a-8ed8-4e17-9393-3af4800cd057","padding_top":50,"padding_bottom":50,"heading_tag":"automatic"}}},"order":["hero","section_press_logos_8mx9wp","section_collections_list_mHmnHa","section_collection_wcVV3J"]}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "hero": {
+      "type": "section-hero",
+      "blocks": {
+        "text_LJ4aKy": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Premium Waterproof Jewelry</p>",
+            "text_font_size": "body-medium"
+          }
+        },
+        "heading": {
+          "type": "heading",
+          "settings": {
+            "title": "ANY 5 PIECES FOR $59.99",
+            "heading_font_size": "heading-x-large",
+            "heading_tag": "automatic"
+          }
+        },
+        "text": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Build Your Own Bundle</p>",
+            "text_font_size": "body-medium"
+          }
+        },
+        "button-1": {
+          "type": "button",
+          "settings": {
+            "link_text": "BUILD YOUR BOX",
+            "link": "shopify://pages/bundle-builder",
+            "button_type": "btn--primary",
+            "button_size": "btn--large",
+            "button_style": "btn--solid",
+            "show_arrow": false
+          }
+        },
+        "button-2": {
+          "type": "button",
+          "settings": {
+            "link_text": "Shop the sale",
+            "link": "shopify://collections/sale",
+            "button_type": "btn--secondary",
+            "button_size": "btn--large",
+            "button_style": "btn--solid",
+            "show_arrow": false
+          }
+        }
+      },
+      "block_order": [
+        "text_LJ4aKy",
+        "heading",
+        "text",
+        "button-1",
+        "button-2"
+      ],
+      "settings": {
+        "image_1": "shopify://shop_images/LJ-003.jpg",
+        "link": "",
+        "width": "wrapper--full",
+        "height": "sixty-fifty-height-hero",
+        "flex_align_desktop": "align--bottom-center-desktop",
+        "mobile_height": "five-fifty-height-hero--mobile",
+        "flex_align_mobile": "align--bottom-center-mobile",
+        "color_scheme": "scheme-2",
+        "show_text_background": false,
+        "overlay_opacity": 25,
+        "show_overlay_text": false,
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "show_placeholder": true
+      }
+    },
+    "section_press_logos_8mx9wp": {
+      "type": "section-press-logos",
+      "blocks": {
+        "logo_item_header_fNeGeH": {
+          "type": "logo-item-header",
+          "settings": {
+            "logo": "shopify://shop_images/logo-001.svg",
+            "logo_width": 100,
+            "link": "",
+            "text": "Include a brief quote from a brand that loves your products",
+            "heading_font_size": "heading-small"
+          }
+        },
+        "logo_item_header_CeBUDA": {
+          "type": "logo-item-header",
+          "settings": {
+            "logo": "shopify://shop_images/logo-003.svg",
+            "logo_width": 100,
+            "link": "",
+            "text": "Include a brief quote from a brand that loves your products",
+            "heading_font_size": "heading-small"
+          }
+        },
+        "logo_item_header_iaVHH4": {
+          "type": "logo-item-header",
+          "settings": {
+            "logo": "shopify://shop_images/logo-002.svg",
+            "logo_width": 100,
+            "link": "",
+            "text": "Include a brief quote from a brand that loves your products",
+            "heading_font_size": "heading-small"
+          }
+        },
+        "logo_item_header_BB7AKN": {
+          "type": "logo-item-header",
+          "settings": {
+            "logo": "shopify://shop_images/logo-004.svg",
+            "logo_width": 100,
+            "link": "",
+            "text": "Include a brief quote from a brand that loves your products",
+            "heading_font_size": "heading-small"
+          }
+        }
+      },
+      "block_order": [
+        "logo_item_header_fNeGeH",
+        "logo_item_header_CeBUDA",
+        "logo_item_header_iaVHH4",
+        "logo_item_header_BB7AKN"
+      ],
+      "settings": {
+        "enable_heading_slider": false,
+        "logo_opacity": 60,
+        "title": "As seen in",
+        "color_scheme": "",
+        "padding_top": 50,
+        "padding_bottom": 50
+      }
+    },
+    "section_collections_list_mHmnHa": {
+      "type": "section-collections-list",
+      "blocks": {
+        "collection_yzNJdf": {
+          "type": "collection",
+          "settings": {
+            "collection": "bundle-collection",
+            "title": ""
+          }
+        },
+        "collection_jPRHUL": {
+          "type": "collection",
+          "settings": {
+            "collection": "bundle-collection",
+            "title": ""
+          }
+        },
+        "collection_gyUFiW": {
+          "type": "collection",
+          "settings": {
+            "collection": "bundle-collection",
+            "title": ""
+          }
+        },
+        "collection_BcfBDt": {
+          "type": "collection",
+          "settings": {
+            "collection": "bundle-collection",
+            "title": ""
+          }
+        },
+        "collection_HJ9hTD": {
+          "type": "collection",
+          "settings": {
+            "collection": "bundle-collection",
+            "title": ""
+          }
+        },
+        "collection_wzDA7E": {
+          "type": "collection",
+          "settings": {
+            "collection": "bundle-collection",
+            "title": ""
+          }
+        }
+      },
+      "block_order": [
+        "collection_yzNJdf",
+        "collection_jPRHUL",
+        "collection_gyUFiW",
+        "collection_BcfBDt",
+        "collection_HJ9hTD",
+        "collection_wzDA7E"
+      ],
+      "settings": {
+        "title": "Collection list",
+        "heading_font_size": "heading-medium",
+        "description": "",
+        "text_font_size": "body-medium",
+        "button_text": "",
+        "button_url": "shopify://collections",
+        "button_type": "btn--primary",
+        "button_size": "",
+        "button_style": "btn--solid",
+        "show_arrow": false,
+        "aspect_ratio": 1,
+        "layout": "grid",
+        "grid": 6,
+        "layout_mobile": "2",
+        "color_scheme": "scheme-4128de9a-8ed8-4e17-9393-3af4800cd057",
+        "padding_top": 32,
+        "padding_bottom": 32,
+        "heading_tag": "automatic"
+      }
+    },
+    "section_collection_wcVV3J": {
+      "type": "section-collection",
+      "settings": {
+        "featured_collection": "bundle-collection",
+        "heading": "Best Sellers",
+        "heading_font_size": "heading-medium",
+        "description": "",
+        "text_font_size": "body-medium",
+        "layout": "inline",
+        "link_text": "Shop All",
+        "link_url": "",
+        "button_type": "btn--primary",
+        "button_size": "",
+        "button_style": "btn--solid",
+        "show_arrow": false,
+        "layout_desktop": "slider",
+        "grid": 6,
+        "rows": 1,
+        "width": "wrapper",
+        "layout_mobile": "slider",
+        "color_scheme": "scheme-4128de9a-8ed8-4e17-9393-3af4800cd057",
+        "padding_top": 50,
+        "padding_bottom": 50,
+        "heading_tag": "automatic"
+      }
+    }
+  },
+  "order": [
+    "hero",
+    "section_press_logos_8mx9wp",
+    "section_collections_list_mHmnHa",
+    "section_collection_wcVV3J"
+  ]
+}
