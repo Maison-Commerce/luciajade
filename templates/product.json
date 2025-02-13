@@ -92,22 +92,13 @@
             "padding_bottom": 16
           }
         },
-        "tabs": {
-          "type": "tab_richtext",
+        "text_mFcY6a": {
+          "type": "text",
           "settings": {
-            "show_description": true,
-            "show_read_more": true,
-            "title_1": "",
-            "raw_content_1": "",
-            "title_2": "",
-            "raw_content_2": "",
-            "title_3": "",
-            "raw_content_3": "",
-            "title_4": "",
-            "raw_content_4": "",
-            "title_5": "",
-            "raw_content_5": "",
-            "padding_bottom": 0
+            "title": "Product details",
+            "text": "{{ product.description }}",
+            "layout": "left",
+            "padding_bottom": 16
           }
         },
         "divider_1": {
@@ -134,8 +125,8 @@
             "show_description": false,
             "show_read_more": true,
             "default_open": false,
-            "heading": "SHIPPING & RETURNS",
-            "text": "<p>We offer <strong>free worldwide shipping</strong> on orders over $35</p><p>We ship every order within <strong>1-2 business days,</strong> and you'll receive a tracking number as soon as it's on its way</p><p><strong>Not totally in love with your purchase? </strong>No problem! You can return it <strong>within 30 days</strong> for a hassle-free refund, no questions asked. We truly want you to be happy with your new jewelry!</p>",
+            "heading": "LIFETIME COLOR WARRANTY",
+            "text": "<p>Our jewelry is crafted with <strong>high-quality materials </strong>designed to last.</p><p>We offer <strong>lifetime warranty </strong>for all products to back that up, covering all defects and color defects (excluding lost items).</p><p>If you ever have an issue, just contact us at help@lucia-jade.com and we'll send you <strong>a brand new replacement. No questions asked.</strong></p>",
             "padding_bottom": 0
           }
         }
@@ -149,7 +140,7 @@
         "variants",
         "buttons",
         "code_FrqFYd",
-        "tabs",
+        "text_mFcY6a",
         "divider_1",
         "accordion_HxqWxJ",
         "accordion_fawGrh"
