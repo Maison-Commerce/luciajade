@@ -97,8 +97,8 @@
           "settings": {
             "show_description": true,
             "show_read_more": true,
-            "title_1": "LIFETIME WARRANTY",
-            "raw_content_1": "<p>We offer a lifetime color warranty and that text goes here.</p>",
+            "title_1": "",
+            "raw_content_1": "",
             "title_2": "",
             "raw_content_2": "",
             "title_3": "",
@@ -127,6 +127,17 @@
             "text": "<p>We offer <strong>free worldwide shipping</strong> on orders over $35</p><p>We ship every order within <strong>1-2 business days,</strong> and you'll receive a tracking number as soon as it's on its way</p><p><strong>Not totally in love with your purchase? </strong>No problem! You can return it <strong>within 30 days</strong> for a hassle-free refund, no questions asked. We truly want you to be happy with your new jewelry!</p>",
             "padding_bottom": 0
           }
+        },
+        "accordion_fawGrh": {
+          "type": "accordion",
+          "settings": {
+            "show_description": false,
+            "show_read_more": true,
+            "default_open": false,
+            "heading": "SHIPPING & RETURNS",
+            "text": "<p>We offer <strong>free worldwide shipping</strong> on orders over $35</p><p>We ship every order within <strong>1-2 business days,</strong> and you'll receive a tracking number as soon as it's on its way</p><p><strong>Not totally in love with your purchase? </strong>No problem! You can return it <strong>within 30 days</strong> for a hassle-free refund, no questions asked. We truly want you to be happy with your new jewelry!</p>",
+            "padding_bottom": 0
+          }
         }
       },
       "block_order": [
@@ -140,7 +151,8 @@
         "code_FrqFYd",
         "tabs",
         "divider_1",
-        "accordion_HxqWxJ"
+        "accordion_HxqWxJ",
+        "accordion_fawGrh"
       ],
       "settings": {
         "product_sticky_enable": true,
