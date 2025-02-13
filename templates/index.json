@@ -140,67 +140,6 @@
         "padding_bottom": 50
       }
     },
-    "section_collections_list_mHmnHa": {
-      "type": "section-collections-list",
-      "blocks": {
-        "collection_yzNJdf": {
-          "type": "collection",
-          "settings": {
-            "collection": "rings",
-            "collection_image": "shopify://shop_images/Sd19f0137557e4dcb8f68eadaae757065c.webp",
-            "title": ""
-          }
-        },
-        "collection_jPRHUL": {
-          "type": "collection",
-          "settings": {
-            "collection": "earrings",
-            "collection_image": "shopify://shop_images/68a5a311-9b89-4a42-96f1-a6c2beebac7c.jpg",
-            "title": ""
-          }
-        },
-        "collection_gyUFiW": {
-          "type": "collection",
-          "settings": {
-            "collection": "necklaces",
-            "title": ""
-          }
-        },
-        "collection_BcfBDt": {
-          "type": "collection",
-          "settings": {
-            "collection": "bracelets",
-            "title": ""
-          }
-        }
-      },
-      "block_order": [
-        "collection_yzNJdf",
-        "collection_jPRHUL",
-        "collection_gyUFiW",
-        "collection_BcfBDt"
-      ],
-      "settings": {
-        "title": "",
-        "heading_font_size": "heading-medium",
-        "description": "",
-        "text_font_size": "body-medium",
-        "button_text": "",
-        "button_url": "shopify://collections",
-        "button_type": "btn--primary",
-        "button_size": "",
-        "button_style": "btn--solid",
-        "show_arrow": false,
-        "aspect_ratio": 1,
-        "layout": "grid",
-        "grid": 4,
-        "layout_mobile": "2",
-        "color_scheme": "scheme-4128de9a-8ed8-4e17-9393-3af4800cd057",
-        "padding_top": 32,
-        "padding_bottom": 32,
-        "heading_tag": "automatic"
-      }
-    },
     "section_collection_wcVV3J": {
       "type": "section-collection",
       "settings": {
@@ -226,12 +165,93 @@
         "padding_bottom": 50,
         "heading_tag": "automatic"
       }
+    },
+    "section_collections_list_mHmnHa": {
+      "type": "section-collections-list",
+      "blocks": {
+        "collection_hkRQd8": {
+          "type": "collection",
+          "settings": {
+            "collection": "best-sellers",
+            "collection_image": "shopify://shop_images/bestsellers.webp",
+            "title": ""
+          }
+        },
+        "collection_yzNJdf": {
+          "type": "collection",
+          "settings": {
+            "collection": "rings",
+            "collection_image": "shopify://shop_images/rings.webp",
+            "title": ""
+          }
+        },
+        "collection_jPRHUL": {
+          "type": "collection",
+          "settings": {
+            "collection": "earrings",
+            "collection_image": "shopify://shop_images/earrings.webp",
+            "title": ""
+          }
+        },
+        "collection_gyUFiW": {
+          "type": "collection",
+          "settings": {
+            "collection": "necklaces",
+            "collection_image": "shopify://shop_images/necklace.png",
+            "title": ""
+          }
+        },
+        "collection_BcfBDt": {
+          "type": "collection",
+          "settings": {
+            "collection": "bracelets",
+            "collection_image": "shopify://shop_images/bracelet.webp",
+            "title": ""
+          }
+        },
+        "collection_rgphEQ": {
+          "type": "collection",
+          "settings": {
+            "collection": "pearls",
+            "collection_image": "shopify://shop_images/pearls.png",
+            "title": ""
+          }
+        }
+      },
+      "block_order": [
+        "collection_hkRQd8",
+        "collection_yzNJdf",
+        "collection_jPRHUL",
+        "collection_gyUFiW",
+        "collection_BcfBDt",
+        "collection_rgphEQ"
+      ],
+      "settings": {
+        "title": "",
+        "heading_font_size": "heading-medium",
+        "description": "",
+        "text_font_size": "body-medium",
+        "button_text": "",
+        "button_url": "shopify://collections",
+        "button_type": "btn--primary",
+        "button_size": "",
+        "button_style": "btn--solid",
+        "show_arrow": false,
+        "aspect_ratio": 1,
+        "layout": "grid",
+        "grid": 3,
+        "layout_mobile": "2",
+        "color_scheme": "scheme-4128de9a-8ed8-4e17-9393-3af4800cd057",
+        "padding_top": 32,
+        "padding_bottom": 32,
+        "heading_tag": "automatic"
+      }
     }
   },
   "order": [
     "hero",
     "section_press_logos_8mx9wp",
-    "section_collections_list_mHmnHa",
-    "section_collection_wcVV3J"
+    "section_collection_wcVV3J",
+    "section_collections_list_mHmnHa"
   ]
 }
