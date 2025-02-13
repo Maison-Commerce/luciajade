@@ -17,9 +17,9 @@
         "text": {
           "type": "text",
           "settings": {
-            "text": "<p>Valentine's Sale - Up To 50% Off</p>",
-            "target_url_enabled": false,
-            "target_url": "",
+            "text": "<p>Valentine's Sale - Any 5 pieces for $59.99</p>",
+            "target_url_enabled": true,
+            "target_url": "shopify://pages/bundle-builder",
             "target_referrer_enabled": false,
             "target_referrer": "",
             "target_device_enabled": false,
@@ -29,7 +29,7 @@
         "text-2": {
           "type": "text",
           "settings": {
-            "text": "<p><a href=\"/collections/new\" title=\"New\">New arrivals are here! Take a peek now</a></p>",
+            "text": "<p>Free Worldwide Shipping</p>",
             "target_url_enabled": false,
             "target_url": "",
             "target_referrer_enabled": false,
