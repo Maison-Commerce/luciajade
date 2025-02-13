@@ -1109,6 +1109,7 @@
     Alpine.data('bundleBuilder', (bundleSize, discountPercentage) => ({
       bundleSize: bundleSize,
       discountPercentage: discountPercentage,
+      comparisonPrice: {{ section.settings.comparison_product.price | default: 0 }},
       selectedItems: [],
       selectedType: 'all',
       notification: {
@@ -1135,11 +1136,11 @@
       },
 
       get finalPrice() {
-        return this.originalTotal * (1 - this.discountPercentage / 100);
+        return this.comparisonPrice;
       },
 
       get savings() {
-        return this.originalTotal - this.finalPrice;
+        return this.originalTotal - this.comparisonPrice;
       },
 
       isProductSelected(productId) {
@@ -1985,6 +1986,16 @@
       "id": "box_full_message",
       "label": "Box Full Message",
       "default": "Box is full!"
+    },
+    {
+      "type": "header",
+      "content": "General Settings"
+    },
+    {
+      "type": "product",
+      "id": "comparison_product",
+      "label": "Comparison Product",
+      "info": "Select a product to compare bundle savings against"
     }
   ],
   "presets": [
