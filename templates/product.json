@@ -129,6 +129,17 @@
             "text": "<p>Our jewelry is crafted with <strong>high-quality materials </strong>designed to last.</p><p>We offer <strong>lifetime warranty </strong>for all products to back that up, covering all defects and color defects (excluding lost items).</p><p>If you ever have an issue, just contact us at help@lucia-jade.com and we'll send you <strong>a brand new replacement. No questions asked.</strong></p>",
             "padding_bottom": 0
           }
+        },
+        "accordion_QaKjDW": {
+          "type": "accordion",
+          "settings": {
+            "show_description": false,
+            "show_read_more": true,
+            "default_open": false,
+            "heading": "FAIR PRICING POLICY",
+            "text": "<p><strong>We believe that beautiful, high-quality jewelry should be truly affordable.</strong></p><p>At Lucia Jade, we offer <strong>fair pricing</strong> - no 10x markups - while using <strong>premium materials </strong>designed to last!</p><p>All our pieces are backed by a <strong>lifetime color warranty, </strong>so you can shop with confidence and enjoy your jewelry for years to come.</p>",
+            "padding_bottom": 0
+          }
         }
       },
       "block_order": [
@@ -143,7 +154,8 @@
         "text_mFcY6a",
         "divider_1",
         "accordion_HxqWxJ",
-        "accordion_fawGrh"
+        "accordion_fawGrh",
+        "accordion_QaKjDW"
       ],
       "settings": {
         "product_sticky_enable": true,
