@@ -84,11 +84,12 @@
           "type": "slide",
           "settings": {
             "media_style": "image",
+            "image": "shopify://shop_images/review-1.jpg",
             "video_url": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
             "controls": false,
             "stars_count": 5,
-            "text": "<p>the perfect candle replacement, obsessed with the lamps!</p>",
-            "author": "<p><strong>@tracer</strong></p>"
+            "text": "<p>\"I'm absolutely in love with my new pieces from Lucia Jade, I've been wearing them daily and they're the cutest!! Will definitely be back again\"</p>",
+            "author": "<p><strong>Lauren S.</strong></p>"
           }
         },
         "slide_hVUDtN": {
@@ -101,71 +102,11 @@
             "text": "<p>Our kids bring them everywhere, specially when doing puzzles and drawings</p>",
             "author": "<p><strong>@theworldisyours</strong></p>"
           }
-        },
-        "slide_PNHxpN": {
-          "type": "slide",
-          "settings": {
-            "media_style": "image",
-            "video_url": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
-            "controls": false,
-            "stars_count": 5,
-            "text": "<p>This is the brand to go for lamps, love the quality and design, as always you get what you pay</p>",
-            "author": "<p><strong>@niels_homes</strong></p>"
-          }
-        },
-        "slide_BnCPft": {
-          "type": "slide",
-          "settings": {
-            "media_style": "image",
-            "video_url": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
-            "controls": false,
-            "stars_count": 5,
-            "text": "<p>Love them, they give the perfect luxury touch to any room</p>",
-            "author": "<p><strong>@allfinds</strong></p>"
-          }
-        },
-        "slide_3KxkAq": {
-          "type": "slide",
-          "settings": {
-            "media_style": "image",
-            "video_url": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
-            "controls": false,
-            "stars_count": 5,
-            "text": "<p>The cordless lamp you've been looking for!</p>",
-            "author": "<p><strong>@lacey</strong></p>"
-          }
-        },
-        "slide_UDmctn": {
-          "type": "slide",
-          "settings": {
-            "media_style": "image",
-            "video_url": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
-            "controls": false,
-            "stars_count": 5,
-            "text": "<p>All my friends want them too now, at least I was the first one to get them..!</p>",
-            "author": "<p><strong>@mcqueen</strong></p>"
-          }
-        },
-        "slide_pN9Dpk": {
-          "type": "slide",
-          "settings": {
-            "media_style": "image",
-            "video_url": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
-            "controls": false,
-            "stars_count": 5,
-            "text": "<p>I use it every day early in the morning and on our dining table, it is do convenient and cool</p>",
-            "author": "<p><strong>@dwithpatty</strong></p>"
-          }
         }
       },
       "block_order": [
         "slide_MjTmbj",
-        "slide_hVUDtN",
-        "slide_PNHxpN",
-        "slide_BnCPft",
-        "slide_3KxkAq",
-        "slide_UDmctn",
-        "slide_pN9Dpk"
+        "slide_hVUDtN"
       ],
       "settings": {
         "heading": "<h2>Loved By 100,000+ Customers Worldwide</h2>",
