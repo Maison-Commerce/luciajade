@@ -35,7 +35,7 @@
       "settings": {
         "title": "Create Your Custom Bundle",
         "bundle_size": 5,
-        "discount_percentage": 0,
+        "discount_percentage": 50,
         "bundle_collection": "best-sellers",
         "card_radius": 0,
         "button_radius": 0,
