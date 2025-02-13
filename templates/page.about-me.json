@@ -82,36 +82,24 @@
           "type": "text",
           "settings": {
             "text": "<p>Founded on the belief that luxury jewelry should be accessible to everyone, our Lucia Jade jewelry specialises in timeless silver and gold pieces to compliment your collection.<br/><br/>We've cut out all the middle men - distributors, retailers, resellers and unfair industry norms - allowing us to bring you the highest quality pieces at seriously affordable, fair prices.</p><p>At Lucia Jade it's important to find affordable jewelry you'll return to time and time again. You'll find classic lines echoed in all of our pieces, from delicate necklaces to statement earrings. Also, with our bespoke and personalised options, our jewelry allows you to make the ultimate gift to a loved one, or yourself.</p><p>Lucia Jade zircons are brighter and more vibrant because our partnered jewelers craft them that way. The combination of Lucia Jade's exacting standards and unparalleled craftsmanship produces the most beautiful zircons in the world. Only the most expertly crafted zircons earn the right to be presented by Lucia Jade.</p>",
-            "text_font_size": "body-x-large",
-            "padding_bottom": 16
-          }
-        },
-        "buttons_X9K6QN": {
-          "type": "buttons",
-          "settings": {
-            "button_text": "Learn more",
-            "button_url": "",
-            "button_type": "btn--primary",
-            "button_size": "",
-            "button_style": "btn--solid",
-            "show_arrow": false,
+            "text_font_size": "body-large",
             "padding_bottom": 16
           }
         }
       },
       "block_order": [
         "heading_xwnUBB",
-        "text_MEdTN9",
-        "buttons_X9K6QN"
+        "text_MEdTN9"
       ],
       "settings": {
+        "image_1": "shopify://shop_images/sideimg.webp",
         "image_width": "one-half",
         "text_alignment": "text-left",
         "layout": "is-reversed",
         "width": "wrapper--full",
         "height": "screen-height-three-quarters",
-        "mobile_height": "screen-height-one-half--mobile",
-        "reverse_blocks": false,
+        "mobile_height": "four-fifty-height-hero--mobile",
+        "reverse_blocks": true,
         "color_scheme": "",
         "padding_top": 0,
         "padding_bottom": 0,
