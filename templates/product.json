@@ -339,12 +339,29 @@
             "text_font_size": "body-medium",
             "heading_tag": "automatic"
           }
+        },
+        "icon_QXRCWy": {
+          "type": "icon",
+          "settings": {
+            "column_width": 25,
+            "icon_name": "icon-award",
+            "icon_size": 50,
+            "icon_alignment": "icon--top",
+            "icon_color": "",
+            "image": "shopify://shop_images/bad_3336878.png",
+            "title": "Forget 10x Mark Ups",
+            "heading_font_size": "heading-small",
+            "text": "<p>We believe high quality jewelry should be affordable so we guarantee fair pricing always.</p>",
+            "text_font_size": "body-medium",
+            "heading_tag": "automatic"
+          }
         }
       },
       "block_order": [
         "icon_rdYMRd",
         "icon_mzHx7E",
-        "icon_zPzDmf"
+        "icon_zPzDmf",
+        "icon_QXRCWy"
       ],
       "settings": {
         "title": "",
