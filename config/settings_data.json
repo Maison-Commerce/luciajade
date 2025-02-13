@@ -52,7 +52,7 @@
     "product_grid_aspect_ratio": 1.1,
     "sale_bg_color": "#44ac52",
     "sale_text_color": "#ffffff",
-    "badge_bg_color": "#ffffff",
+    "badge_bg_color": "#f4ff7e",
     "badge_text_color": "#212121",
     "show_sold_out_badge": true,
     "show_automatic_new_badge": true,
