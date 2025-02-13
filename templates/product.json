@@ -203,11 +203,23 @@
             "author": "Amie L.",
             "time": "1 day ago"
           }
+        },
+        "item_CnCEPm": {
+          "type": "item",
+          "settings": {
+            "stars_count": 5,
+            "verified_text": "Verified",
+            "title": "So unique!",
+            "text": "<p>I love my new necklace! It goes with just about anything for any occasion, whether casual or fancy, with the right amount of simplicity and uniqueness!!</p>",
+            "author": "Kanchan P.",
+            "time": "1 day ago"
+          }
         }
       },
       "block_order": [
         "item_XjHnNC",
-        "item_Gga6qT"
+        "item_Gga6qT",
+        "item_CnCEPm"
       ],
       "settings": {
         "reviews_position": "below_buy",
