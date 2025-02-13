@@ -220,10 +220,21 @@
           "settings": {
             "stars_count": 5,
             "verified_text": "Verified",
-            "title": "So unique!",
+            "title": "Beautiful piece",
             "text": "<p>Its a beautiful piece, have been wearing it daily and showering with it. I don't see any tarnish or skin allergies.</p>",
             "author": "Sirisha A.",
             "time": "2 days ago"
+          }
+        },
+        "item_eXEa7c": {
+          "type": "item",
+          "settings": {
+            "stars_count": 5,
+            "verified_text": "Verified",
+            "title": "So happy!!",
+            "text": "<p>I've worn my jewelry every day for the last few months, in the gym, shower, to sleep! and it still looks exactly the same as when I bought it. No tarnishing or breaking at all!</p>",
+            "author": "Millie S.",
+            "time": "3 days ago"
           }
         }
       },
@@ -231,7 +242,8 @@
         "item_XjHnNC",
         "item_Gga6qT",
         "item_CnCEPm",
-        "item_byyqLG"
+        "item_byyqLG",
+        "item_eXEa7c"
       ],
       "settings": {
         "reviews_position": "below_buy",
