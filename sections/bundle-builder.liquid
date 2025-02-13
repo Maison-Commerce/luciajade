@@ -1,5 +1,3 @@
-
-
 <!-- Initialize Liquid Ajax Cart -->
 <script>
   document.addEventListener('DOMContentLoaded', function() {
@@ -799,6 +797,9 @@
 
   /* Mobile Styles */
   @media screen and (max-width: 768px) {
+    .bundle-builder {
+      padding: 0;
+    }
     .bundle-builder__products {
       grid-template-columns: repeat(2, 1fr);
       gap: 1rem;
@@ -1006,7 +1007,7 @@
     .bundle-progress-container {
       width: calc(100% - 40px);
       max-width: none;
-      top: 10px;
+      top: 80px;
     }
   }
 
@@ -1110,12 +1111,12 @@
       loading: false,
       isViewOpen: false,
 
-      // Информация о bundle product
+      // Информация о bundle product из настроек секции
       bundleProduct: {
-        id: '{{ all_products["bundle-products"].id }}',
+        id: '{{ bundle_product.id }}',
         variant: {
-          id: {{ all_products["bundle-products"].variants.first.id }},
-          price: {{ all_products["bundle-products"].variants.first.price }}
+          id: {{ bundle_product.variants.first.id | json }},
+          price: {{ bundle_product.variants.first.price | json }}
         }
       },
 
@@ -1135,7 +1136,7 @@
 
       async addBundleToCart() {
         if (this.selectedItems.length < this.bundleSize) {
-          this.showNotification('{{ section.settings.bundle_incomplete_message | escape }}', 'error');
+          this.showNotification('Please select all items for your bundle', 'error');
           return;
         }
 
@@ -1197,34 +1198,19 @@
           this.selectedItems = [];
           localStorage.removeItem('currentBundle');
           this.isViewOpen = false;
-          this.showNotification('{{ section.settings.bundle_added_message | escape }}', 'success');
+          this.showNotification('Bundle added to cart successfully!', 'success');
           window.location.href = '/cart';
 
         } catch (error) {
           console.error('Bundle addition error:', error);
-          this.showNotification('{{ section.settings.bundle_error_message | escape }}', 'error');
+          this.showNotification('Failed to add bundle to cart', 'error');
         } finally {
           this.loading = false;
         }
       },
 
-      showNotification(message, type = 'success') {
-        // Clear any existing toasts first
-        const existingToasts = document.querySelectorAll('.toastify');
-        existingToasts.forEach(toast => toast.remove());
-
-        // Show new toast
-        Toastify({
-          text: message,
-          duration: 3000,
-          gravity: window.innerWidth <= 768 ? "top" : "bottom", // Change gravity based on screen size
-          position: "left",
-          className: type,
-          style: {
-            background: type === 'success' ? "#000000" : "#ef4444"
-          },
-          onClick: function(){} // Callback after click
-        }).showToast();
+      toggleView() {
+        this.isViewOpen = !this.isViewOpen;
       },
 
       formatMoney(cents) {
@@ -1523,23 +1509,13 @@
     
     <!-- Bundle totals -->
     <div class="bundle-total" x-show="selectedItems.length > 0">
-      <p>
-        <span>Original Total:</span>
-        <span x-text="formatMoney(originalTotal)"></span>
-      </p>
-      {% if section.settings.discount_percentage != 0%}
-      <p>
-        <span>Bundle Discount:</span>
-        <span x-text="discountPercentage + '%'"></span>
-      </p>
-      {% endif %}
-      <p>
-        <span>You Save:</span>
-        <span class="savings" x-text="formatMoney(savings)"></span>
-      </p>
       <p class="final-price">
-        <span>Final Price:</span>
+        <span>Bundle Price:</span>
         <span x-text="formatMoney(finalPrice)"></span>
+      </p>
+      <p>
+        <span>Items Selected:</span>
+        <span x-text="selectedItems.length + ' / ' + bundleSize"></span>
       </p>
     </div>
 
@@ -1622,6 +1598,22 @@
   "settings": [
     {
       "type": "header",
+      "content": "Bundle Settings"
+    },
+    {
+      "type": "number",
+      "id": "bundle_size",
+      "label": "Number of Items in Bundle",
+      "default": 5
+    },
+    {
+      "type": "product",
+      "id": "bundle_product",
+      "label": "Bundle Product",
+      "info": "Select the bundle product that defines the price"
+    },
+    {
+      "type": "header",
       "content": "General Settings"
     },
     {
@@ -1634,13 +1626,7 @@
       "type": "number",
       "id": "bundle_size",
       "label": "Number of Items in Bundle",
-      "default": 5
-    },
-    {
-      "type": "number",
-      "id": "discount_percentage",
-      "label": "Bundle Discount Percentage",
-      "default": 20
+      "default": 7
     },
     {
       "type": "collection",
