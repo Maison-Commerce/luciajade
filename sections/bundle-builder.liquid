@@ -1579,16 +1579,12 @@
         <span x-text="formatMoney(originalTotal)"></span>
       </p>
       <p>
-        <span>Final Price:</span>
-        <span x-text="formatMoney({{ section.settings.comparison_product.price }})"></span>
-      </p>
-      <p>
         <span>You Save:</span>
-        <span class="savings" x-text="formatMoney(savings)"></span>
+        <span class="savings" x-text="formatMoney(originalTotal - {{ section.settings.comparison_product.price }})"></span>
       </p>
       <p class="final-price">
         <span>Final Price:</span>
-        <span class="savings" x-text="formatMoney(originalTotal - {{ section.settings.comparison_product.price }})"></span>
+        <span x-text="formatMoney({{ section.settings.comparison_product.price }})"></span>
       </p>
     </div>
 
