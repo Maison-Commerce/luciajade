@@ -103,11 +103,37 @@
             "text": "<p>\"Literally the perfect 24/7 earrings. They are now my go to. Super cute and comfy, just the right size, and easy to sleep in.\"</p>",
             "author": "<p><strong>Alice M.</strong></p>"
           }
+        },
+        "slide_LcKXCt": {
+          "type": "slide",
+          "settings": {
+            "media_style": "image",
+            "image": "shopify://shop_images/review-3.jpg",
+            "video_url": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
+            "controls": false,
+            "stars_count": 5,
+            "text": "<p>\"Goes so well with my other braclets, delivery was very quick and packaged nicely. saw your ads on instagram and had to order something and i'm not disappointed!!!\"</p>",
+            "author": "<p><strong>L.K</strong></p>"
+          }
+        },
+        "slide_g9ynNr": {
+          "type": "slide",
+          "settings": {
+            "media_style": "image",
+            "image": "shopify://shop_images/review-4.jpg",
+            "video_url": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
+            "controls": false,
+            "stars_count": 5,
+            "text": "<p>\"Its a beautiful piece, have been wearing it daily and showering with it. I don't see any tarnish or skin allergies.\"</p>",
+            "author": "<p><strong>Pauline A.</strong></p>"
+          }
         }
       },
       "block_order": [
         "slide_MjTmbj",
-        "slide_9WQWyn"
+        "slide_9WQWyn",
+        "slide_LcKXCt",
+        "slide_g9ynNr"
       ],
       "settings": {
         "heading": "<h2>Loved By 100,000+ Customers Worldwide</h2>",
