@@ -258,7 +258,7 @@
             "icon_color": "",
             "title": "Free Worldwide Shipping",
             "heading_font_size": "heading-small",
-            "text": "<p>On all orders over $35</p>",
+            "text": "<p>On all orders <strong>(ending soon)</strong></p>",
             "text_font_size": "body-medium",
             "heading_tag": "automatic"
           }
