@@ -214,12 +214,24 @@
             "author": "Kanchan P.",
             "time": "1 day ago"
           }
+        },
+        "item_byyqLG": {
+          "type": "item",
+          "settings": {
+            "stars_count": 5,
+            "verified_text": "Verified",
+            "title": "So unique!",
+            "text": "<p>Its a beautiful piece, have been wearing it daily and showering with it. I don't see any tarnish or skin allergies.</p>",
+            "author": "Sirisha A.",
+            "time": "2 days ago"
+          }
         }
       },
       "block_order": [
         "item_XjHnNC",
         "item_Gga6qT",
-        "item_CnCEPm"
+        "item_CnCEPm",
+        "item_byyqLG"
       ],
       "settings": {
         "reviews_position": "below_buy",
