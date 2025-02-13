@@ -1,5 +1,3 @@
-
-
 <!-- Initialize Liquid Ajax Cart -->
 <script>
   document.addEventListener('DOMContentLoaded', function() {
@@ -1106,173 +1104,105 @@
 
 <script>
   document.addEventListener('alpine:init', () => {
-    Alpine.data('bundleBuilder', (bundleSize, discountPercentage) => ({
+    Alpine.data('bundleBuilder', (bundleSize) => ({
       bundleSize: bundleSize,
-      discountPercentage: discountPercentage,
       selectedItems: [],
-      selectedType: 'all',
-      notification: {
-        show: false,
-        message: '',
-        type: 'success'
-      },
       loading: false,
-      isViewOpen: false,
+      bundleProduct: {
+        id: {{ bundle_product.variants.first.id | json }},
+        price: {{ bundle_product.variants.first.price | json }}
+      },
 
       init() {
-        // Clear localStorage on page load
         localStorage.removeItem('currentBundle');
         this.selectedItems = [];
-        this.selectedType = 'all';
-      },
-
-      toggleView() {
-        this.isViewOpen = !this.isViewOpen;
-      },
-
-      get originalTotal() {
-        return this.selectedItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-      },
-
-      get finalPrice() {
-        return this.originalTotal * (1 - this.discountPercentage / 100);
-      },
-
-      get savings() {
-        return this.originalTotal - this.finalPrice;
-      },
-
-      isProductSelected(productId) {
-        return this.selectedItems.some(item => item.id === productId);
-      },
-
-      addToBundle(product) {
-        if (this.selectedItems.length >= this.bundleSize) {
-          this.showNotification('{{ section.settings.box_full_notification | escape }}', 'error');
-          return;
-        }
-
-        const bundleItem = {
-          ...product,
-          instanceId: `${product.id}_${Date.now()}`,
-          quantity: 1
-        };
-
-        this.selectedItems.push(bundleItem);
-        localStorage.setItem('currentBundle', JSON.stringify(this.selectedItems));
-        this.showNotification('{{ section.settings.item_added_notification | escape }}', 'success');
-      },
-
-      removeFromBundle(productId) {
-        const lastIndex = [...this.selectedItems].reverse()
-          .findIndex(item => item.id === productId);
-        
-        if (lastIndex !== -1) {
-          const actualIndex = this.selectedItems.length - 1 - lastIndex;
-          this.selectedItems.splice(actualIndex, 1);
-          localStorage.setItem('currentBundle', JSON.stringify(this.selectedItems));
-          this.showNotification('{{ section.settings.item_removed_notification | escape }}', 'success');
-        }
-      },
-
-      updateQuantity(instanceId, change) {
-        const item = this.selectedItems.find(item => item.instanceId === instanceId);
-        if (!item) return;
-
-        const newQuantity = item.quantity + change;
-        if (newQuantity < 1) return;
-
-        const currentTotalItems = this.selectedItems.reduce((sum, i) => sum + i.quantity, 0);
-        if (currentTotalItems + change > this.bundleSize) {
-          const message = '{{ section.settings.exceed_size_notification | escape }}'.replace('{size}', this.bundleSize);
-          this.showNotification(message, 'error');
-          return;
-        }
-
-        item.quantity = newQuantity;
-        localStorage.setItem('currentBundle', JSON.stringify(this.selectedItems));
       },
 
       async addBundleToCart() {
         if (this.selectedItems.length < this.bundleSize) {
-          this.showNotification('{{ section.settings.bundle_incomplete_message | escape }}', 'error');
+          this.showNotification('Please select all items for your bundle', 'error');
           return;
         }
 
         this.loading = true;
 
         try {
-          const bundleId = new Date().getTime();
-          const items = this.selectedItems.map(item => ({
-            id: parseInt(item.variant_id),
-            quantity: item.quantity,
-            properties: {
-              '_bundle_id': bundleId,
-              '_bundle_discount': this.discountPercentage + '%',
-              'Bundle': 'Jewelry Bundle Set',
-              '_original_price': item.price
-            }
-          }));
+          const bundleId = Date.now();
+          const items = [
+            // Добавляем основной bundle product с фиксированной ценой
+            {
+              id: this.bundleProduct.id,
+              quantity: 1,
+              properties: {
+                '_bundle_id': bundleId,
+                '_is_bundle_master': true,
+                'Bundle Items': this.selectedItems.map(item => 
+                  `${item.title} - ${item.variant_title}`
+                ).join(', ')
+              }
+            },
+            // Добавляем выбранные товары с нулевой ценой
+            ...this.selectedItems.map(item => ({
+              id: parseInt(item.variant_id),
+              quantity: 1,
+              properties: {
+                '_bundle_id': bundleId,
+                '_is_bundle_item': true,
+                '_price': 0
+              }
+            }))
+          ];
 
-          if (typeof window.liquidAjaxCart !== 'undefined') {
-            const response = await window.liquidAjaxCart.add({
-              items: items
-            });
+          const response = await fetch('/cart/add.js', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ items })
+          });
 
-            if (!response.ok) {
-              const errorData = await response.json();
-              throw new Error(errorData.description || 'Failed to add bundle to cart');
-            }
-          } else {
-            const response = await fetch('/cart/add.js', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify({ items })
-            });
-
-            if (!response.ok) {
-              const errorData = await response.json();
-              throw new Error(errorData.description || 'Failed to add bundle to cart');
-            }
+          if (!response.ok) {
+            throw new Error('Failed to add bundle to cart');
           }
 
-          // Clear the bundle
-          this.selectedItems = [];
-          localStorage.removeItem('currentBundle');
-          this.isViewOpen = false;
-
-          // Show success message
-          this.showNotification('{{ section.settings.bundle_added_message | escape }}', 'success');
-
-          // Redirect to cart page
           window.location.href = '/cart';
 
         } catch (error) {
           console.error('Bundle addition error:', error);
-          this.showNotification('{{ section.settings.bundle_error_message | escape }}', 'error');
+          this.showNotification('Failed to add bundle to cart', 'error');
         } finally {
           this.loading = false;
         }
       },
 
-      showNotification(message, type = 'success') {
-        // Clear any existing toasts first
-        const existingToasts = document.querySelectorAll('.toastify');
-        existingToasts.forEach(toast => toast.remove());
+      addToBundle(product) {
+        if (this.selectedItems.length >= this.bundleSize) {
+          this.showNotification('Bundle is full', 'error');
+          return;
+        }
 
-        // Show new toast
+        this.selectedItems.push({
+          ...product,
+          instanceId: `${product.id}_${Date.now()}`
+        });
+      },
+
+      removeFromBundle(productId) {
+        const index = this.selectedItems.findIndex(item => item.id === productId);
+        if (index !== -1) {
+          this.selectedItems.splice(index, 1);
+        }
+      },
+
+      showNotification(message, type = 'success') {
         Toastify({
           text: message,
           duration: 3000,
-          gravity: window.innerWidth <= 768 ? "top" : "bottom", // Change gravity based on screen size
+          gravity: "bottom",
           position: "left",
-          className: type,
           style: {
             background: type === 'success' ? "#000000" : "#ef4444"
-          },
-          onClick: function(){} // Callback after click
+          }
         }).showToast();
       },
 
@@ -1298,58 +1228,27 @@
   });
 </script>
 
+{%- assign bundle_product = all_products[section.settings.bundle_product] -%}
+
 <div class="bundle-builder" 
-     x-data="bundleBuilder({{ section.settings.bundle_size }}, {{ section.settings.discount_percentage }})"
+     x-data="bundleBuilder({{ section.settings.bundle_size }})"
      x-init="init()">
 
-
-    <div class="bundle-progress-container">
-      <div class="bundle-progress-text">
-        <span x-text="selectedItems.length"></span> / <span x-text="bundleSize"></span> items selected
-      </div>
-      
-      <div class="bundle-progress-bar">
-        <div class="bundle-progress-fill"
-             :style="{
-               width: (selectedItems.length / bundleSize * 100) + '%',
-               background: selectedItems.length === bundleSize ? 'var(--color-success, #4CAF50)' : 'linear-gradient(90deg, #000000, #333333)'
-             }">
-        </div>
-      </div>
-      
-      <div class="bundle-progress-steps">
-        <template x-for="index in bundleSize" :key="index">
-          <div class="bundle-progress-step"
-               :class="{
-                 'active': selectedItems.length === index,
-                 'completed': selectedItems.length > index
-               }">
-          </div>
-        </template>
-      </div>
-      
-      <div class="bundle-progress-labels">
-        <div class="bundle-progress-label"
-             :class="{ 'active': selectedItems.length === 0 }">
-          Start
-        </div>
-        <div class="bundle-progress-label"
-             :class="{ 'active': selectedItems.length > 0 && selectedItems.length < bundleSize }">
-          Building
-        </div>
-        <div class="bundle-progress-label"
-             :class="{ 'active': selectedItems.length === bundleSize }">
-          Complete
-        </div>
-      </div>
-        <!-- View Box Button -->
-      <button class="bundle-banner-button"
-              @click="toggleView()"
-              x-show="!isViewOpen">
-        {{ section.settings.view_box_text }} (<span x-text="selectedItems.length"></span>)
-      </button>
+  <div class="bundle-progress-container">
+    <div class="bundle-progress-text">
+      <span x-text="selectedItems.length"></span> / <span x-text="bundleSize"></span> items selected
     </div>
-  
+    
+    <div class="bundle-progress-bar">
+      <div class="bundle-progress-fill"
+           :style="{
+             width: (selectedItems.length / bundleSize * 100) + '%',
+             background: selectedItems.length === bundleSize ? 'var(--color-success, #4CAF50)' : 'linear-gradient(90deg, #000000, #333333)'
+           }">
+      </div>
+    </div>
+  </div>
+
   <div class="bundle-builder__header">
     <h2 class="h1">{{ section.settings.title }}</h2>
   </div>
@@ -1680,10 +1579,16 @@
       "default": "Build Your Bundle"
     },
     {
+      "type": "product",
+      "id": "bundle_product",
+      "label": "Bundle Product",
+      "info": "Select the bundle product that defines the price"
+    },
+    {
       "type": "number",
       "id": "bundle_size",
       "label": "Number of Items in Bundle",
-      "default": 7
+      "default": 5
     },
     {
       "type": "collection",
