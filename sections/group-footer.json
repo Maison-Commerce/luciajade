@@ -18,7 +18,17 @@
           "type": "linklist",
           "settings": {
             "linklist": "main-menu",
-            "title": "",
+            "title": "SHOP OUR NEW COLLECTIONS",
+            "heading_font_size": "heading-x-small",
+            "column_width": 25,
+            "enable_accordion": false
+          }
+        },
+        "linklist_GbiVLp": {
+          "type": "linklist",
+          "settings": {
+            "linklist": "footer",
+            "title": "MORE INFO",
             "heading_font_size": "heading-x-small",
             "column_width": 25,
             "enable_accordion": false
@@ -55,6 +65,7 @@
       },
       "block_order": [
         "footer-1",
+        "linklist_GbiVLp",
         "footer-2",
         "footer-0"
       ],
