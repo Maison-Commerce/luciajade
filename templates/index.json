@@ -325,6 +325,70 @@
         "padding_bottom": 50,
         "heading_tag": "automatic"
       }
+    },
+    "section_newsletter_VMPrYg": {
+      "type": "section-newsletter",
+      "blocks": {
+        "image_Kyc4Qe": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/666431ab-3d92-4778-a592-3f6f473d1e4a.jpg",
+            "title": "Join Our Newsletter",
+            "heading_font_size": "heading-large",
+            "text": "<p>& GET 10% OFF</p>",
+            "text_font_size": "body-large",
+            "flex_align": "align--middle-center",
+            "show_text_background": false,
+            "bg_color": "",
+            "color": "#ffffff",
+            "overlay_opacity": 20,
+            "overlay_color": "",
+            "show_overlay_text": true,
+            "link_text": "",
+            "link": "",
+            "button_type": "btn--primary",
+            "button_size": "",
+            "button_style": "btn--solid",
+            "show_arrow": false,
+            "heading_tag": "automatic"
+          }
+        },
+        "newsletter_JezQhr": {
+          "type": "newsletter",
+          "settings": {
+            "subheading": "Newsletter",
+            "heading": "Sign up",
+            "heading_font_size": "heading-large",
+            "text": "<p>Sign up for product updates, new drops and 10% off your first order.</p>",
+            "text_font_size": "body-medium",
+            "text_columns": 1,
+            "align_text": "text-left",
+            "show_name": true,
+            "button_text": "Join, it's free",
+            "show_arrow": true,
+            "terms": true,
+            "button_type": "btn--primary",
+            "button_size": "",
+            "button_style": "btn--solid",
+            "show_social_links": false,
+            "bg_color": "",
+            "color": "",
+            "heading_tag": "automatic"
+          }
+        }
+      },
+      "block_order": [
+        "image_Kyc4Qe",
+        "newsletter_JezQhr"
+      ],
+      "settings": {
+        "width": "wrapper--full",
+        "height": "three-fifty-height-hero",
+        "mobile_height": "screen-height-one-half--mobile",
+        "color_scheme": "",
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
     }
   },
   "order": [
@@ -332,6 +396,7 @@
     "section_press_logos_8mx9wp",
     "section_collection_wcVV3J",
     "section_collections_list_mHmnHa",
-    "section_text_row_tLqMbh"
+    "section_text_row_tLqMbh",
+    "section_newsletter_VMPrYg"
   ]
 }
