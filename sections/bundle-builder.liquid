@@ -1103,91 +1103,34 @@
 
 <script>
   document.addEventListener('alpine:init', () => {
-    Alpine.data('bundleBuilder', (bundleSize, discountPercentage) => ({
+    Alpine.data('bundleBuilder', (bundleSize) => ({
       bundleSize: bundleSize,
-      discountPercentage: discountPercentage,
       selectedItems: [],
       selectedType: 'all',
-      notification: {
-        show: false,
-        message: '',
-        type: 'success'
-      },
       loading: false,
       isViewOpen: false,
 
+      // Информация о bundle product
+      bundleProduct: {
+        id: '{{ all_products["bundle-products"].id }}',
+        variant: {
+          id: {{ all_products["bundle-products"].variants.first.id }},
+          price: {{ all_products["bundle-products"].variants.first.price }}
+        }
+      },
+
       init() {
-        // Clear localStorage on page load
         localStorage.removeItem('currentBundle');
         this.selectedItems = [];
         this.selectedType = 'all';
       },
 
-      toggleView() {
-        this.isViewOpen = !this.isViewOpen;
-      },
-
       get originalTotal() {
-        return this.selectedItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        return this.bundleProduct.variant.price;
       },
 
       get finalPrice() {
-        return this.originalTotal * (1 - this.discountPercentage / 100);
-      },
-
-      get savings() {
-        return this.originalTotal - this.finalPrice;
-      },
-
-      isProductSelected(productId) {
-        return this.selectedItems.some(item => item.id === productId);
-      },
-
-      addToBundle(product) {
-        if (this.selectedItems.length >= this.bundleSize) {
-          this.showNotification('{{ section.settings.box_full_notification | escape }}', 'error');
-          return;
-        }
-
-        const bundleItem = {
-          ...product,
-          instanceId: `${product.id}_${Date.now()}`,
-          quantity: 1
-        };
-
-        this.selectedItems.push(bundleItem);
-        localStorage.setItem('currentBundle', JSON.stringify(this.selectedItems));
-        this.showNotification('{{ section.settings.item_added_notification | escape }}', 'success');
-      },
-
-      removeFromBundle(productId) {
-        const lastIndex = [...this.selectedItems].reverse()
-          .findIndex(item => item.id === productId);
-        
-        if (lastIndex !== -1) {
-          const actualIndex = this.selectedItems.length - 1 - lastIndex;
-          this.selectedItems.splice(actualIndex, 1);
-          localStorage.setItem('currentBundle', JSON.stringify(this.selectedItems));
-          this.showNotification('{{ section.settings.item_removed_notification | escape }}', 'success');
-        }
-      },
-
-      updateQuantity(instanceId, change) {
-        const item = this.selectedItems.find(item => item.instanceId === instanceId);
-        if (!item) return;
-
-        const newQuantity = item.quantity + change;
-        if (newQuantity < 1) return;
-
-        const currentTotalItems = this.selectedItems.reduce((sum, i) => sum + i.quantity, 0);
-        if (currentTotalItems + change > this.bundleSize) {
-          const message = '{{ section.settings.exceed_size_notification | escape }}'.replace('{size}', this.bundleSize);
-          this.showNotification(message, 'error');
-          return;
-        }
-
-        item.quantity = newQuantity;
-        localStorage.setItem('currentBundle', JSON.stringify(this.selectedItems));
+        return this.originalTotal;
       },
 
       async addBundleToCart() {
@@ -1200,16 +1143,32 @@
 
         try {
           const bundleId = new Date().getTime();
-          const items = this.selectedItems.map(item => ({
-            id: parseInt(item.variant_id),
-            quantity: item.quantity,
-            properties: {
-              '_bundle_id': bundleId,
-              '_bundle_discount': this.discountPercentage + '%',
-              'Bundle': 'Jewelry Bundle Set',
-              '_original_price': item.price
-            }
-          }));
+          const items = [
+            // Добавляем bundle product с фиксированной ценой
+            {
+              id: this.bundleProduct.variant.id,
+              quantity: 1,
+              properties: {
+                '_bundle_id': bundleId,
+                '_is_bundle_master': true,
+                'Bundle Items': this.selectedItems.map(item => 
+                  `${item.title} - ${item.variant_title}`
+                ).join(', '),
+                'Bundle': 'Bundle Set'
+              }
+            },
+            // Добавляем выбранные товары с нулевой ценой
+            ...this.selectedItems.map(item => ({
+              id: parseInt(item.variant_id),
+              quantity: 1,
+              properties: {
+                '_bundle_id': bundleId,
+                '_is_bundle_item': true,
+                '_price': 0,
+                'Bundle': 'Bundle Set'
+              }
+            }))
+          ];
 
           if (typeof window.liquidAjaxCart !== 'undefined') {
             const response = await window.liquidAjaxCart.add({
@@ -1235,15 +1194,10 @@
             }
           }
 
-          // Clear the bundle
           this.selectedItems = [];
           localStorage.removeItem('currentBundle');
           this.isViewOpen = false;
-
-          // Show success message
           this.showNotification('{{ section.settings.bundle_added_message | escape }}', 'success');
-
-          // Redirect to cart page
           window.location.href = '/cart';
 
         } catch (error) {
@@ -1296,7 +1250,7 @@
 </script>
 
 <div class="bundle-builder" 
-     x-data="bundleBuilder({{ section.settings.bundle_size }}, {{ section.settings.discount_percentage }})"
+     x-data="bundleBuilder({{ section.settings.bundle_size }})"
      x-init="init()">
 
 
@@ -1680,7 +1634,7 @@
       "type": "number",
       "id": "bundle_size",
       "label": "Number of Items in Bundle",
-      "default": 7
+      "default": 5
     },
     {
       "type": "number",
