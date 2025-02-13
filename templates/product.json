@@ -49,6 +49,13 @@
             "padding_bottom": 32
           }
         },
+        "code_FrqFYd": {
+          "type": "code",
+          "settings": {
+            "code": "<p id=\"locationinfop\"></p>",
+            "padding_bottom": 16
+          }
+        },
         "tabs": {
           "type": "tab_richtext",
           "settings": {
@@ -115,6 +122,7 @@
         "price",
         "variants",
         "buttons",
+        "code_FrqFYd",
         "tabs",
         "divider_1",
         "icon_1",
