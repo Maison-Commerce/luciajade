@@ -19,8 +19,8 @@
           "settings": {
             "linklist": "main-menu",
             "title": "",
-            "heading_font_size": "heading-mini",
-            "column_width": 33,
+            "heading_font_size": "heading-x-small",
+            "column_width": 25,
             "enable_accordion": false
           }
         },
@@ -28,10 +28,10 @@
           "type": "text",
           "settings": {
             "image_width": 150,
-            "title": "Contact",
-            "heading_font_size": "heading-medium",
-            "text": "<p>1234 Main Street <br/>New York, NY 12345 <br/> 123.456.7890<br/>help@broadcast.com</p>",
-            "column_width": 33,
+            "title": "Get In touch",
+            "heading_font_size": "heading-x-small",
+            "text": "<p>199 Water St<br/>New York, NY 10038 <br/>help@lucia-jade.com</p>",
+            "column_width": 25,
             "enable_accordion": false
           }
         },
@@ -39,17 +39,17 @@
           "type": "newsletter",
           "settings": {
             "title": "Newsletter",
-            "heading_font_size": "heading-medium",
-            "text": "<p>Subscribe to get special offers, free giveaways, and once-in-a-lifetime deals.</p>",
+            "heading_font_size": "heading-x-small",
+            "text": "<p>Sign up for product updates, new drops and 10% off your first order.</p>",
             "show_name": true,
-            "button_text": "Join",
-            "show_arrow": false,
-            "terms": true,
+            "button_text": "Join, it's free",
+            "show_arrow": true,
+            "terms": false,
             "button_type": "btn--secondary",
             "button_size": "",
             "button_style": "btn--solid",
             "show_social_links": false,
-            "column_width": 33
+            "column_width": 25
           }
         }
       },
