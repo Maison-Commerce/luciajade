@@ -199,39 +199,15 @@
             "stars_count": 5,
             "verified_text": "Verified",
             "title": "Worn it everyday",
-            "text": "<p>I have had my necklace for about two months and have worn it everyday and has not tarnished, so happy with the product and will be ordering again for sure.</p>",
-            "author": "Katy J.",
+            "text": "<p>I love my ring and the rest of the items I bought. They are sturdy, well-made and look the same as the photos if not better. I love how unique each of them are! I will see how they hold up but right now I would definitely say I will return. I highly recommend!</p>",
+            "author": "Amie L.",
             "time": "1 day ago"
-          }
-        },
-        "item_aRJBif": {
-          "type": "item",
-          "settings": {
-            "stars_count": 5,
-            "verified_text": "Verified",
-            "title": "Title text",
-            "text": "<p>Text</p>",
-            "author": "Default Author",
-            "time": "15 hours ago"
-          }
-        },
-        "item_CLiVft": {
-          "type": "item",
-          "settings": {
-            "stars_count": 5,
-            "verified_text": "Verified",
-            "title": "Title text",
-            "text": "<p>Text</p>",
-            "author": "Default Author",
-            "time": "15 hours ago"
           }
         }
       },
       "block_order": [
         "item_XjHnNC",
-        "item_Gga6qT",
-        "item_aRJBif",
-        "item_CLiVft"
+        "item_Gga6qT"
       ],
       "settings": {
         "reviews_position": "below_buy",
