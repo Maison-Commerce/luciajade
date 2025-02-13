@@ -140,6 +140,13 @@
             "text": "<p><strong>We believe that beautiful, high-quality jewelry should be truly affordable.</strong></p><p>At Lucia Jade, we offer <strong>fair pricing</strong> - no 10x markups - while using <strong>premium materials </strong>designed to last!</p><p>All our pieces are backed by a <strong>lifetime color warranty, </strong>so you can shop with confidence and enjoy your jewelry for years to come.</p>",
             "padding_bottom": 0
           }
+        },
+        "code_ptKpdM": {
+          "type": "code",
+          "settings": {
+            "code": "<div id='ss-product-reviews-2'></div>",
+            "padding_bottom": 16
+          }
         }
       },
       "block_order": [
@@ -155,7 +162,8 @@
         "divider_1",
         "accordion_HxqWxJ",
         "accordion_fawGrh",
-        "accordion_QaKjDW"
+        "accordion_QaKjDW",
+        "code_ptKpdM"
       ],
       "settings": {
         "product_sticky_enable": true,
