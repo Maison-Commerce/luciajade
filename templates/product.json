@@ -98,14 +98,7 @@
             "title": "Product details",
             "text": "{{ product.description }}",
             "layout": "left",
-            "padding_bottom": 16
-          }
-        },
-        "divider_1": {
-          "type": "divider",
-          "settings": {
-            "show_line": true,
-            "padding_bottom": 16
+            "padding_bottom": 8
           }
         },
         "accordion_HxqWxJ": {
@@ -159,7 +152,6 @@
         "buttons",
         "code_FrqFYd",
         "text_mFcY6a",
-        "divider_1",
         "accordion_HxqWxJ",
         "accordion_fawGrh",
         "accordion_QaKjDW",
