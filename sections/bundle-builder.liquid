@@ -1205,29 +1205,16 @@
 
         try {
           const bundleId = new Date().getTime();
-          const items = [
-            // Add the comparison product first
-            {
-              id: {{ section.settings.comparison_product.first_available_variant.id }},
-              quantity: 1,
-              properties: {
-                '_bundle_id': bundleId,
-                'Bundle': 'Jewelry Bundle Set'
-              }
-            },
-            // Then add all the selected items with $0 price for tracking
-            ...this.selectedItems.map(item => ({
-              id: parseInt(item.variant_id),
-              quantity: item.quantity,
-              properties: {
-                '_bundle_id': bundleId,
-                '_original_price': item.price,
-                '_bundle_item': true,
-                'Bundle': 'Jewelry Bundle Set (Bundle Item)',
-                'Price': '0.00'
-              }
-            }))
-          ];
+          const items = this.selectedItems.map(item => ({
+            id: parseInt(item.variant_id),
+            quantity: item.quantity,
+            properties: {
+              '_bundle_id': bundleId,
+              '_bundle_discount': this.discountPercentage + '%',
+              'Bundle': 'Jewelry Bundle Set',
+              '_original_price': item.price
+            }
+          }));
 
           if (typeof window.liquidAjaxCart !== 'undefined') {
             const response = await window.liquidAjaxCart.add({
@@ -1313,7 +1300,7 @@
   });
 </script>
 
-<div id="bundle-builder" class="bundle-builder" 
+<div class="bundle-builder" 
      x-data="bundleBuilder({{ section.settings.bundle_size }}, {{ section.settings.discount_percentage }})"
      x-init="init()">
 
