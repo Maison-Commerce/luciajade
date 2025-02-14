@@ -87,6 +87,59 @@
         "show_placeholder": true
       }
     },
+    "section_double_FJF8rU": {
+      "type": "section-double",
+      "blocks": {
+        "heading_LTWriy": {
+          "type": "heading",
+          "settings": {
+            "title": "How it works?",
+            "heading_font_size": "heading-medium",
+            "padding_bottom": 16,
+            "heading_tag": "automatic"
+          }
+        },
+        "text_rVwYTi": {
+          "type": "text",
+          "settings": {
+            "text": "<ol><li>Click on <strong>'Choose My Jewelry'</strong></li><li>Select Your Pieces By Clicking <strong>'Add To Box'</strong></li><li><strong>Add 5 items to your box</strong> & Checkout as Normal!</li><li><strong>Enjoy Your Jewelry</strong> - We Know You'll Love It!</li></ol>",
+            "text_font_size": "body-large",
+            "padding_bottom": 16
+          }
+        },
+        "buttons_iQE8MF": {
+          "type": "buttons",
+          "settings": {
+            "button_text": "CHOOSE MY JEWELRY",
+            "button_url": "",
+            "button_type": "btn--primary",
+            "button_size": "btn--large",
+            "button_style": "btn--solid",
+            "show_arrow": true,
+            "padding_bottom": 16
+          }
+        }
+      },
+      "block_order": [
+        "heading_LTWriy",
+        "text_rVwYTi",
+        "buttons_iQE8MF"
+      ],
+      "settings": {
+        "image_1": "shopify://shop_images/luciajade-box.webp",
+        "image_width": "one-half",
+        "text_alignment": "text-left",
+        "layout": "is-reversed",
+        "width": "wrapper--full",
+        "height": "five-fifty-height-hero",
+        "mobile_height": "four-fifty-height-hero--mobile",
+        "reverse_blocks": false,
+        "color_scheme": "",
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "show_placeholder": true
+      }
+    },
     "section_press_logos_WwXrdD": {
       "type": "section-press-logos",
       "blocks": {
@@ -376,6 +429,7 @@
   "order": [
     "main",
     "section_double_nWNXec",
+    "section_double_FJF8rU",
     "section_press_logos_WwXrdD",
     "bundle_builder",
     "section_multicolumn_eqFPgc",
