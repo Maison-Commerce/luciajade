@@ -57,7 +57,7 @@
             "icon_name": "icon-truck",
             "icon_size": 20,
             "icon_color": "",
-            "text": "<p>Free worldwide shipping over $35</p>",
+            "text": "<p>Free worldwide shipping</p>",
             "text_font_size": "body-medium",
             "width": "full",
             "padding_bottom": 16
