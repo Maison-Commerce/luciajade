@@ -10,18 +10,7 @@
 {
   "parent": "index.json",
   "context": {
-    "market": "united-states"
+    "market": "united-kingdom"
   },
-  "sections": {
-    "hero": {
-      "settings": {},
-      "blocks": {
-        "heading": {
-          "settings": {
-            "title": "ANY {{ localization.market.metafields.custom.byob_qty.value }} PIECES FOR ${{ localization.market.metafields.custom.byob_price.value }}"
-          }
-        }
-      }
-    }
-  }
+  "sections": {}
 }
