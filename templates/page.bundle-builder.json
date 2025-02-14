@@ -146,31 +146,48 @@
         "icon_XntdBH": {
           "type": "icon",
           "settings": {
-            "column_width": 33,
+            "column_width": 25,
             "icon_name": "icon-shield",
-            "icon_size": 20,
+            "icon_size": 50,
             "icon_alignment": "icon--top",
             "icon_color": "",
             "image": "shopify://shop_images/free-delivery_411776.png",
-            "title": "Secure transactions",
+            "title": "Free Worldwide Shipping",
             "heading_font_size": "heading-small",
-            "text": "<p>Transactions are handled with bank-grade security.</p>",
+            "text": "<p>We offer free worldwide shipping on all orders, including all duties & taxes.</p>",
+            "text_font_size": "body-medium",
+            "heading_tag": "automatic"
+          }
+        },
+        "icon_qXYGgt": {
+          "type": "icon",
+          "settings": {
+            "column_width": 25,
+            "icon_name": "icon-shield",
+            "icon_size": 50,
+            "icon_alignment": "icon--top",
+            "icon_color": "",
+            "image": "shopify://shop_images/diamond-ring_4647987.png",
+            "title": "Lifetime Color Warranty",
+            "heading_font_size": "heading-small",
+            "text": "<p>If your jewelry has any color defects, we’ll send you a brand-new replacement. No questions asked.</p>",
             "text_font_size": "body-medium",
             "heading_tag": "automatic"
           }
         }
       },
       "block_order": [
-        "icon_XntdBH"
+        "icon_XntdBH",
+        "icon_qXYGgt"
       ],
       "settings": {
         "title": "WHY SHOP WITH US?",
         "heading_font_size": "heading-medium",
         "description": "",
         "align_heading": "text-center",
-        "align_text": "text-left",
+        "align_text": "text-center",
         "width": "wrapper--full-padded",
-        "align_columns": "flex-align-top",
+        "align_columns": "flex-align-center",
         "layout_mobile": "slider",
         "color_scheme": "scheme-3",
         "padding_top": 50,
