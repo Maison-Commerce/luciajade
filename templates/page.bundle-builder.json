@@ -170,7 +170,39 @@
             "image": "shopify://shop_images/diamond-ring_4647987.png",
             "title": "Lifetime Color Warranty",
             "heading_font_size": "heading-small",
-            "text": "<p>If your jewelry has any color defects, we’ll send you a brand-new replacement. No questions asked.</p>",
+            "text": "<p>We promise the color stays in perfect condition for life. Otherwise we'll send you a replacement for free.</p>",
+            "text_font_size": "body-medium",
+            "heading_tag": "automatic"
+          }
+        },
+        "icon_6Lpj4h": {
+          "type": "icon",
+          "settings": {
+            "column_width": 25,
+            "icon_name": "icon-shield",
+            "icon_size": 50,
+            "icon_alignment": "icon--top",
+            "icon_color": "",
+            "image": "shopify://shop_images/Materials_d3feed5e-c6c0-405c-9c46-fc7860f215dd.png",
+            "title": "Timeless Design",
+            "heading_font_size": "heading-small",
+            "text": "<p>Made to elevate any look, from casual days to special occasions.</p>",
+            "text_font_size": "body-medium",
+            "heading_tag": "automatic"
+          }
+        },
+        "icon_d6GVEj": {
+          "type": "icon",
+          "settings": {
+            "column_width": 25,
+            "icon_name": "icon-shield",
+            "icon_size": 50,
+            "icon_alignment": "icon--top",
+            "icon_color": "",
+            "image": "shopify://shop_images/bad_3336878.png",
+            "title": "Forget 10x Mark Ups",
+            "heading_font_size": "heading-small",
+            "text": "<p>We believe high quality jewelry should be affordable so we guarantee fair pricing always.</p>",
             "text_font_size": "body-medium",
             "heading_tag": "automatic"
           }
@@ -178,7 +210,9 @@
       },
       "block_order": [
         "icon_XntdBH",
-        "icon_qXYGgt"
+        "icon_qXYGgt",
+        "icon_6Lpj4h",
+        "icon_d6GVEj"
       ],
       "settings": {
         "title": "WHY SHOP WITH US?",
