@@ -8,9 +8,9 @@
  * ------------------------------------------------------------
  */
 {
-  "parent": "page.bundle-builder.json",
+  "parent": "group-footer.json",
   "context": {
-    "market": "united-states"
+    "market": "united-kingdom"
   },
   "sections": {}
 }
