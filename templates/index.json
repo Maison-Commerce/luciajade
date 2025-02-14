@@ -48,8 +48,8 @@
         "button-2": {
           "type": "button",
           "settings": {
-            "link_text": "Shop the sale",
-            "link": "shopify://collections/sale",
+            "link_text": "Shop best sellers",
+            "link": "shopify://collections/best-sellers",
             "button_type": "btn--secondary",
             "button_size": "btn--large",
             "button_style": "btn--solid",
