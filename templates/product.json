@@ -115,7 +115,7 @@
             "show_read_more": true,
             "default_open": false,
             "heading": "SHIPPING & RETURNS",
-            "text": "<p>We offer <strong>free worldwide shipping.</strong></p><p>We ship every order within <strong>1-2 business days,</strong> and you'll receive a tracking number as soon as it's on its way</p><p><strong>Not totally in love with your purchase? </strong>No problem! You can return it <strong>within 30 days</strong> for a hassle-free refund, no questions asked. We truly want you to be happy with your new jewelry!</p>",
+            "text": "<p>We offer <strong>free worldwide shipping.</strong></p><p>We ship every order within <strong>1-2 business days,</strong> and you'll receive a tracking number as soon as it's on its way. <a href=\"/pages/shipping-information\" target=\"_blank\" title=\"Shipping Information\">Click here to view delivery times.</a></p><p><strong>Not totally in love with your purchase? </strong>No problem! You can return it <strong>within 30 days</strong> for a hassle-free refund, no questions asked. We truly want you to be happy with your new jewelry!</p>",
             "padding_bottom": 0
           }
         },
