@@ -1206,28 +1206,38 @@
 
         try {
           const bundleId = new Date().getTime();
-          const items = [
-            // Add comparison product first
-            {
-              id: {{ section.settings.comparison_product.first_available_variant.id }},
+          let items = [];
+
+          // Safely add comparison product if it exists and has a valid variant
+          {% if section.settings.comparison_product != blank and section.settings.comparison_product.first_available_variant != blank %}
+            items.push({
+              id: {{ section.settings.comparison_product.first_available_variant.id | json }},
               quantity: 1,
               properties: {
                 '_bundle_id': bundleId,
                 'Bundle': 'Jewelry Bundle Set - Main Product'
               }
-            },
-            // Add bundle items
-            ...this.selectedItems.map(item => ({
-              id: parseInt(item.variant_id),
-              quantity: item.quantity,
-              properties: {
-                '_bundle_id': bundleId,
-                '_bundle_discount': this.discountPercentage + '%',
-                'Bundle': 'Jewelry Bundle Set - Bundle Item',
-                '_original_price': item.price
-              }
-            }))
-          ];
+            });
+          {% endif %}
+
+          // Add bundle items
+          const bundleItems = this.selectedItems.map(item => ({
+            id: parseInt(item.variant_id),
+            quantity: item.quantity,
+            properties: {
+              '_bundle_id': bundleId,
+              '_bundle_discount': this.discountPercentage + '%',
+              'Bundle': 'Jewelry Bundle Set - Bundle Item',
+              '_original_price': item.price
+            }
+          }));
+
+          items = [...items, ...bundleItems];
+
+          // Ensure we have items to add
+          if (items.length === 0) {
+            throw new Error('No valid items to add to cart');
+          }
 
           if (typeof window.liquidAjaxCart !== 'undefined') {
             const response = await window.liquidAjaxCart.add({
