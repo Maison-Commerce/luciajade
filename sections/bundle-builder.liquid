@@ -1208,17 +1208,22 @@
           const bundleId = new Date().getTime();
           let items = [];
 
-          // Safely add comparison product if it exists and has a valid variant
-          {% if section.settings.comparison_product != blank and section.settings.comparison_product.first_available_variant != blank %}
+          // Add comparison product with direct variant ID reference
+          const comparisonVariantId = {{ section.settings.comparison_product.selected_or_first_available_variant.id | default: 'null' }};
+          console.log('Comparison Product Variant ID:', comparisonVariantId);
+
+          if (comparisonVariantId) {
             items.push({
-              id: {{ section.settings.comparison_product.first_available_variant.id | json }},
+              id: comparisonVariantId,
               quantity: 1,
               properties: {
                 '_bundle_id': bundleId,
                 'Bundle': 'Jewelry Bundle Set - Main Product'
               }
             });
-          {% endif %}
+          } else {
+            console.error('Comparison product variant ID is missing');
+          }
 
           // Add bundle items
           const bundleItems = this.selectedItems.map(item => ({
@@ -1233,35 +1238,36 @@
           }));
 
           items = [...items, ...bundleItems];
+          console.log('Final items array:', items);
 
           // Ensure we have items to add
           if (items.length === 0) {
             throw new Error('No valid items to add to cart');
           }
 
+          let cartResponse;
           if (typeof window.liquidAjaxCart !== 'undefined') {
-            const response = await window.liquidAjaxCart.add({
+            cartResponse = await window.liquidAjaxCart.add({
               items: items
             });
-
-            if (!response.ok) {
-              const errorData = await response.json();
-              throw new Error(errorData.description || 'Failed to add bundle to cart');
-            }
           } else {
-            const response = await fetch('/cart/add.js', {
+            cartResponse = await fetch('/cart/add.js', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json'
               },
               body: JSON.stringify({ items })
             });
-
-            if (!response.ok) {
-              const errorData = await response.json();
-              throw new Error(errorData.description || 'Failed to add bundle to cart');
-            }
           }
+
+          if (!cartResponse.ok) {
+            const errorData = await cartResponse.json();
+            console.error('Cart addition error:', errorData);
+            throw new Error(errorData.description || 'Failed to add bundle to cart');
+          }
+
+          const responseData = await cartResponse.json();
+          console.log('Cart addition response:', responseData);
 
           // Clear the bundle
           this.selectedItems = [];
