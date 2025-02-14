@@ -12,5 +12,12 @@
   "context": {
     "market": "united-states"
   },
-  "sections": {}
+  "sections": {
+    "bundle_builder": {
+      "settings": {
+        "title": "ANY {{ localization.market.metafields.custom.byob_qty.value }} PIECES FOR ${{ localization.market.metafields.custom.byob_price.value }}"
+      },
+      "blocks": {}
+    }
+  }
 }
