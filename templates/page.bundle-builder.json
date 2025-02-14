@@ -26,6 +26,54 @@
         "heading_tag": "automatic"
       }
     },
+    "section_double_nWNXec": {
+      "type": "section-double",
+      "blocks": {
+        "subheading_HGaVLg": {
+          "type": "subheading",
+          "settings": {
+            "subheading": "LOVED BY 100,000+ CUSTOMERS",
+            "padding_bottom": 16
+          }
+        },
+        "heading_UVVFfg": {
+          "type": "heading",
+          "settings": {
+            "title": "PICK ANY 5 ITEMS FOR ONLY <span style=\"color:#069BA8\">$59.99</span> | 70% OFF",
+            "heading_font_size": "heading-large",
+            "padding_bottom": 16,
+            "heading_tag": "automatic"
+          }
+        },
+        "text_ny46xw": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Discount Automatically Applied To Cart</p>",
+            "text_font_size": "body-medium",
+            "padding_bottom": 16
+          }
+        }
+      },
+      "block_order": [
+        "subheading_HGaVLg",
+        "heading_UVVFfg",
+        "text_ny46xw"
+      ],
+      "settings": {
+        "image_1": "shopify://shop_images/luciajade-box.webp",
+        "image_width": "one-half",
+        "text_alignment": "text-left",
+        "layout": "",
+        "width": "wrapper--full",
+        "height": "five-fifty-height-hero",
+        "mobile_height": "four-fifty-height-hero--mobile",
+        "reverse_blocks": false,
+        "color_scheme": "",
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "show_placeholder": true
+      }
+    },
     "bundle_builder": {
       "type": "bundle-builder",
       "custom_css": [
@@ -255,6 +303,7 @@
   },
   "order": [
     "main",
+    "section_double_nWNXec",
     "bundle_builder",
     "section_multicolumn_eqFPgc",
     "section_sidebar_FFdyeB"
