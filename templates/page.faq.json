@@ -93,6 +93,18 @@
             "icon_size": 20,
             "icon_color": ""
           }
+        },
+        "question_t4JCDm": {
+          "type": "question",
+          "settings": {
+            "default_open": false,
+            "title": "Do you ship worldwide?",
+            "content": "<p>Yes! We ship to almost every country worldwide. If you see your country as an available shipping location at checkout, we ship there!</p>",
+            "show_icon": false,
+            "icon_name": "icon-award",
+            "icon_size": 20,
+            "icon_color": ""
+          }
         }
       },
       "block_order": [
@@ -101,7 +113,8 @@
         "faq-1",
         "faq-2",
         "question_GJXHiL",
-        "question_WcppaE"
+        "question_WcppaE",
+        "question_t4JCDm"
       ],
       "settings": {
         "heading_font_size": "heading-medium",
