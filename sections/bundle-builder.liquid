@@ -1210,19 +1210,15 @@
 
           // Add comparison product with direct variant ID reference
           const comparisonVariantId = {{ section.settings.comparison_product.selected_or_first_available_variant.id | default: 'null' }};
-          console.log('Comparison Product Variant ID:', comparisonVariantId);
 
           if (comparisonVariantId) {
             items.push({
               id: comparisonVariantId,
               quantity: 1,
               properties: {
-                '_bundle_id': bundleId,
                 'Bundle': 'Jewelry Bundle Set - Main Product'
               }
             });
-          } else {
-            console.error('Comparison product variant ID is missing');
           }
 
           // Add bundle items
@@ -1238,7 +1234,6 @@
           }));
 
           items = [...items, ...bundleItems];
-          console.log('Final items array:', items);
 
           // Ensure we have items to add
           if (items.length === 0) {
@@ -1262,12 +1257,8 @@
 
           if (!cartResponse.ok) {
             const errorData = await cartResponse.json();
-            console.error('Cart addition error:', errorData);
             throw new Error(errorData.description || 'Failed to add bundle to cart');
           }
-
-          const responseData = await cartResponse.json();
-          console.log('Cart addition response:', responseData);
 
           // Clear the bundle
           this.selectedItems = [];
@@ -1281,7 +1272,6 @@
           window.location.href = '/cart';
 
         } catch (error) {
-          console.error('Bundle addition error:', error);
           this.showNotification('{{ section.settings.bundle_error_message | escape }}', 'error');
         } finally {
           this.loading = false;
