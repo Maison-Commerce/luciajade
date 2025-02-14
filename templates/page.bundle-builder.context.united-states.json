@@ -10,14 +10,7 @@
 {
   "parent": "page.bundle-builder.json",
   "context": {
-    "market": "united-kingdom"
+    "market": "united-states"
   },
-  "sections": {
-    "bundle_builder": {
-      "settings": {
-        "title": "ANY {{ localization.market.metafields.custom.byob_qty.value }} PIECES FOR £{{ localization.market.metafields.custom.byob_price.value }}0"
-      },
-      "blocks": {}
-    }
-  }
+  "sections": {}
 }
