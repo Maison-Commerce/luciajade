@@ -481,7 +481,7 @@
             "image": "shopify://shop_images/free-delivery_411776.png",
             "title": "Free Worldwide Shipping",
             "heading_font_size": "heading-small",
-            "text": "<p>We offer free worldwide shipping over $35, including all duties & taxes.</p>",
+            "text": "<p>We offer free worldwide shipping on all orders, including all duties & taxes.</p>",
             "text_font_size": "body-medium",
             "heading_tag": "automatic"
           }
