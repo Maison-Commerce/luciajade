@@ -12,12 +12,5 @@
   "context": {
     "market": "united-kingdom"
   },
-  "sections": {
-    "bundle_builder": {
-      "settings": {
-        "title": "ANY {{ localization.market.metafields.custom.byob_qty.value }} PIECES FOR £{{ localization.market.metafields.custom.byob_price.value }}0"
-      },
-      "blocks": {}
-    }
-  }
+  "sections": {}
 }
