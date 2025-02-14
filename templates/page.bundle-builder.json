@@ -57,7 +57,7 @@
           "type": "buttons",
           "settings": {
             "button_text": "SHOP 5 FOR $59.99 NOW",
-            "button_url": "#bundle-builder",
+            "button_url": "",
             "button_type": "btn--primary",
             "button_size": "btn--large",
             "button_style": "btn--solid",
