@@ -1208,20 +1208,7 @@
           const bundleId = new Date().getTime();
           let items = [];
 
-          // Add comparison product with direct variant ID reference
-          const comparisonVariantId = {{ section.settings.comparison_product.selected_or_first_available_variant.id | default: 'null' }};
-
-          if (comparisonVariantId) {
-            items.push({
-              id: comparisonVariantId,
-              quantity: 1,
-              properties: {
-                'Bundle': 'Jewelry Bundle Set - Main Product'
-              }
-            });
-          }
-
-          // Add bundle items
+          // Remove the comparison product section and only add bundle items
           const bundleItems = this.selectedItems.map(item => ({
             id: parseInt(item.variant_id),
             quantity: item.quantity,
@@ -1233,7 +1220,7 @@
             }
           }));
 
-          items = [...items, ...bundleItems];
+          items = bundleItems; // Just use the bundle items directly
 
           // Ensure we have items to add
           if (items.length === 0) {
