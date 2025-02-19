@@ -17,7 +17,7 @@
         "text": {
           "type": "text",
           "settings": {
-            "text": "<p>Valentine's Sale - Any 5 pieces for $59.99</p>",
+            "text": "<p>Women's Day Sale - Any 5 pieces for $59.99</p>",
             "target_url_enabled": true,
             "target_url": "shopify://pages/bundle-builder",
             "target_referrer_enabled": false,
