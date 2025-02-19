@@ -31,7 +31,7 @@
           "settings": {
             "text": "<p><strong>Ending Soon: </strong>Free Worldwide Shipping</p>",
             "target_url_enabled": false,
-            "target_url": "",
+            "target_url": "shopify://pages/bundle-builder",
             "target_referrer_enabled": false,
             "target_referrer": "",
             "target_device_enabled": false,
