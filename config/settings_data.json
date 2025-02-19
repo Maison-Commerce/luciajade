@@ -94,6 +94,11 @@
         "type": "shopify://apps/kaching-bundles/blocks/app-embed-block/6c637362-a106-4a32-94ac-94dcfd68cdb8",
         "disabled": false,
         "settings": {}
+      },
+      "9323109295802554384": {
+        "type": "shopify://apps/upstackified-universal-pixel/blocks/adtScript/2ef9f833-e251-4eed-af16-8dca98b27a2f",
+        "disabled": false,
+        "settings": {}
       }
     },
     "color_schemes": {
