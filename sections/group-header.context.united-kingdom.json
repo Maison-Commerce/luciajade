@@ -12,5 +12,16 @@
   "context": {
     "market": "united-kingdom"
   },
-  "sections": {}
+  "sections": {
+    "announcement": {
+      "settings": {},
+      "blocks": {
+        "text": {
+          "settings": {
+            "text": "<p>Women's Day Sale - Any 5 pieces for £49 </p>"
+          }
+        }
+      }
+    }
+  }
 }
