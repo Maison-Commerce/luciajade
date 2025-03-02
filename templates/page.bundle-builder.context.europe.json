@@ -12,5 +12,16 @@
   "context": {
     "market": "europe"
   },
-  "sections": {}
+  "sections": {
+    "section_double_nWNXec": {
+      "settings": {},
+      "blocks": {
+        "heading_UVVFfg": {
+          "settings": {
+            "title": "PICK ANY 5 ITEMS FOR ONLY €59.95 | 70% OFF"
+          }
+        }
+      }
+    }
+  }
 }
