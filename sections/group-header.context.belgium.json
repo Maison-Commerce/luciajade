@@ -12,5 +12,16 @@
   "context": {
     "market": "belgium"
   },
-  "sections": {}
+  "sections": {
+    "announcement": {
+      "settings": {},
+      "blocks": {
+        "text": {
+          "settings": {
+            "text": "<p>Women's Day Sale - Any 5 pieces for €59.95</p>"
+          }
+        }
+      }
+    }
+  }
 }

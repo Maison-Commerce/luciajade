@@ -12,5 +12,22 @@
   "context": {
     "market": "belgium"
   },
-  "sections": {}
+  "sections": {
+    "section_double_nWNXec": {
+      "settings": {},
+      "blocks": {
+        "heading_UVVFfg": {
+          "settings": {
+            "title": "PICK ANY 5 ITEMS FOR ONLY €59.95 | 70% OFF"
+          }
+        }
+      }
+    },
+    "bundle_builder": {
+      "settings": {
+        "title": "ANY 5 PIECES FOR €59.95"
+      },
+      "blocks": {}
+    }
+  }
 }
